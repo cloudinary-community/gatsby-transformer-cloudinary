@@ -10,7 +10,7 @@ export const query = graphql`
     file(name: { eq: "jason-astronaut" }) {
       image: childCloudinaryAsset {
         sizes
-        src @transform(value: "e_grayscale")
+        src
         srcSet
         id
         base64
