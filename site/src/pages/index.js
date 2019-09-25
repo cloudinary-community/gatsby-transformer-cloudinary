@@ -36,18 +36,18 @@ const IndexPage = () => (
       </a>{' '}
       at your fingertips.
     </p>
-    <div className="examples">
-      <FluidDefault />
-      <FixedThumb />
-      <GifDefault />
-      <FluidSilly />
-    </div>
     <h2>Installation</h2>
     <p>
       <a href="https://www.npmjs.com/package/gatsby-transformer-cloudinary#install">
         Learn how to get started in the README &rarr;
       </a>
     </p>
+    <div className="examples">
+      <FluidDefault />
+      <FixedThumb />
+      <GifDefault />
+      <FluidSilly />
+    </div>
   </Layout>
 );
 
