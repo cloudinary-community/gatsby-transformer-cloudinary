@@ -1,22 +1,15 @@
 {
-  "name": "gatsby-starter-default",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "name": "gatsby-transformer-cloudinary-demo",
+  "description": "A demo site to show off the Cloudinary transformer.",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "Jason Lengstorf <jason@lengstorf.com>",
   "dependencies": {
     "gatsby": "^2.15.18",
     "gatsby-image": "^2.2.19",
-    "gatsby-plugin-manifest": "^2.2.17",
-    "gatsby-plugin-offline": "^3.0.7",
-    "gatsby-plugin-react-helmet": "^3.1.7",
-    "gatsby-plugin-sharp": "^2.2.24",
-    "gatsby-source-filesystem": "^2.1.24",
-    "gatsby-transformer-sharp": "^2.2.15",
-    "prop-types": "^15.7.2",
+    "gatsby-source-filesystem": "^2.1.26",
     "react": "^16.9.0",
-    "react-dom": "^16.9.0",
-    "react-helmet": "^5.2.1"
+    "react-dom": "^16.9.0"
   },
   "devDependencies": {
     "prettier": "^1.18.2"
@@ -36,9 +29,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
-  },
-  "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/jlengstorf/gatsby-transformer-cloudinary"
   }
 }
