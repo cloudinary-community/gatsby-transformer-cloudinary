@@ -118,7 +118,6 @@ exports.getFixedImageObject = async ({
   const srcSet = sizes
     .filter(size => size.width <= originalWidth)
     .map(size => {
-      console.log(size.width);
       // Get URL for each image including user-defined transformations.
       const url = getImageURL({
         // Add the size at the end to override width for srcSet support.
@@ -171,8 +170,6 @@ exports.getFluidImageObject = async ({
     base64Width,
     chained,
   });
-
-  console.log(breakpoints);
 
   const srcSet = breakpoints
     .map(breakpointWidth => {
