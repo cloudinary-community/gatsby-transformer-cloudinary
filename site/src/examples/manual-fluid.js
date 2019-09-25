@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'gatsby-image';
-import { getFluidImageObject } from '../../plugins/gatsby-transformer-cloudinary';
+import { getFluidImageObject } from 'gatsby-transformer-cloudinary';
 
 export default () => {
   const [fluid, setFluid] = useState(false);

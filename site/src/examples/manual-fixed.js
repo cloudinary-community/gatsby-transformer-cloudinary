@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'gatsby-image';
-import { getFixedImageObject } from '../../plugins/gatsby-transformer-cloudinary';
+import { getFixedImageObject } from 'gatsby-transformer-cloudinary';
 
 export default () => {
   const [fixed, setFixed] = useState(false);
