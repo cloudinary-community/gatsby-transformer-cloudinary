@@ -2,7 +2,7 @@
   "private": true,
   "name": "gatsby-transformer-cloudinary-demo",
   "description": "A demo site to show off the Cloudinary transformer.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Jason Lengstorf <jason@lengstorf.com>",
   "dependencies": {
     "gatsby": "^2.15.18",
