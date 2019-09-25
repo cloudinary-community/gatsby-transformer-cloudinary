@@ -43,7 +43,11 @@ const IndexPage = () => (
       <FluidSilly />
     </div>
     <h2>Installation</h2>
-    <p>See the README for more details about getting started.</p>
+    <p>
+      <a href="https://www.npmjs.com/package/gatsby-transformer-cloudinary#install">
+        Learn how to get started in the README &rarr;
+      </a>
+    </p>
   </Layout>
 );
 
