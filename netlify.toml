@@ -1,8 +1,9 @@
 # example netlify.toml
 [build]
+  base = "site"
   command = "yarn build"
   functions = "functions"
-  publish = "public"
+  publish = "site/public"
 
   ## Uncomment to use this redirect for Single Page Applications like create-react-app. 
   ## Not needed for static site generators.
