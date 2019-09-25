@@ -20,7 +20,6 @@
   ],
   "license": "MIT",
   "scripts": {
-    "prebuild": "cd plugins/gatsby-transformer-cloudinary && yarn && cd ../..",
     "build": "gatsby build",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
