@@ -1,34 +1,7 @@
 {
   "private": true,
-  "name": "gatsby-transformer-cloudinary-demo",
-  "description": "A demo site to show off the Cloudinary transformer.",
-  "version": "0.2.0",
-  "author": "Jason Lengstorf <jason@lengstorf.com>",
-  "dependencies": {
-    "gatsby": "^2.15.18",
-    "gatsby-image": "^2.2.19",
-    "gatsby-source-filesystem": "^2.1.26",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0"
-  },
-  "devDependencies": {
-    "prettier": "^1.18.2"
-  },
-  "keywords": [
-    "gatsby"
-  ],
-  "license": "MIT",
-  "scripts": {
-    "prebuild": "cd plugins/gatsby-transformer-cloudinary && yarn && cd ../..",
-    "build": "gatsby build",
-    "develop": "gatsby develop",
-    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
-    "start": "npm run develop",
-    "serve": "gatsby serve",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing \""
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jlengstorf/gatsby-transformer-cloudinary"
-  }
+  "workspaces": [
+    "packages/*",
+    "site"
+  ]
 }
