@@ -11,7 +11,7 @@ export default () => {
             transformations: ["e_blackwhite"]
             chained: [
               "e_vectorize:colors:2:despeckle:20,e_tint:100:tomato:0p:white:100p"
-              "l_beard_png,w_0.77,fl_relative,g_face,a_-5,y_0.06,x_0.01"
+              "l_beard_png,w_0.77,fl_relative,g_face,a_-5,y_0.06"
             ]
           ) {
             ...CloudinaryAssetFluid
@@ -30,7 +30,7 @@ export default () => {
             transformations: ["e_blackwhite"]
             chained: [
               "e_vectorize:colors:2:despeckle:20,e_tint:100:tomato:0p:white:100p",
-              "l_beard_png,w_0.77,fl_relative,g_face,a_-5,y_0.06,x_0.01"
+              "l_beard_png,w_0.77,fl_relative,g_face,a_-5,y_0.06"
             ]
           ) {
             ...CloudinaryAssetFluid
