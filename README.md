@@ -1,6 +1,6 @@
 # Use Cloudinary to Manage Your Gatsby Images!
 
-#### [Demo site](https://gatsby-cloudinary-transformer-wip.netlify.com/) · [Get Started](https://www.npmjs.com/package/gatsby-transformer-cloudinary#install) · [API](https://www.npmjs.com/package/gatsby-transformer-cloudinary#api) · [Source](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/tree/master/packages/gatsby-transformer-cloudinary)
+#### [Demo site](https://gatsby-transformer-cloudinary.netlify.com/) · [Get Started](https://www.npmjs.com/package/gatsby-transformer-cloudinary#install) · [API](https://www.npmjs.com/package/gatsby-transformer-cloudinary#api) · [Source](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/tree/master/packages/gatsby-transformer-cloudinary)
 
 Get all the automatic performance and developer experience benefits of using [`gatsby-image`](https://gatsbyjs.org/packages/gatsby-image) _plus_ all the power of [Cloudinary’s image transformation APIs](https://cloudinary.com/documentation/image_transformation_reference) in just a few lines of code.
 

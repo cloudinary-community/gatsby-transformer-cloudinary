@@ -29,6 +29,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jlengstorf/gatsby-transformer-cloudinary"
+    "url": "https://github.com/cloudinary-devs/gatsby-transformer-cloudinary"
   }
 }

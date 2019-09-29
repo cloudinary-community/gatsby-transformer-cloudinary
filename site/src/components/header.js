@@ -28,6 +28,9 @@ const Header = ({ siteTitle }) => (
       <a href="https://www.npmjs.com/package/gatsby-transformer-cloudinary#install">
         Install
       </a>
+      <a href="https://github.com/cloudinary-devs/gatsby-transformer-cloudinary">
+        Source Code
+      </a>
     </nav>
   </header>
 );
