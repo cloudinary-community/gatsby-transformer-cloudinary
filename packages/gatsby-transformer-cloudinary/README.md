@@ -4,7 +4,7 @@ Creates `CloudinaryAsset` nodes from compatible `File` nodes. The `File` nodes a
 
 You’ll need a [Cloudinary account](https://cloudinary.com) to use this plugin. They have a generous free tier, so for most of us this will stay free for quite a while.
 
-[Live demo](https://gatsby-cloudinary-transformer-wip.netlify.com/) ([source](https://github.com/jlengstorf/gatsby-transformer-cloudinary))
+[Live demo](https://gatsby-transformer-cloudinary.netlify.com/) ([source](https://github.com/jlengstorf/gatsby-transformer-cloudinary))
 
 ## Install
 
