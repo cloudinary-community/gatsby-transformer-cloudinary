@@ -6,7 +6,7 @@ You’ll need a [Cloudinary account](https://cloudinary.com) to use this plugin.
 
 [Live demo](https://gatsby-transformer-cloudinary.netlify.com/) ([source](https://github.com/jlengstorf/gatsby-transformer-cloudinary))
 
-> **DISCLAIMER:** If you try running this demo's source code on your own computer, you might face issues as the demo uses assets pre-hosted on the author's Cloudinary account. Before running, please update with images already existing in either your filesystem or your Cloudinary account.
+> **DISCLAIMER:** If you try running this demo's source code on your own computer, you might face issues as the demo uses assets and [transformations](https://cloudinary.com/documentation/chained_and_named_transformations#named_transformations) from the author’s Cloudinary account. Before running, please remove them or replace them with images and transformations from your own Cloudinary account.
 
 ## Install
 
