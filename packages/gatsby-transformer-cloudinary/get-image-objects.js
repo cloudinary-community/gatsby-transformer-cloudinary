@@ -171,7 +171,14 @@ exports.getFluidImageObject = async ({
     chained,
   });
 
-  const srcSet = breakpoints
+  const cleaned = breakpoints
+    .concat(max) // make sure we get the max size
+    .filter(w => w <= max) // don’t add larger sizes
+    .sort((a, b) => a - b); // sort in ascending order
+
+  const deduped = [...new Set(cleaned)];
+
+  const srcSet = deduped
     .map(breakpointWidth => {
       // Get URL for each image including user-defined transformations.
       const url = getImageURL({

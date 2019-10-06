@@ -1,6 +1,6 @@
 const cloudinary = require('cloudinary').v2;
 
-const DEFAULT_FLUID_MAX_WIDTH = 650;
+const DEFAULT_FLUID_MAX_WIDTH = 5000;
 const DEFAULT_FLUID_MIN_WIDTH = 200;
 
 exports.uploadImageNodeToCloudinary = async (node, options) => {
