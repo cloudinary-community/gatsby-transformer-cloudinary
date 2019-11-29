@@ -35,7 +35,7 @@ CLOUDINARY_API_SECRET=<your API secret>
 
 ### Configure the plugin
 
-In your `gatsby-config.js`, point `gatsby-source-filesystem` to images in your app, then set up `gatsby-source-cloudinary` with your credentials.
+In your `gatsby-config.js`, point `gatsby-source-filesystem` to images in your app, then set up `gatsby-transformer-cloudinary` with your credentials.
 
 ```js
 // Load the environment variables.
