@@ -6,7 +6,7 @@ Get all the automatic performance and developer experience benefits of using [`g
 
 [Learn how to get started &rarr;](https://www.npmjs.com/package/gatsby-transformer-cloudinary#install)
 
-> Looking to simply leverage Cloudinary's storage and optimized delivery to fetch existing media files from Cloudinary into your Gatsby project? Checkout [gatsby-source-cloudinary](https://www.npmjs.com/package/gatsby-source-cloudinary) plugin.
+> Looking to simply leverage Cloudinary's storage and optimized delivery, to fetch existing media files from Cloudinary into your Gatsby project? Checkout [gatsby-source-cloudinary](https://www.npmjs.com/package/gatsby-source-cloudinary) plugin.
 
 ## Learn how this plugin was built
 
