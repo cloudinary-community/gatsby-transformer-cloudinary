@@ -61,11 +61,20 @@ module.exports = {
 
         // This folder will be created if it doesn’t exist.
         uploadFolder: 'gatsby-cloudinary',
+        // fluidMaxWidth: 800, // optional; Max width set for responsive breakpoints. default: 1000
+        // fluidMinWidth: 200, // optional; Min width set for responsive breakpoints generated. default: 200
+        // createDerived: true, // optional; Creates derived images from the responsive breakpoints. default: true
+        // breakpointsMaxImages: 4 // optional; Set maximum breakpoint images generated. default: 5
       },
     },
   ],
 };
 ```
+
+In gatsby-config, Responsive breakpoints can be created for each image, use the `fluidMaxWidth` and `fluidMinWidth` options to set them.
+
+> Note: Setting a high max width such as 5000 will lead to the generation of a lot of derived images, between the max and min widths breakpoints, during image upload. Use this option with care.
+
 
 ### Query for images
 
