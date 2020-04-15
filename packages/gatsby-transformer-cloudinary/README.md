@@ -8,9 +8,47 @@ You’ll need a [Cloudinary account](https://cloudinary.com) to use this plugin.
 
 > **DISCLAIMER:** If you try running this demo's source code on your own computer, you might face issues as the demo uses assets and [transformations](https://cloudinary.com/documentation/chained_and_named_transformations#named_transformations) from the author’s Cloudinary account. Before running, please remove them or replace them with images and transformations from your own Cloudinary account.
 
-## Install
+## Features
+- Upload local project media assets to a secure remote CDN
+- Utilize media assets on Cloudinary in gatsby-image
+- Use gatsby-image `fluid` and `fixed` formats on Cloudinary assets
+- Retrieve media files in optimized formats with responsive breakpoints
+- Utilize all Cloudinary transformations including chained transformations in gatsby's data layer
 
-This transformer only works if there are `File` nodes, which are created by [`gatsby-source-filesystem`](https://www.gatsbyjs.org/packages/gatsby-source-filesystem/)
+## Example usage
+Here's the plugin in action to fetch a fixed asset using the `useStaticQuery` API of gatsby:
+
+```jsx harmony
+import React from 'react';
+import { graphql, useStaticQuery } from 'gatsby';
+import Image from 'gatsby-image';
+
+export default () => {
+  const data = useStaticQuery(graphql`
+    query {
+      file(name: { eq: "marketplace-banner" }) {
+        childCloudinaryAsset {
+          fixed {
+            ...CloudinaryAssetFixed
+          }
+        }
+      }
+    }
+  `);
+
+  return (
+    <div>
+        <h2>Here goes something</h2>
+        <Image fixed={data.file.childCloudinaryAsset.fixed} alt="banner" />
+    </div>
+    );
+};
+```
+
+## Installation
+
+This transformer only works if there are `File` nodes, which are created by [`gatsby-source-filesystem`](https://www.gatsbyjs.org/packages/gatsby-source-filesystem/). 
+Install the plugins using either `npm` or `yarn`.
 
 ```sh
 npm install --save gatsby-transformer-cloudinary gatsby-source-filesystem
@@ -58,29 +96,36 @@ module.exports = {
         cloudName: process.env.CLOUDINARY_CLOUD_NAME,
         apiKey: process.env.CLOUDINARY_API_KEY,
         apiSecret: process.env.CLOUDINARY_API_SECRET,
-
-        // This folder will be created if it doesn’t exist.
         uploadFolder: 'gatsby-cloudinary',
-        // fluidMaxWidth: 800, // optional; Max width set for responsive breakpoints. default: 1000
-        // fluidMinWidth: 200, // optional; Min width set for responsive breakpoints generated. default: 200
-        // createDerived: true, // optional; Creates derived images from the responsive breakpoints. default: true
-        // breakpointsMaxImages: 4 // optional; Set maximum breakpoint images generated. default: 5
+        
       },
     },
   ],
 };
 ```
 
-In gatsby-config, Responsive breakpoints can be created for each image, use the `fluidMaxWidth` and `fluidMinWidth` options to set them.
+### Plugin options
+In `gatsby-config.js` the plugin accepts the following options:
 
-> Note: Setting a high max width such as 5000 will lead to the generation of a lot of derived images, between the max and min widths breakpoints, during image upload. Use this option with care.
+| option                 | type    | required | default value | description                                                                                                                                                                             |
+|------------------------|---------|----------|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `cloudName`            | string  | true     | n/a           | Cloud name of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable. |
+| `apiKey`               | string  | true     | n/a           | API Key of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable.    |
+| `apiSecret`            | string  | true     | n/a           | API Secret of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable. |
+| `uploadFolder`         | string  | false    | n/a           | This is the name of the folder the images will be uploaded to on Cloudinary. It will be created on Cloudinary if it is not specified.                                                   |
+| `fluidMaxWidth`        | integer | false    | 1000          | Max width set for responsive breakpoints images generated and returned on image upload.                                                                                                 |
+| `fluidMinWidth`        | integer | false    | 200           | Min width set for responsive breakpoints images generated and returned on image upload.                                                                                                 |
+| `createDerived`        | boolean | false    | true          | This option is specifies the creation of derived images using the specified fluidMinWidth and fluidMaxWidth dimensions specified.                                                       |
+| `breakpointsMaxImages` | integer | false    | 5             | Set maximum number of responsive breakpoint images generated and returned on image upload.                                                                                              |
+
+> Note: Setting a high max width such as 5000 will lead to the generation of a lot of derived images, between the max and min widths breakpoints on image upload. Use this option with care.
 
 
 ### Query for images
 
 Assuming you have an image called “avatar.jpg” in your `src/images/` directory, you can use it in a component like this:
 
-```jsx
+```jsx harmony
 import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
 import Image from 'gatsby-image';
@@ -101,39 +146,6 @@ export default () => {
   return <Image fluid={data.file.childCloudinaryAsset.fluid} alt="avatar" />;
 };
 ```
-
-## API
-
-This plugin can support both the `fixed` and `fluid` formats for `gatsby-image`.
-
-Both `fixed` and `fluid` accept arguments. All arguments are optional.
-
-### Arguments for both `fixed` and `fluid`
-
-| argument          | type        | default                | description                                                                                                                                                                                                                                                                    |
-| ----------------- | ----------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `transformations` | `[String!]` | `[]`                   | Transformations to apply to the image. Pass these as an array (e.g. `["e_grayscale", "ar_16:9"]`)                                                                                                                                                                              |
-| `chained`         | `[String!]` | `[]`                   | For complex transformations, you may need to [chain transformations](https://cloudinary.com/documentation/chained_and_named_transformations). These are supplied as an array, with each link in the chain as an array item (e.g. `["e_grayscale", "l_overlay,g_center,o_60"]`) |
-| `defaults`        | `[String!]` | `["f_auto", "q_auto"]` | By default, this transformer will set the format and quality parameters to “auto”, which is a Good Idea™ from a performance standpoint. If you want to change these defaults, you can set this argument explicitly.                                                            |
-| `base64Width`     | `Int`       | `30`                   | If you want to change the width of the placeholder image shown while the full-resolution image is loading, you can change this value.                                                                                                                                          |
-
-### Arguments for `fixed`
-
-| argument | type  | default | description                                 |
-| -------- | ----- | ------- | ------------------------------------------- |
-| `width`  | `Int` | `400`   | The width that the image should display at. |
-
-### Arguments for `fluid`
-
-| argument   | type  | default | description                         |
-| ---------- | ----- | ------- | ----------------------------------- |
-| `maxWidth` | `Int` | `650`   | The maximum width for fluid images. |
-
-### A note about aspect ratios
-
-You’re able to change the aspect ratio of images by supplying the [aspect ratio parameter](https://cloudinary.com/documentation/image_transformation_reference#aspect_ratio_parameter) in the `transformations` argument.
-
-> **NOTE:** The aspect ratio _must_ be supplied in the `transformations` array. It **will not** be picked up from the `chained` argument.
 
 ## Manual Usage
 
@@ -191,3 +203,48 @@ export default () => {
   return fixed ? <Image fixed={fixed} alt="Jason" /> : <p>loading...</p>;
 };
 ```
+
+## API
+
+This plugin can support both the `fixed` and `fluid` formats for `gatsby-image`.
+
+Both `fixed` and `fluid` accept arguments. All arguments are optional.
+
+### Arguments for both `fixed` and `fluid`
+
+| argument          | type        | default                | description                                                                                                                                                                                                                                                                    |
+| ----------------- | ----------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `transformations` | `[String!]` | `[]`                   | Transformations to apply to the image. Pass these as an array (e.g. `["e_grayscale", "ar_16:9"]`)                                                                                                                                                                              |
+| `chained`         | `[String!]` | `[]`                   | For complex transformations, you may need to [chain transformations](https://cloudinary.com/documentation/chained_and_named_transformations). These are supplied as an array, with each link in the chain as an array item (e.g. `["e_grayscale", "l_overlay,g_center,o_60"]`) |
+| `defaults`        | `[String!]` | `["f_auto", "q_auto"]` | By default, this transformer will set the format and quality parameters to “auto”, which is a Good Idea™ from a performance standpoint. If you want to change these defaults, you can set this argument explicitly.                                                            |
+| `base64Width`     | `Int`       | `30`                   | If you want to change the width of the placeholder image shown while the full-resolution image is loading, you can change this value.                                                                                                                                          |
+
+### Arguments for `fixed`
+
+| argument | type  | default | description                                 |
+| -------- | ----- | ------- | ------------------------------------------- |
+| `width`  | `Int` | `400`   | The width that the image should display at. |
+
+### Arguments for `fluid`
+
+| argument   | type  | default | description                         |
+| ---------- | ----- | ------- | ----------------------------------- |
+| `maxWidth` | `Int` | `650`   | The maximum width for fluid images. |
+
+### A note about aspect ratios
+
+You’re able to change the aspect ratio of images by supplying the [aspect ratio parameter](https://cloudinary.com/documentation/image_transformation_reference#aspect_ratio_parameter) in the `transformations` argument.
+
+> **NOTE:** The aspect ratio _must_ be supplied in the `transformations` array. It **will not** be picked up from the `chained` argument.
+
+## Other Resources
+- [Cloudinary image transformation reference](https://cloudinary.com/documentation/image_transformation_reference)
+- [Try the gatsby-source-cloudinary plugin to source media files into Gatsby file nodes](https://www.npmjs.com/package/gatsby-source-cloudinary)
+- [Using Cloudinary image service for media optimization](https://www.gatsbyjs.org/docs/using-cloudinary-image-service/)
+- [Learn how this plugin was built with Jason Lengstorf](https://www.learnwithjason.dev/build-a-gatsby-transformer-plugin-for-cloudinary)
+
+## Contribute
+Want to contribute to make this tool even better? Feel free to send in issues and pull requests on feature requests, fixes, bugs, typos, performance lapses or any other challenge faced with using this tool.
+
+## License
+MIT 
