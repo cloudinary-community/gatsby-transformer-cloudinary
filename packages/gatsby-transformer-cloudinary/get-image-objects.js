@@ -1,9 +1,13 @@
 const axios = require('axios');
+// todo: for fluid images when original width and height is not set, use width and height of image as is and make full width
+// todo: investigate graphQL query overrides for width and height and abstract control to user through gql query
 
+// Define default width values for fluid, fixed and base64 images
 const DEFAULT_BASE64_WIDTH = 30;
 const DEFAULT_FIXED_WIDTH = 400;
 const DEFAULT_FLUID_MAX_WIDTH = 650;
 
+// Create Cloudinary image URL with transformations.
 const getImageURL = ({
   public_id,
   cloudName,
@@ -30,6 +34,7 @@ const getImageURL = ({
   return baseURL + imagePath;
 };
 
+// Fetch and return Base64 image
 const getBase64 = async url => {
   const result = await axios.get(url, { responseType: 'arraybuffer' });
   const data = Buffer.from(result.data).toString('base64');
@@ -37,6 +42,7 @@ const getBase64 = async url => {
   return `data:image/jpeg;base64,${data}`;
 };
 
+// retrieve aspect ratio if in transformation else create aspect ratio values
 const getAspectRatio = (transformations, originalAspectRatio) => {
   const arTransform = transformations.find(t => t.startsWith('ar_'));
   if (!arTransform) {
@@ -53,6 +59,7 @@ const getAspectRatio = (transformations, originalAspectRatio) => {
   return w / h;
 };
 
+// Create shared image data for both fixed and fluid. Returns src and Base64
 const getSharedImageData = async ({
   public_id,
   version,
@@ -91,7 +98,7 @@ exports.getFixedImageObject = async ({
   version = false,
   width = DEFAULT_FIXED_WIDTH,
   base64Width = DEFAULT_BASE64_WIDTH,
-  base64Transformations = null,
+  base64Transformations = [],
   transformations = [],
   chained = [],
 }) => {
@@ -146,11 +153,11 @@ exports.getFluidImageObject = async ({
   cloudName,
   originalWidth,
   originalHeight,
-  breakpoints,
+  breakpoints = [200, 400, 600],
   version = false,
   maxWidth = DEFAULT_FLUID_MAX_WIDTH,
   base64Width = DEFAULT_BASE64_WIDTH,
-  base64Transformations = null,
+  base64Transformations = [],
   transformations = [],
   chained = [],
 }) => {
