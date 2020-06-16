@@ -133,6 +133,13 @@ exports.onCreateNode = async (
   { node, actions, reporter, createNodeId },
   options,
 ) => {
+  // Transform only those images specified by 'sourceInstanceName' option.
+  if (
+    options.sourceInstanceName &&
+    options.sourceInstanceName !== node.sourceInstanceName) {
+    return;
+  }
+
   if (!ALLOWED_MEDIA_TYPES.includes(node.internal.mediaType)) {
     return;
   }
