@@ -4409,6 +4409,15 @@ gatsby-telemetry@^1.1.25:
     stack-utils "1.0.2"
     uuid "3.3.3"
 
+gatsby-transformer-cloudinary@^0.1.0:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/gatsby-transformer-cloudinary/-/gatsby-transformer-cloudinary-0.1.2.tgz#601c2da932d736c8fb2e16bcf7d30eba862494f9"
+  integrity sha512-EfXH/Po5pwmJTAS0DQb7xl7b61C+IwZFydZfc/Pz2J3OLemOGxc3/JgpEXinSnqnSIXS+6IVP/np6gSPqXgenA==
+  dependencies:
+    axios "^0.19.0"
+    cloudinary "^1.15.0"
+    fs-extra "^8.1.0"
+
 gatsby@^2.15.18:
   version "2.15.22"
   resolved "https://registry.yarnpkg.com/gatsby/-/gatsby-2.15.22.tgz#a859793645b8b5e3c2c5df85ffbfd306b655590e"
@@ -9945,9 +9954,9 @@ websocket-driver@>=0.5.1:
     websocket-extensions ">=0.1.1"
 
 websocket-extensions@>=0.1.1:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/websocket-extensions/-/websocket-extensions-0.1.3.tgz#5d2ff22977003ec687a4b87073dfbbac146ccf29"
-  integrity sha512-nqHUnMXmBzT0w570r2JpJxfiSD1IzoI+HGVdd3aZ0yNi3ngvQ4jv1dtHt5VGxfI2yj5yqImPhOK4vmIh2xMbGg==
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/websocket-extensions/-/websocket-extensions-0.1.4.tgz#7f8473bc839dfd87608adb95d7eb075211578a42"
+  integrity sha512-OqedPIGOfsDlo31UNwYbCFMSaO9m9G/0faIHj5/dZFDMFqPTcx6UwqyOy3COEaEOg/9VsGIpdqn62W5KhoKSpg==
 
 whatwg-fetch@2.0.4:
   version "2.0.4"
