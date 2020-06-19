@@ -2,9 +2,10 @@ const cloudinary = require('cloudinary').v2;
 
 const DEFAULT_FLUID_MAX_WIDTH = 1000;
 const DEFAULT_FLUID_MIN_WIDTH = 200;
+const DEFAULT_PUBLIC_ID = (node) => node.name;
 
 exports.uploadImageNodeToCloudinary = async (node, options) => {
-  const {cloudName, apiKey, apiSecret, uploadFolder, fluidMaxWidth = DEFAULT_FLUID_MAX_WIDTH, fluidMinWidth = DEFAULT_FLUID_MIN_WIDTH, breakpointsMaxImages = 5, createDerived = true} =  options;
+  const {cloudName, apiKey, apiSecret, uploadFolder, publicId = DEFAULT_PUBLIC_ID, fluidMaxWidth = DEFAULT_FLUID_MAX_WIDTH, fluidMinWidth = DEFAULT_FLUID_MIN_WIDTH, breakpointsMaxImages = 5, createDerived = true} =  options;
   cloudinary.config({
     cloud_name: cloudName,
     api_key: apiKey,
@@ -13,8 +14,8 @@ exports.uploadImageNodeToCloudinary = async (node, options) => {
 
   try{
     const result = await cloudinary.uploader.upload(node.absolutePath, {
+      public_id: publicId(node),
       folder: uploadFolder,
-      public_id: node.name,
       resource_type: 'auto',
       responsive_breakpoints: [
         {

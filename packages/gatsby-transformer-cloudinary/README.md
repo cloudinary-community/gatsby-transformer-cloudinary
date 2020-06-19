@@ -116,7 +116,8 @@ In `gatsby-config.js` the plugin accepts the following options:
 | `fluidMaxWidth`        | `Int`     | false    | 1000          | Max width set for responsive breakpoints images generated and returned on image upload.                                                                                                 |
 | `fluidMinWidth`        | `Int`     | false    | 200           | Min width set for responsive breakpoints images generated and returned on image upload.                                                                                                 |
 | `createDerived`        | `Boolean` | false    | true          | This option is specifies the creation of derived images using the specified fluidMinWidth and fluidMaxWidth dimensions specified.                                                       |
-| `breakpointsMaxImages` | `Integer` | false    | 5             | Set maximum number of responsive breakpoint images generated and returned on image upload.                                                                                              |
+| `breakpointsMaxImages` | `Integer` | false    | 5             | Set maximum number of responsive breakpoint images generated and returned on image upload. 
+| `publicId` | `Function` | false    | `node.name`             | This functions accepts a File node and returns the public_id that will be used in the upload.
 
 > Note: Setting a high max width such as 5000 will lead to the generation of a lot of derived images, between the max and min widths breakpoints on image upload. Use this option with care.
 
