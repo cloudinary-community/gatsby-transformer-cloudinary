@@ -54,4 +54,6 @@ exports.createRemoteImageNode = async ({
   const relationshipKey = `${relationshipName}___NODE`;
   parentNode[relationshipKey] = imageNode.id;
   // console.log('parentNode', parentNode);
+
+  return imageNode;
 };
