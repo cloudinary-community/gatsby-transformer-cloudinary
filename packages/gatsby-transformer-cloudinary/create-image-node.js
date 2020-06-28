@@ -1,5 +1,14 @@
 const { getPluginOptions } = require('./options');
 
+function getDefaultBreakpoints({ width }) {
+  const { fluidMinWidth, fluidMaxWidth } = getPluginOptions();
+
+  const max = Math.min(width, fluidMaxWidth);
+  const min = fluidMinWidth;
+
+  return [min, Math.round((min + max) / 2)];
+}
+
 exports.createImageNode = ({
   cloudinaryUploadResult: {
     responsive_breakpoints = [{ breakpoints: [] }],
@@ -16,8 +25,16 @@ exports.createImageNode = ({
   createParentChildLink,
   relationshipName = 'CloudinaryAsset',
 }) => {
-  const [{ breakpoints }] = responsive_breakpoints;
   const { cloudName } = getPluginOptions();
+  const cloudinaryBreakpoints = responsive_breakpoints
+    .shift()
+    .breakpoints.map(({ width }) => width);
+
+  const defaultBreakpoints = getDefaultBreakpoints({ width });
+  const breakpoints =
+    cloudinaryBreakpoints.length > 0
+      ? cloudinaryBreakpoints
+      : defaultBreakpoints;
 
   const imageNode = {
     // These helper fields are only here so the resolvers have access to them.
@@ -27,7 +44,7 @@ exports.createImageNode = ({
     version: version,
     originalHeight: height,
     originalWidth: width,
-    breakpoints: breakpoints.map(({ width }) => width),
+    breakpoints,
 
     // Add the required internal Gatsby node fields.
     id: createNodeId(`${relationshipName}-${secure_url}`),
