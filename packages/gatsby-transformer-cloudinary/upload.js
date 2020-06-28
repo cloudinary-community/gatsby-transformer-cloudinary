@@ -30,7 +30,7 @@ exports.uploadImageToCloudinary = async ({ url, publicId }) => {
     // responsive_breakpoints: [
     //   {
     //     create_derived: createDerived, //can we save on transformations if this is false? no. this only saves storage.
-    //     bytes_step: 20000,
+    //     bytes_step: 20000,  // {bytes_step: 20000} is the default and hard-coded, so we can omit it.
     //     min_width: fluidMinWidth,
     //     max_width: fluidMaxWidth,
     //     max_images: breakpointsMaxImages,
