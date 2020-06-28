@@ -114,9 +114,9 @@ In `gatsby-config.js` the plugin accepts the following options:
 | `apiSecret`            | `String`  | true     | n/a           | API Secret of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable. |
 | `uploadFolder`         | `String`  | false    | n/a           | This is the name of the folder the images will be uploaded to on Cloudinary. It will be created on Cloudinary if it is not specified.                                                   |
 | `fluidMaxWidth`        | `Int`     | false    | 1000          | Max width set for responsive breakpoints images generated and returned on image upload.                                                                                                 |
-| `fluidMinWidth`        | `Int`     | false    | 200           | Min width set for responsive breakpoints images generated and returned on image upload.                                                                                                 |
+| `fluidMinWidth`        | `Int`     | false    | 50            | Min width set for responsive breakpoints images generated and returned on image upload.                                                                                                 |
 | `createDerived`        | `Boolean` | false    | true          | This option is specifies the creation of derived images using the specified fluidMinWidth and fluidMaxWidth dimensions specified.                                                       |
-| `breakpointsMaxImages` | `Integer` | false    | 5             | Set maximum number of responsive breakpoint images generated and returned on image upload.                                                                                              |
+| `breakpointsMaxImages` | `Integer` | false    | 20            | Set maximum number of responsive breakpoint images generated and returned on image upload.                                                                                              |
 
 > Note: Setting a high max width such as 5000 will lead to the generation of a lot of derived images, between the max and min widths breakpoints on image upload. Use this option with care.
 
