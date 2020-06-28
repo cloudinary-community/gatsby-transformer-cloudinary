@@ -37,7 +37,7 @@ exports.uploadImageToCloudinary = async ({ url, publicId }) => {
     //   },
     // ],
   });
-  console.log("exports.uploadImageToCloudinary -> result", result)
+  console.log('exports.uploadImageToCloudinary -> result', result);
   return result;
 };
 
