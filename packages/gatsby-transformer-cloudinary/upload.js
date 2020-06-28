@@ -22,10 +22,11 @@ exports.uploadImageToCloudinary = async ({ url, publicId }) => {
 
   const result = await cloudinary.uploader.upload(url, {
     // overwrite: true,
-    overwrite: false, // can we save on anything if we set this to false? no
+    overwrite: false, // can we save on anything if we set overwrite to false? yes. setting this to true uses one transformation per image
     folder: uploadFolder,
     public_id: publicId,
-    resource_type: 'image',
+    resource_type: 'auto',
+    // can we save on anything by omitting responsive_breakpoints? yes, it reduces the number of transformations we use.
     // responsive_breakpoints: [
     //   {
     //     create_derived: createDerived, //can we save on transformations if this is false? no. this only saves storage.
