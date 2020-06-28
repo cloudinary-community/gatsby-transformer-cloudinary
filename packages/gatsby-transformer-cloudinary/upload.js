@@ -18,25 +18,29 @@ exports.uploadImageToCloudinary = async ({ url, publicId }) => {
     api_secret: apiSecret,
   });
 
+  //can we save on transformations if we do omit responsive_breakpoints?
+
   const result = await cloudinary.uploader.upload(url, {
-    overwrite: false,
+    // overwrite: true,
+    overwrite: false, // can we save on anything if we set this to false? no
     folder: uploadFolder,
     public_id: publicId,
-    resource_type: 'auto',
-    responsive_breakpoints: [
-      {
-        create_derived: createDerived,
-        bytes_step: 20000,
-        min_width: fluidMinWidth,
-        max_width: fluidMaxWidth,
-        max_images: breakpointsMaxImages,
-      },
-    ],
+    resource_type: 'image',
+    // responsive_breakpoints: [
+    //   {
+    //     create_derived: createDerived, //can we save on transformations if this is false? no. this only saves storage.
+    //     bytes_step: 20000,
+    //     min_width: fluidMinWidth,
+    //     max_width: fluidMaxWidth,
+    //     max_images: breakpointsMaxImages,
+    //   },
+    // ],
   });
+  console.log("exports.uploadImageToCloudinary -> result", result)
   return result;
 };
 
-exports.uploadImageNodeToCloudinary = async (node) => {
+exports.uploadImageNodeToCloudinary = async node => {
   const url = node.absolutePath;
   const publicId = node.name;
   const result = await exports.uploadImageToCloudinary({ url, publicId });

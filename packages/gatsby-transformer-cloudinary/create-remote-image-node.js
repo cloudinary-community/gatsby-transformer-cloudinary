@@ -1,52 +1,52 @@
 const path = require('path');
-const { getPluginOptions } = require('./options');
 const { uploadImageToCloudinary } = require('./upload');
+const { createImageNode } = require('./create-image-node');
 
 exports.createRemoteImageNode = async ({
   url,
   parentNode,
   relationshipName,
-  createNode,
   createContentDigest,
+  createNode,
   createNodeId,
+  reporter,
 }) => {
-  const { cloudName } = getPluginOptions();
+  if (!relationshipName) {
+    throw Error("'relationshipName' is a required argument.");
+  }
+  if (relationshipName === 'CloudinaryAsset') {
+    throw Error(
+      "'relationshipName' cannot be 'CloudinaryAsset'. That name is reserved.",
+    );
+  }
+
   const publicId = path.parse(url).name;
 
-  const result = await uploadImageToCloudinary({
+  // const cloudinaryUploadResult = await uploadImageToCloudinary({
+  //   url,
+  //   publicId,
+  // });
+
+  const cloudinaryUploadResult = await benchmark(
+    () => uploadImageToCloudinary({ url, publicId }),
+    reporter,
     url,
-    publicId,
+  );
+
+  return createImageNode({
+    relationshipName,
+    cloudinaryUploadResult,
+    parentNode,
+    createContentDigest,
+    createNode,
+    createNodeId,
   });
-
-  const [{ breakpoints }] = result.responsive_breakpoints;
-
-  const imageNode = {
-    // These helper fields are only here so the resolvers have access to them.
-    // They will *not* be available via Gatsby’s data layer.
-    cloudName: cloudName,
-    public_id: result.public_id,
-    version: result.version,
-    originalHeight: result.height,
-    originalWidth: result.width,
-    breakpoints: breakpoints.map(({ width }) => width),
-
-    // Add the required internal Gatsby node fields.
-    id: createNodeId(`${relationshipName}-${result.secure_url}`),
-    parent: parentNode.id,
-    internal: {
-      type: 'CloudinaryAsset',
-      // Gatsby uses the content digest to decide when to reprocess a given
-      // node. We can use the Cloudinary URL to avoid doing extra work.
-      contentDigest: createContentDigest(result.secure_url),
-    },
-  };
-
-  // Add the new node to Gatsby’s data layer.
-  createNode(imageNode, { name: 'gatsby-transformer-cloudinary' });
-
-  // Tell Gatsby to add `${relationshipName}` to the parent node.
-  const relationshipKey = `${relationshipName}___NODE`;
-  parentNode[relationshipKey] = imageNode.id;
-
-  return imageNode;
 };
+
+async function benchmark(fn, reporter, tag) {
+  const start = new Date();
+  const result = await fn();
+  const stop = new Date();
+  reporter.info(`Elapsed time: ${stop - start} ms (${tag})`);
+  return result;
+}

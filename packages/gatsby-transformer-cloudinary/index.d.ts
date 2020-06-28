@@ -6,26 +6,12 @@ export function createRemoteImageNode(
 
 export interface CreateRemoteImageNodeArgs {
   url: string;
-  // store: Store;
-  // cache: GatsbyCache;
+  parentNode: any;
+  relationshipName: string;
+  createContentDigest: NodePluginArgs['createContentDigest'];
   createNode: NodePluginArgs['actions']['createNode'];
   createNodeId: NodePluginArgs['createNodeId'];
-  // auth?: {
-  //   htaccess_user: string;
-  //   htaccess_pass: string;
-  // };
-  // httpHeaders?: object;
-  // ext?: string;
-  // name?: string;
-  // reporter: Reporter;
-
-
-  //these were added
-  parentNodeId?: string;
-  relationshipName?: string;
-  parentNode?: any;
-  createContentDigest: NodePluginArgs['createContentDigest'];
-
+  reporter: Reporter;
 }
 
 export type CloudinaryAssetNode = any;

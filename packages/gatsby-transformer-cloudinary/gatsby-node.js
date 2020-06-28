@@ -4,8 +4,8 @@ const {
   getFluidImageObject,
 } = require('./get-image-objects');
 const { uploadImageNodeToCloudinary } = require('./upload');
-const { setPluginOptions, getPluginOptions } = require('./options');
-const { createRemoteImageNode } = require('./create-remote-image-node');
+const { setPluginOptions } = require('./options');
+const { createImageNode } = require('./create-image-node');
 
 const ALLOWED_MEDIA_TYPES = ['image/png', 'image/jpeg', 'image/gif'];
 
@@ -131,43 +131,26 @@ exports.createResolvers = ({ createResolvers }) => {
   createResolvers(resolvers);
 };
 
-exports.onCreateNode = async ({ node, actions, createNodeId }) => {
+exports.onCreateNode = async ({
+  node,
+  actions: { createNode, createParentChildLink },
+  createNodeId,
+  createContentDigest,
+}) => {
   if (!ALLOWED_MEDIA_TYPES.includes(node.internal.mediaType)) {
     return;
   }
 
-  const result = await uploadImageNodeToCloudinary(node);
+  const cloudinaryUploadResult = await uploadImageNodeToCloudinary(node);
 
-  const [{ breakpoints }] = result.responsive_breakpoints;
-
-  const { cloudName } = getPluginOptions();
-
-  const imageNode = {
-    // These helper fields are only here so the resolvers have access to them.
-    // They will *not* be available via Gatsby’s data layer.
-    cloudName: cloudName,
-    public_id: result.public_id,
-    version: result.version,
-    originalHeight: result.height,
-    originalWidth: result.width,
-    breakpoints: breakpoints.map(({ width }) => width),
-
-    // Add the required internal Gatsby node fields.
-    id: createNodeId(`CloudinaryAsset-${node.id}`),
-    parent: node.id,
-    internal: {
-      type: 'CloudinaryAsset',
-      // Gatsby uses the content digest to decide when to reprocess a given
-      // node. We can use the parent file’s digest to avoid doing extra work.
-      contentDigest: node.internal.contentDigest,
-    },
-  };
-
-  // Add the new node to Gatsby’s data layer.
-  actions.createNode(imageNode);
-
-  // Tell Gatsby to add `childCloudinaryAsset` to the parent `File` node.
-  actions.createParentChildLink({ parent: node, child: imageNode });
+  return createImageNode({
+    cloudinaryUploadResult,
+    parentNode: node,
+    createContentDigest,
+    createNode,
+    createNodeId,
+    createParentChildLink,
+  });
 };
 
 exports.onPreInit = (_, pluginOptions) => {
