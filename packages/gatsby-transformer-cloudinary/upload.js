@@ -1,33 +1,44 @@
 const cloudinary = require('cloudinary').v2;
+const { getPluginOptions } = require('./options');
 
-const DEFAULT_FLUID_MAX_WIDTH = 1000;
-const DEFAULT_FLUID_MIN_WIDTH = 200;
-
-exports.uploadImageNodeToCloudinary = async (node, options) => {
-  const {cloudName, apiKey, apiSecret, uploadFolder, fluidMaxWidth = DEFAULT_FLUID_MAX_WIDTH, fluidMinWidth = DEFAULT_FLUID_MIN_WIDTH, breakpointsMaxImages = 5, createDerived = true} =  options;
+exports.uploadImageToCloudinary = async ({ url, publicId }) => {
+  const {
+    cloudName,
+    apiKey,
+    apiSecret,
+    uploadFolder,
+    fluidMaxWidth,
+    fluidMinWidth,
+    breakpointsMaxImages,
+    createDerived,
+  } = getPluginOptions();
   cloudinary.config({
     cloud_name: cloudName,
     api_key: apiKey,
     api_secret: apiSecret,
   });
 
-  try{
-    const result = await cloudinary.uploader.upload(node.absolutePath, {
-      folder: uploadFolder,
-      public_id: node.name,
-      resource_type: 'auto',
-      responsive_breakpoints: [
-        {
-          create_derived: createDerived,
-          bytes_step: 20000,
-          min_width: fluidMinWidth,
-          max_width: fluidMaxWidth,
-          max_images: breakpointsMaxImages,
-        },
-      ],
-    });
-    return result;
-  }catch(e){
-    throw e;
-  }
+  const result = await cloudinary.uploader.upload(url, {
+    overwrite: false,
+    folder: uploadFolder,
+    public_id: publicId,
+    resource_type: 'auto',
+    responsive_breakpoints: [
+      {
+        create_derived: createDerived,
+        bytes_step: 20000,
+        min_width: fluidMinWidth,
+        max_width: fluidMaxWidth,
+        max_images: breakpointsMaxImages,
+      },
+    ],
+  });
+  return result;
+};
+
+exports.uploadImageNodeToCloudinary = async (node) => {
+  const url = node.absolutePath;
+  const publicId = node.name;
+  const result = await exports.uploadImageToCloudinary({ url, publicId });
+  return result;
 };

@@ -3,5 +3,6 @@
   "workspaces": [
     "packages/*",
     "site"
-  ]
+  ],
+    "types": "./index.d.ts"
 }

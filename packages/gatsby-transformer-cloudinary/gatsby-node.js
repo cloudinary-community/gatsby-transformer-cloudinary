@@ -4,6 +4,8 @@ const {
   getFluidImageObject,
 } = require('./get-image-objects');
 const { uploadImageNodeToCloudinary } = require('./upload');
+const { setPluginOptions, getPluginOptions } = require('./options');
+const { createRemoteImageNode } = require('./create-remote-image-node');
 
 const ALLOWED_MEDIA_TYPES = ['image/png', 'image/jpeg', 'image/gif'];
 
@@ -62,7 +64,7 @@ exports.createSchemaCustomization = ({ actions }) => {
   `);
 };
 
-exports.createResolvers = ({ createResolvers, reporter }) => {
+exports.createResolvers = ({ createResolvers }) => {
   const resolvers = {
     CloudinaryAsset: {
       fixed: {
@@ -129,26 +131,32 @@ exports.createResolvers = ({ createResolvers, reporter }) => {
   createResolvers(resolvers);
 };
 
-exports.onCreateNode = async (
-  { node, actions, reporter, createNodeId },
-  options,
-) => {
+exports.onCreateNode = async sourceNodeArgs => {
+  const { node, actions, reporter, createNodeId } = sourceNodeArgs;
+  const POST_NODE_TYPE = 'post';
+  if (node.internal.type === POST_NODE_TYPE && node.cover_photo_url) {
+    await createRemoteImageNode({
+      url: node.cover_photo_url,
+      parentNode: node,
+      relationshipName: 'coverPhoto',
+      sourceNodeArgs,
+    });
+  }
+
   if (!ALLOWED_MEDIA_TYPES.includes(node.internal.mediaType)) {
     return;
   }
 
-  const result = await uploadImageNodeToCloudinary(node, options).catch(
-    error => {
-      reporter.panic(error.message, error);
-    },
-  );
+  const result = await uploadImageNodeToCloudinary(node);
 
   const [{ breakpoints }] = result.responsive_breakpoints;
+
+  const { cloudName } = getPluginOptions();
 
   const imageNode = {
     // These helper fields are only here so the resolvers have access to them.
     // They will *not* be available via Gatsby’s data layer.
-    cloudName: options.cloudName,
+    cloudName: cloudName,
     public_id: result.public_id,
     version: result.version,
     originalHeight: result.height,
@@ -171,4 +179,8 @@ exports.onCreateNode = async (
 
   // Tell Gatsby to add `childCloudinaryAsset` to the parent `File` node.
   actions.createParentChildLink({ parent: node, child: imageNode });
+};
+
+exports.onPreInit = (_, pluginOptions) => {
+  setPluginOptions(pluginOptions);
 };
