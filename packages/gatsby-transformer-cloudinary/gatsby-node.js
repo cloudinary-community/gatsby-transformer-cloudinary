@@ -131,18 +131,7 @@ exports.createResolvers = ({ createResolvers }) => {
   createResolvers(resolvers);
 };
 
-exports.onCreateNode = async sourceNodeArgs => {
-  const { node, actions, reporter, createNodeId } = sourceNodeArgs;
-  const POST_NODE_TYPE = 'post';
-  if (node.internal.type === POST_NODE_TYPE && node.cover_photo_url) {
-    await createRemoteImageNode({
-      url: node.cover_photo_url,
-      parentNode: node,
-      relationshipName: 'coverPhoto',
-      sourceNodeArgs,
-    });
-  }
-
+exports.onCreateNode = async ({ node, actions, createNodeId }) => {
   if (!ALLOWED_MEDIA_TYPES.includes(node.internal.mediaType)) {
     return;
   }
