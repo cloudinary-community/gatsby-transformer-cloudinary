@@ -20,8 +20,6 @@ exports.createRemoteImageNode = async ({
   const result = await uploadImageToCloudinary({
     url,
     publicId,
-  }).catch(error => {
-    reporter.panic(error.message, error);
   });
   // console.log('result', result);
 
