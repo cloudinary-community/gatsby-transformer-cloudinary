@@ -22,8 +22,6 @@ exports.uploadImageToCloudinary = async ({ url, publicId }) => {
     api_secret: apiSecret,
   });
 
-  //can we save on transformations if we do omit responsive_breakpoints?
-
   const uploadOptions = {
     folder: uploadFolder,
     overwrite: overwriteExisting,
