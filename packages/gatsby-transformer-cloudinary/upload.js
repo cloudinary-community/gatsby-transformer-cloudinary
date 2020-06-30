@@ -36,7 +36,10 @@ exports.uploadImageToCloudinary = async ({ url, publicId }) => {
   // image, Cloudinary bills us for one transformation. Since this API call
   // gets called for every image every time our Gatsby cache gets cleared, this
   // can get expensive very fast. This option should not be used outside of
-  // production.
+  // production. It's recommended that createDerived be set to true when
+  // useCloudinaryBreakpoints is set to true.This will store the derived images
+  // and prevent Cloudinary from using more transformations to recompute them
+  // in the future.
   if (useCloudinaryBreakpoints) {
     uploadOptions.responsive_breakpoints = [
       {
