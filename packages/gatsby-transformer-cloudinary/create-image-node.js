@@ -42,7 +42,7 @@ exports.createImageNode = ({
     breakpoints,
 
     // Add the required internal Gatsby node fields.
-    id: createNodeId(`${relationshipName}-${secure_url}`),
+    id: createNodeId(`CloudinaryAsset-${secure_url}`),
     parent: parentNode.id,
     internal: {
       type: 'CloudinaryAsset',

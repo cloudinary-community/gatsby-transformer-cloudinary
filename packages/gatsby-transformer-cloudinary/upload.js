@@ -5,7 +5,11 @@ exports.uploadImageToCloudinary = async ({ url, publicId }) => {
   const {
     apiKey,
     apiSecret,
+    breakpointsMaxImages,
     cloudName,
+    createDerived,
+    fluidMaxWidth,
+    fluidMinWidth,
     overwriteExisting,
     uploadFolder,
     useCloudinaryBreakpoints,
@@ -42,9 +46,18 @@ exports.uploadImageToCloudinary = async ({ url, publicId }) => {
     ];
   }
 
-  const result = await cloudinary.uploader.upload(url, uploadOptions);
-  console.log('exports.uploadImageToCloudinary -> result', result);
-  return result;
+  let attempts = 1;
+
+  while (attempts++ <= 3) {
+    try {
+      const result = await cloudinary.uploader.upload(url, uploadOptions);
+      // console.log('exports.uploadImageToCloudinary -> result', result);
+      return result;
+    } catch (error) {
+      console.log('Caught an error in uploadImageToCloudinary:', error);
+    }
+  }
+  throw Error(`Unable to upload ${url} to Cloudinary.`);
 };
 
 exports.uploadImageNodeToCloudinary = async node => {

@@ -157,7 +157,7 @@ exports.onCreateNode = async ({
 
   // Tell Gatsby to add `childCloudinaryAsset` to the parent `File` node.
   createParentChildLink({
-    parent: parentNode,
+    parent: node,
     child: imageNode,
   });
 
