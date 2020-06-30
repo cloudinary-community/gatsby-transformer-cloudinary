@@ -5,6 +5,7 @@ const DEFAULT_FLUID_MIN_WIDTH = 50;
 const DEFAULT_BREAKPOINTS_MAX_IMAGES = 20;
 const DEFAULT_CREATE_DERIVED = true;
 const DEFAULT_USE_CLOUDINARY_BREAKPOINTS = true;
+const DEFAULT_OVERWRITE_EXISTING = true;
 
 const requiredOptions = ['cloudName', 'apiKey', 'apiSecret'];
 
@@ -23,6 +24,7 @@ exports.setPluginOptions = pluginOptions => {
     breakpointsMaxImages: DEFAULT_BREAKPOINTS_MAX_IMAGES,
     createDerived: DEFAULT_CREATE_DERIVED,
     useCloudinaryBreakpoints: DEFAULT_USE_CLOUDINARY_BREAKPOINTS,
+    overwriteExisting: DEFAULT_OVERWRITE_EXISTING,
     ...pluginOptions,
   };
 };

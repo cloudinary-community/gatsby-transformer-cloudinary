@@ -6,6 +6,7 @@ exports.uploadImageToCloudinary = async ({ url, publicId }) => {
     apiKey,
     apiSecret,
     cloudName,
+    overwriteExisting,
     uploadFolder,
     useCloudinaryBreakpoints,
   } = getPluginOptions();
@@ -19,8 +20,7 @@ exports.uploadImageToCloudinary = async ({ url, publicId }) => {
 
   const uploadOptions = {
     folder: uploadFolder,
-    // overwrite: true,
-    overwrite: false, // can we save on anything if we set overwrite to false? yes. setting this to true uses one transformation per image
+    overwrite: overwriteExisting,
     public_id: publicId,
     resource_type: 'auto',
   };
@@ -33,8 +33,8 @@ exports.uploadImageToCloudinary = async ({ url, publicId }) => {
   if (useCloudinaryBreakpoints) {
     uploadOptions.responsive_breakpoints = [
       {
-        create_derived: createDerived, //can we save on transformations if this is false? no. this only saves storage.
-        bytes_step: 20000, // {bytes_step: 20000} is the default and hard-coded, so we can omit it.
+        create_derived: createDerived,
+        bytes_step: 20000,
         min_width: fluidMinWidth,
         max_width: fluidMaxWidth,
         max_images: breakpointsMaxImages,
