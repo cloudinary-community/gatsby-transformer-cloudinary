@@ -1,6 +1,6 @@
 {
   "name": "gatsby-transformer-cloudinary",
-  "version": "0.3.5",
+  "version": "1.0.0",
   "description": "Transform local files into Cloudinary-managed assets for Gatsby sites.",
   "main": "index.js",
   "author": "Jason Lengstorf <jason@lengstorf.com>",
