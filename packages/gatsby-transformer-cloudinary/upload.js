@@ -1,6 +1,8 @@
 const cloudinary = require('cloudinary').v2;
 const { getPluginOptions } = require('./options');
 
+const FIVE_MINUTES = 5 * 60 * 1000;
+
 exports.uploadImageToCloudinary = async ({ url, publicId }) => {
   const {
     apiKey,
@@ -27,6 +29,7 @@ exports.uploadImageToCloudinary = async ({ url, publicId }) => {
     overwrite: overwriteExisting,
     public_id: publicId,
     resource_type: 'auto',
+    timeout: FIVE_MINUTES,
   };
 
   // Each time we ask Cloudinary to calculate the responsive breakpoints for an
