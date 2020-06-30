@@ -1,17 +1,26 @@
 const { getPluginOptions } = require('./options');
 
-function getDefaultBreakpoints({ width }) {
-  const { fluidMinWidth, fluidMaxWidth } = getPluginOptions();
+function getDefaultBreakpoints(imageWidth) {
+  const {
+    breakpointsMaxImages,
+    fluidMinWidth,
+    fluidMaxWidth,
+  } = getPluginOptions();
 
-  const max = Math.min(width, fluidMaxWidth);
+  const max = Math.min(imageWidth, fluidMaxWidth);
   const min = fluidMinWidth;
 
-  return [min, Math.round((min + max) / 2)];
+  const breakpoints = [max];
+  for (let i = 1; i < breakpointsMaxImages; i++) {
+    const breakpoint = max - (i * (max - min)) / (breakpointsMaxImages - 1);
+    breakpoints.push(Math.round(breakpoint));
+  }
+  return breakpoints;
 }
 
 exports.createImageNode = ({
   cloudinaryUploadResult: {
-    responsive_breakpoints = [{ breakpoints: [] }],
+    responsive_breakpoints,
     public_id,
     version,
     height,
@@ -24,7 +33,7 @@ exports.createImageNode = ({
 }) => {
   const { cloudName } = getPluginOptions();
 
-  let breakpoints = getDefaultBreakpoints({ width });
+  let breakpoints = getDefaultBreakpoints(width);
   if (responsive_breakpoints) {
     breakpoints = responsive_breakpoints
       .shift()

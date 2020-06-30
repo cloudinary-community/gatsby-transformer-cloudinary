@@ -20,6 +20,13 @@ exports.setPluginOptions = pluginOptions => {
     }
   });
 
+  if (
+    pluginOptions.breakpointsMaxImages &&
+    pluginOptions.breakpointsMaxImages < 1
+  ) {
+    throw Error(`breakpointsMaxImages must be at least 1.`);
+  }
+
   options = {
     ...defaultOptions,
     ...pluginOptions,
