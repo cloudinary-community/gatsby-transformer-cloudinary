@@ -4,9 +4,9 @@ const defaultOptions = {
   fluidMaxWidth: 1000,
   fluidMinWidth: 50,
   breakpointsMaxImages: 20,
-  createDerived: true,
-  useCloudinaryBreakpoints: true,
-  overwriteExisting: true,
+  createDerived: false,
+  useCloudinaryBreakpoints: false,
+  overwriteExisting: false,
 };
 
 const requiredOptions = ['cloudName', 'apiKey', 'apiSecret'];
