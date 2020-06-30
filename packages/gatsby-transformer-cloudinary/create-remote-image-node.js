@@ -14,11 +14,6 @@ exports.createRemoteImageNode = async ({
   if (!relationshipName) {
     throw Error("'relationshipName' is a required argument.");
   }
-  if (relationshipName === 'CloudinaryAsset') {
-    throw Error(
-      "'relationshipName' cannot be 'CloudinaryAsset'. That name is reserved.",
-    );
-  }
 
   const publicId = path.parse(url).name;
 
