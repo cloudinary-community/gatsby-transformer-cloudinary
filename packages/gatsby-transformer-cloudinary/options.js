@@ -1,11 +1,13 @@
 let options = null;
 
-const DEFAULT_FLUID_MAX_WIDTH = 1000;
-const DEFAULT_FLUID_MIN_WIDTH = 50;
-const DEFAULT_BREAKPOINTS_MAX_IMAGES = 20;
-const DEFAULT_CREATE_DERIVED = true;
-const DEFAULT_USE_CLOUDINARY_BREAKPOINTS = true;
-const DEFAULT_OVERWRITE_EXISTING = true;
+const defaultOptions = {
+  fluidMaxWidth: 1000,
+  fluidMinWidth: 50,
+  breakpointsMaxImages: 20,
+  createDerived: true,
+  useCloudinaryBreakpoints: true,
+  overwriteExisting: true,
+};
 
 const requiredOptions = ['cloudName', 'apiKey', 'apiSecret'];
 
@@ -19,12 +21,7 @@ exports.setPluginOptions = pluginOptions => {
   });
 
   options = {
-    fluidMaxWidth: DEFAULT_FLUID_MAX_WIDTH,
-    fluidMinWidth: DEFAULT_FLUID_MIN_WIDTH,
-    breakpointsMaxImages: DEFAULT_BREAKPOINTS_MAX_IMAGES,
-    createDerived: DEFAULT_CREATE_DERIVED,
-    useCloudinaryBreakpoints: DEFAULT_USE_CLOUDINARY_BREAKPOINTS,
-    overwriteExisting: DEFAULT_OVERWRITE_EXISTING,
+    ...defaultOptions,
     ...pluginOptions,
   };
 };
