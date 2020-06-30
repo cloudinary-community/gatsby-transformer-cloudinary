@@ -2,9 +2,6 @@ const path = require('path');
 const { uploadImageToCloudinary } = require('./upload');
 const { createImageNode } = require('./create-image-node');
 
-let totalImages = 0;
-let uploadedImages = 0;
-
 exports.createRemoteImageNode = async ({
   url,
   parentNode,
@@ -20,18 +17,11 @@ exports.createRemoteImageNode = async ({
 
   const publicId = path.parse(url).name;
 
-  totalImages++;
-
   const cloudinaryUploadResult = await uploadImageToCloudinary({
     url,
     publicId,
+    reporter,
   });
-
-  uploadedImages++;
-
-  reporter.info(
-    `Uploaded ${uploadedImages} of ${totalImages} images to Cloudinary.`,
-  );
 
   const imageNode = createImageNode({
     relationshipName,
@@ -48,6 +38,5 @@ exports.createRemoteImageNode = async ({
   // Tell Gatsby to add `${relationshipName}` to the parent node.
   const relationshipKey = `${relationshipName}___NODE`;
   parentNode[relationshipKey] = imageNode.id;
-
   return imageNode;
 };

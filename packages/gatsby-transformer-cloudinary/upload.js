@@ -1,9 +1,12 @@
 const cloudinary = require('cloudinary').v2;
 const { getPluginOptions } = require('./options');
 
+let totalImages = 0;
+let uploadedImages = 0;
+
 const FIVE_MINUTES = 5 * 60 * 1000;
 
-exports.uploadImageToCloudinary = async ({ url, publicId }) => {
+exports.uploadImageToCloudinary = async ({ url, publicId, reporter }) => {
   const {
     apiKey,
     apiSecret,
@@ -52,10 +55,21 @@ exports.uploadImageToCloudinary = async ({ url, publicId }) => {
 
   let attempts = 1;
 
+  totalImages++;
+
   while (attempts++ <= 3) {
     try {
       const result = await cloudinary.uploader.upload(url, uploadOptions);
-      // console.log('exports.uploadImageToCloudinary -> result', result);
+      uploadedImages++;
+      if (
+        uploadedImages == totalImages ||
+        uploadedImages % Math.ceil(totalImages / 100) == 0
+      )
+        reporter.info(
+          `[gatsby-transformer-cloudinary] Uploaded ${uploadedImages} of ${totalImages} images to Cloudinary. (${Math.round(
+            (100 * uploadedImages) / totalImages,
+          )}%)`,
+        );
       return result;
     } catch (error) {
       console.log('Caught an error in uploadImageToCloudinary:', error);
@@ -64,9 +78,13 @@ exports.uploadImageToCloudinary = async ({ url, publicId }) => {
   throw Error(`Unable to upload ${url} to Cloudinary.`);
 };
 
-exports.uploadImageNodeToCloudinary = async node => {
+exports.uploadImageNodeToCloudinary = async ({ node, reporter }) => {
   const url = node.absolutePath;
   const publicId = node.name;
-  const result = await exports.uploadImageToCloudinary({ url, publicId });
+  const result = await exports.uploadImageToCloudinary({
+    url,
+    publicId,
+    reporter,
+  });
   return result;
 };

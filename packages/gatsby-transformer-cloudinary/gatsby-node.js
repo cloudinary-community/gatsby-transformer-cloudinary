@@ -136,12 +136,16 @@ exports.onCreateNode = async ({
   actions: { createNode, createParentChildLink },
   createNodeId,
   createContentDigest,
+  reporter,
 }) => {
   if (!ALLOWED_MEDIA_TYPES.includes(node.internal.mediaType)) {
     return;
   }
 
-  const cloudinaryUploadResult = await uploadImageNodeToCloudinary(node);
+  const cloudinaryUploadResult = await uploadImageNodeToCloudinary({
+    node,
+    reporter,
+  });
 
   const imageNode = createImageNode({
     cloudinaryUploadResult,
