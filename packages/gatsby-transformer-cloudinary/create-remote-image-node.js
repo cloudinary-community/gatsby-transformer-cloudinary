@@ -22,18 +22,13 @@ exports.createRemoteImageNode = async ({
 
   const publicId = path.parse(url).name;
 
-  // const cloudinaryUploadResult = await uploadImageToCloudinary({
-  //   url,
-  //   publicId,
-  // });
-
   const cloudinaryUploadResult = await benchmark(
     () => uploadImageToCloudinary({ url, publicId }),
     reporter,
     url,
   );
 
-  return createImageNode({
+  const imageNode = createImageNode({
     relationshipName,
     cloudinaryUploadResult,
     parentNode,
@@ -41,6 +36,15 @@ exports.createRemoteImageNode = async ({
     createNode,
     createNodeId,
   });
+
+  // Add the new node to Gatsby’s data layer.
+  createNode(imageNode, { name: 'gatsby-transformer-cloudinary' });
+
+  // Tell Gatsby to add `${relationshipName}` to the parent node.
+  const relationshipKey = `${relationshipName}___NODE`;
+  parentNode[relationshipKey] = imageNode.id;
+
+  return imageNode;
 };
 
 async function benchmark(fn, reporter, tag) {

@@ -143,7 +143,7 @@ exports.onCreateNode = async ({
 
   const cloudinaryUploadResult = await uploadImageNodeToCloudinary(node);
 
-  return createImageNode({
+  const imageNode = createImageNode({
     cloudinaryUploadResult,
     parentNode: node,
     createContentDigest,
@@ -151,6 +151,17 @@ exports.onCreateNode = async ({
     createNodeId,
     createParentChildLink,
   });
+
+  // Add the new node to Gatsby’s data layer.
+  createNode(imageNode);
+
+  // Tell Gatsby to add `childCloudinaryAsset` to the parent `File` node.
+  createParentChildLink({
+    parent: parentNode,
+    child: imageNode,
+  });
+
+  return imageNode;
 };
 
 exports.onPreInit = (_, pluginOptions) => {

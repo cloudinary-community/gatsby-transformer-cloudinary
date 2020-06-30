@@ -20,21 +20,16 @@ exports.createImageNode = ({
   },
   parentNode,
   createContentDigest,
-  createNode,
   createNodeId,
-  createParentChildLink,
-  relationshipName = 'CloudinaryAsset',
 }) => {
   const { cloudName } = getPluginOptions();
-  const cloudinaryBreakpoints = responsive_breakpoints
-    .shift()
-    .breakpoints.map(({ width }) => width);
 
-  const defaultBreakpoints = getDefaultBreakpoints({ width });
-  const breakpoints =
-    cloudinaryBreakpoints.length > 0
-      ? cloudinaryBreakpoints
-      : defaultBreakpoints;
+  let breakpoints = getDefaultBreakpoints({ width });
+  if (responsive_breakpoints) {
+    breakpoints = responsive_breakpoints
+      .shift()
+      .breakpoints.map(({ width }) => width);
+  }
 
   const imageNode = {
     // These helper fields are only here so the resolvers have access to them.
@@ -56,28 +51,6 @@ exports.createImageNode = ({
       contentDigest: createContentDigest(secure_url),
     },
   };
-
-  // If no relationshipName is given, that means we're automatically
-  // creating a CloudinaryAsset node from a File node created by
-  // `gatsby-source-filesystem`. If a relationshipName is given, that means
-  // we're creating a CloudinaryAsset node from a provided URL.
-  if (relationshipName == 'CloudinaryAsset') {
-    // Add the new node to Gatsby’s data layer.
-    createNode(imageNode);
-
-    // Tell Gatsby to add `childCloudinaryAsset` to the parent `File` node.
-    createParentChildLink({
-      parent: parentNode,
-      child: imageNode,
-    });
-  } else {
-    // Add the new node to Gatsby’s data layer.
-    createNode(imageNode, { name: 'gatsby-transformer-cloudinary' });
-
-    // Tell Gatsby to add `${relationshipName}` to the parent node.
-    const relationshipKey = `${relationshipName}___NODE`;
-    parentNode[relationshipKey] = imageNode.id;
-  }
 
   return imageNode;
 };
