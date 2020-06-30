@@ -5,7 +5,17 @@ const DEFAULT_FLUID_MIN_WIDTH = 50;
 const DEFAULT_BREAKPOINTS_MAX_IMAGES = 20;
 const DEFAULT_CREATE_DERIVED = true;
 
+const requiredOptions = ['cloudName', 'apiKey', 'apiSecret'];
+
 exports.setPluginOptions = pluginOptions => {
+  requiredOptions.forEach(optionKey => {
+    if (pluginOptions[optionKey] == null) {
+      throw Error(
+        `${optionKey} is a required plugin option for gatsby-transformer-cloudinary.`,
+      );
+    }
+  });
+
   options = {
     fluidMaxWidth: DEFAULT_FLUID_MAX_WIDTH,
     fluidMinWidth: DEFAULT_FLUID_MIN_WIDTH,
