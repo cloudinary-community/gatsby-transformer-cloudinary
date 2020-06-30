@@ -1,4 +1,4 @@
-import { NodePluginArgs, Store, GatsbyCache, Reporter } from 'gatsby';
+import { NodePluginArgs, Reporter } from 'gatsby';
 
 export function createRemoteImageNode(
   args: CreateRemoteImageNodeArgs,
@@ -14,4 +14,20 @@ export interface CreateRemoteImageNodeArgs {
   reporter: Reporter;
 }
 
-export type CloudinaryAssetNode = any;
+export interface CloudinaryAssetNode {
+  cloudName: string;
+  public_id: string;
+  version: number;
+  originalHeight: number;
+  originalWidth: number;
+  breakpoints: number[];
+  id: string;
+  parent: string;
+  internal: {
+    type: string;
+    contentDigest: string;
+    counter: number;
+    owner: string;
+  };
+  children: string[];
+}
