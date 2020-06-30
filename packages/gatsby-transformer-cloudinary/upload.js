@@ -2,7 +2,13 @@ const cloudinary = require('cloudinary').v2;
 const { getPluginOptions } = require('./options');
 
 exports.uploadImageToCloudinary = async ({ url, publicId }) => {
-  const { cloudName, apiKey, apiSecret, uploadFolder } = getPluginOptions();
+  const {
+    apiKey,
+    apiSecret,
+    cloudName,
+    uploadFolder,
+    useCloudinaryBreakpoints,
+  } = getPluginOptions();
   cloudinary.config({
     cloud_name: cloudName,
     api_key: apiKey,
@@ -11,23 +17,32 @@ exports.uploadImageToCloudinary = async ({ url, publicId }) => {
 
   //can we save on transformations if we do omit responsive_breakpoints?
 
-  const result = await cloudinary.uploader.upload(url, {
+  const uploadOptions = {
+    folder: uploadFolder,
     // overwrite: true,
     overwrite: false, // can we save on anything if we set overwrite to false? yes. setting this to true uses one transformation per image
-    folder: uploadFolder,
     public_id: publicId,
     resource_type: 'auto',
-    // can we save on anything by omitting responsive_breakpoints? yes, it reduces the number of transformations we use.
-    // responsive_breakpoints: [
-    //   {
-    //     create_derived: createDerived, //can we save on transformations if this is false? no. this only saves storage.
-    //     bytes_step: 20000,  // {bytes_step: 20000} is the default and hard-coded, so we can omit it.
-    //     min_width: fluidMinWidth,
-    //     max_width: fluidMaxWidth,
-    //     max_images: breakpointsMaxImages,
-    //   },
-    // ],
-  });
+  };
+
+  // Each time we ask Cloudinary to calculate the responsive breakpoints for an
+  // image, Cloudinary bills us for one transformation. Since this API call
+  // gets called for every image every time our Gatsby cache gets cleared, this
+  // can get expensive very fast. This option should not be used outside of
+  // production.
+  if (useCloudinaryBreakpoints) {
+    uploadOptions.responsive_breakpoints = [
+      {
+        create_derived: createDerived, //can we save on transformations if this is false? no. this only saves storage.
+        bytes_step: 20000, // {bytes_step: 20000} is the default and hard-coded, so we can omit it.
+        min_width: fluidMinWidth,
+        max_width: fluidMaxWidth,
+        max_images: breakpointsMaxImages,
+      },
+    ];
+  }
+
+  const result = await cloudinary.uploader.upload(url, uploadOptions);
   console.log('exports.uploadImageToCloudinary -> result', result);
   return result;
 };
