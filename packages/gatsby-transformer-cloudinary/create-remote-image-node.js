@@ -2,6 +2,9 @@ const path = require('path');
 const { uploadImageToCloudinary } = require('./upload');
 const { createImageNode } = require('./create-image-node');
 
+let totalImages = 0;
+let uploadedImages = 0;
+
 exports.createRemoteImageNode = async ({
   url,
   parentNode,
@@ -17,10 +20,17 @@ exports.createRemoteImageNode = async ({
 
   const publicId = path.parse(url).name;
 
-  const cloudinaryUploadResult = await benchmark(
-    () => uploadImageToCloudinary({ url, publicId }),
-    reporter,
+  totalImages++;
+
+  const cloudinaryUploadResult = await uploadImageToCloudinary({
     url,
+    publicId,
+  });
+
+  uploadedImages++;
+
+  reporter.info(
+    `Uploaded ${uploadedImages} of ${totalImages} images to Cloudinary.`,
   );
 
   const imageNode = createImageNode({
@@ -41,11 +51,3 @@ exports.createRemoteImageNode = async ({
 
   return imageNode;
 };
-
-async function benchmark(fn, reporter, tag) {
-  const start = new Date();
-  const result = await fn();
-  const stop = new Date();
-  reporter.info(`Elapsed time: ${stop - start} ms (${tag})`);
-  return result;
-}
