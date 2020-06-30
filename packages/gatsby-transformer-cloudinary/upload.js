@@ -2,16 +2,7 @@ const cloudinary = require('cloudinary').v2;
 const { getPluginOptions } = require('./options');
 
 exports.uploadImageToCloudinary = async ({ url, publicId }) => {
-  const {
-    cloudName,
-    apiKey,
-    apiSecret,
-    uploadFolder,
-    fluidMaxWidth,
-    fluidMinWidth,
-    breakpointsMaxImages,
-    createDerived,
-  } = getPluginOptions();
+  const { cloudName, apiKey, apiSecret, uploadFolder } = getPluginOptions();
   cloudinary.config({
     cloud_name: cloudName,
     api_key: apiKey,
