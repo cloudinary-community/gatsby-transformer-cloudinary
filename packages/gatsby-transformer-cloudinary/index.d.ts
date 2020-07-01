@@ -8,6 +8,7 @@ export interface CreateRemoteImageNodeArgs {
   url: string;
   parentNode: any;
   relationshipName: string;
+  overwriteExisting?: boolean;
   createContentDigest: NodePluginArgs['createContentDigest'];
   createNode: NodePluginArgs['actions']['createNode'];
   createNodeId: NodePluginArgs['createNodeId'];

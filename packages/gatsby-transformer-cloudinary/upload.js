@@ -6,7 +6,12 @@ let uploadedImages = 0;
 
 const FIVE_MINUTES = 5 * 60 * 1000;
 
-exports.uploadImageToCloudinary = async ({ url, publicId, reporter }) => {
+exports.uploadImageToCloudinary = async ({
+  url,
+  publicId,
+  overwrite,
+  reporter,
+}) => {
   const {
     apiKey,
     apiSecret,
@@ -15,7 +20,6 @@ exports.uploadImageToCloudinary = async ({ url, publicId, reporter }) => {
     createDerived,
     fluidMaxWidth,
     fluidMinWidth,
-    overwriteExisting,
     uploadFolder,
     useCloudinaryBreakpoints,
   } = getPluginOptions();
@@ -27,7 +31,7 @@ exports.uploadImageToCloudinary = async ({ url, publicId, reporter }) => {
 
   const uploadOptions = {
     folder: uploadFolder,
-    overwrite: overwriteExisting,
+    overwrite,
     public_id: publicId,
     resource_type: 'auto',
     timeout: FIVE_MINUTES,

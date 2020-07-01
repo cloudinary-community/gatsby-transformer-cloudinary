@@ -4,6 +4,7 @@ const { createImageNode } = require('./create-image-node');
 
 exports.createRemoteImageNode = async ({
   url,
+  overwriteExisting,
   parentNode,
   relationshipName,
   createContentDigest,
@@ -15,11 +16,17 @@ exports.createRemoteImageNode = async ({
     throw Error("'relationshipName' is a required argument.");
   }
 
+  const overwrite =
+    overwriteExisting == null
+      ? getPluginOptions().overwriteExisting
+      : overwriteExisting;
+
   const publicId = path.parse(url).name;
 
   const cloudinaryUploadResult = await uploadImageToCloudinary({
     url,
     publicId,
+    overwrite,
     reporter,
   });
 
