@@ -57,7 +57,7 @@ exports.uploadImageToCloudinary = async ({ url, publicId, reporter }) => {
 
   totalImages++;
 
-  while (attempts++ <= 3) {
+  while (true) {
     try {
       const result = await cloudinary.uploader.upload(url, uploadOptions);
       uploadedImages++;
@@ -72,10 +72,19 @@ exports.uploadImageToCloudinary = async ({ url, publicId, reporter }) => {
         );
       return result;
     } catch (error) {
-      console.log('Caught an error in uploadImageToCloudinary:', error);
+      const stringifiedError = JSON.stringify(error, null, 2);
+      if (attempts < 3) {
+        attempts += 1;
+        reporter.warn(
+          `An error occurred when uploading ${url} to Cloudinary: ${stringifiedError}`,
+        );
+      } else {
+        reporter.panic(
+          `Unable to upload ${url} to Cloudinary after ${attempts} attempts: ${stringifiedError}`,
+        );
+      }
     }
   }
-  throw Error(`Unable to upload ${url} to Cloudinary.`);
 };
 
 exports.uploadImageNodeToCloudinary = async ({ node, reporter }) => {
