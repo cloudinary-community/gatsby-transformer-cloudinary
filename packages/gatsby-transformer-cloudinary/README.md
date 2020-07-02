@@ -11,6 +11,7 @@ You’ll need a [Cloudinary account](https://cloudinary.com) to use this plugin.
 ## Features
 
 - Upload local project media assets to a secure remote CDN
+- Upload remote media assets to a secure remote CDN
 - Utilize media assets on Cloudinary in gatsby-image
 - Use gatsby-image `fluid` and `fixed` formats on Cloudinary assets
 - Retrieve media files in optimized formats with responsive breakpoints
@@ -49,11 +50,18 @@ export default () => {
 
 ## Installation
 
-This transformer only works if there are `File` nodes, which are created by [`gatsby-source-filesystem`](https://www.gatsbyjs.org/packages/gatsby-source-filesystem/).
+This transformer automatically creates childCloudinaryAsset nodes for `File` nodes created by [`gatsby-source-filesystem`](https://www.gatsbyjs.org/packages/gatsby-source-filesystem/).
+
+This transformer also allows you to pass URLs directly to Cloudinary to side-step the need to first download files to your development machine. This can be achieved by calling the `createRemoteImageNode` function from an `onCreateNode` function.
+
 Install the plugins using either `npm` or `yarn`.
 
 ```sh
 npm install --save gatsby-transformer-cloudinary gatsby-source-filesystem
+```
+
+```sh
+yarn add gatsby-transformer-cloudinary gatsby-source-filesystem
 ```
 
 ## How to use
@@ -69,7 +77,7 @@ CLOUDINARY_API_KEY=<your API key>
 CLOUDINARY_API_SECRET=<your API secret>
 ```
 
-> **NOTE:** you’ll also need to set these env vars in your build system (i.e. Netlify).
+> **NOTE:** you’ll also need to set these environment variables in your build system (i.e. Netlify).
 
 ### Configure the plugin
 
@@ -103,6 +111,37 @@ module.exports = {
 };
 ```
 
+To directly upload images to Cloudinary from remote sources, you can use the `createRemoteImageNode` function:
+
+```js
+// gatsby-node.js
+import { createRemoteImageNode } from 'gatsby-transformer-cloudinary';
+
+// This example assumes "post" nodes are created in a `sourceNodes` function.
+const POST_NODE_TYPE = 'post';
+
+export async function onCreateNode({
+  node,
+  actions: { createNode },
+  createNodeId,
+  createContentDigest,
+  reporter,
+}) {
+  // In this example, "post" nodes sometimes have a "cover_photo_url" that's a link to an image.
+  if (node.internal.type === POST_NODE_TYPE && node.cover_photo_url) {
+    await createRemoteImageNode({
+      url: node.cover_photo_url,
+      parentNode: node,
+      relationshipName: 'coverPhoto',
+      createNode,
+      createNodeId,
+      createContentDigest,
+      reporter,
+    });
+  }
+}
+```
+
 ### Plugin options
 
 In `gatsby-config.js` the plugin accepts the following options:
@@ -120,7 +159,7 @@ In `gatsby-config.js` the plugin accepts the following options:
 | `useCloudinaryBreakpoints` | `Boolean` | false    | false         | If `true`, then Cloudinary will be requested to automatically find the best breakpoints for each image. It's recommended that this option be set to `false` in development because this option uses one Cloudinary transformation for every image uploaded to Cloudinary plus one transformation for every derived image created while calculating breakpoints.                                                        |
 | `overwriteExisting`        | `Boolean` | false    | false         | Whether to overwrite existing assets with the same public ID. When set to false, return immediately if an asset with the same Public ID was found. It's recommended that this is set to false in development as each image overwrite costs one Cloudinary transformation.                                                                                                                                              |
 
-> Note: Setting a high max width such as 5000 will lead to the generation of a lot of derived images, between the max and min widths breakpoints on image upload. Use this option with care.
+> Note: Each derived image created for a breakpoint will consume one Cloudinary transformation. Enable the `useCloudinaryBreakpoints` option with care. If the `createDerived` option is enabled, transformations will only be consumed when the images are first created. However, created images will consume Cloudinary storage space. If `overwriteExisting` is enabled, each image that you upload will consume one transformation each time your Gatsby cache gets cleared and the image gets re-uploaded. For this reason, it's recommended that you keep `overWriteExisting` disabled and instead set the `overwriteExisting` parameter of `createRemoteImageNode` on a per-image basis when you know that an image has actually been updated.
 
 ### Query for images
 
