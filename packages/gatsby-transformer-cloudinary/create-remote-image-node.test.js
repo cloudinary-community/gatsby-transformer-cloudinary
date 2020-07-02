@@ -1,3 +1,4 @@
+const path = require('path');
 const { createRemoteImageNode } = require('./create-remote-image-node');
 
 jest.mock('./create-image-node');
@@ -63,7 +64,19 @@ test('calls uploadImageToCloudinary with overwrite from args if provided', async
 });
 
 test('calls uploadImageToCloudinary with the correct arguments', async () => {
-  expect(0).toEqual(1);
+  const imageNodeId = 'image-node-id';
+  createImageNode.mockReturnValue({ id: imageNodeId });
+  const reporter = 'reporter';
+  const args = getDefaultArgs({ reporter });
+  await createRemoteImageNode(args);
+  const expectedArgs = {
+    url: args.url,
+    publicId: path.parse(args.url).name,
+    reporter,
+  };
+  expect(uploadImageToCloudinary).toHaveBeenCalledWith(
+    expect.objectContaining(expectedArgs),
+  );
 });
 
 test('passes the correct arguments to createImageNode', async () => {
@@ -111,5 +124,12 @@ test('links the newly created node to the provided parent node in GraphQL', asyn
 });
 
 test('returns the image node that it created', async () => {
-  expect(0).toEqual(1);
+  const args = getDefaultArgs();
+  const imageNodeId = 'image-node-id';
+  const imageNode = { id: imageNodeId };
+  createImageNode.mockReturnValue(imageNode);
+
+  const actual = await createRemoteImageNode(args);
+
+  expect(actual).toEqual(imageNode);
 });
