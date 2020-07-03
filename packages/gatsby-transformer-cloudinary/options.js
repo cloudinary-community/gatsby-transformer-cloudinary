@@ -24,7 +24,9 @@ exports.setPluginOptions = ({ pluginOptions, reporter }) => {
     pluginOptions.breakpointsMaxImages &&
     pluginOptions.breakpointsMaxImages < 1
   ) {
-    throw Error(`breakpointsMaxImages must be at least 1.`);
+    reporter.panic(
+      `[gatsby-transformer-cloudinary] "breakpointsMaxImages" must be at least 1. You can modify it in your gatsby-config file.`,
+    );
   }
 
   options = {
