@@ -168,6 +168,6 @@ exports.onCreateNode = async ({
   return imageNode;
 };
 
-exports.onPreInit = (_, pluginOptions) => {
-  setPluginOptions(pluginOptions);
+exports.onPreInit = ({ reporter }, pluginOptions) => {
+  setPluginOptions({ pluginOptions, reporter });
 };
