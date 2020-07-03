@@ -9,7 +9,7 @@ const defaultOptions = {
   overwriteExisting: false,
 };
 
-const requiredOptions = ['cloudName', 'apiKey', 'apiSecret'];
+const requiredOptions = ['apiKey', 'apiSecret', 'cloudName'];
 
 exports.setPluginOptions = ({ pluginOptions, reporter }) => {
   requiredOptions.forEach(optionKey => {
