@@ -16,18 +16,73 @@ function getDefaultArgs(args) {
     createNode: jest.fn(() => 'createNode'),
     createNodeId: jest.fn(() => 'createNodeId'),
     createContentDigest: jest.fn(() => 'createContentDigest'),
+    reporter: {},
     parentNode: { id: 'abc-123' },
     overwriteExisting: false,
     ...args,
   };
 }
 
+test('requires url', async () => {
+  const args = getDefaultArgs();
+  delete args.url;
+
+  await expect(createRemoteImageNode(args)).rejects.toThrow(
+    '`url` is a required argument. Pass the URL where the image is currently hosted so it can be downloaded by Cloudinary.',
+  );
+});
+
+test('requires parentNode', async () => {
+  const args = getDefaultArgs();
+  delete args.parentNode;
+
+  await expect(createRemoteImageNode(args)).rejects.toThrow(
+    "`parentNode` is a required argument. This parameter is used to link a newly created node representing the image to a parent node in Gatsby's GraphQL layer.",
+  );
+});
+
 test('requires relationshipName', async () => {
   const args = getDefaultArgs();
   delete args.relationshipName;
 
   await expect(createRemoteImageNode(args)).rejects.toThrow(
-    "'relationshipName' is a required argument.",
+    "`relationshipName` is a required argument. This parameter sets the name of the relationship between the parent node and the newly created node for this image in Gatsby's GraphQL layer.",
+  );
+});
+
+test('requires createContentDigest', async () => {
+  const args = getDefaultArgs();
+  delete args.createContentDigest;
+
+  await expect(createRemoteImageNode(args)).rejects.toThrow(
+    "`createContentDigest` is a required argument. It's available at `CreateNodeArgs.createContentDigest`.",
+  );
+});
+
+test('requires createNode', async () => {
+  const args = getDefaultArgs();
+  delete args.createNode;
+
+  await expect(createRemoteImageNode(args)).rejects.toThrow(
+    "`createNode` is a required argument. It's available at `CreateNodeArgs.actions.createNode`.",
+  );
+});
+
+test('requires createNodeId', async () => {
+  const args = getDefaultArgs();
+  delete args.createNodeId;
+
+  await expect(createRemoteImageNode(args)).rejects.toThrow(
+    "`createNodeId` is a required argument. It's available at `CreateNodeArgs.createNodeId`.",
+  );
+});
+
+test('requires reporter', async () => {
+  const args = getDefaultArgs();
+  delete args.reporter;
+
+  await expect(createRemoteImageNode(args)).rejects.toThrow(
+    "`reporter` is a required argument. It's available at `CreateNodeArgs.reporter`.",
   );
 });
 
