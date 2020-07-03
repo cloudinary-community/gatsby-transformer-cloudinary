@@ -10,6 +10,10 @@ function getDefaultBreakpoints(imageWidth) {
   const max = Math.min(imageWidth, fluidMaxWidth);
   const min = fluidMinWidth;
 
+  if (max <= min) {
+    return [max];
+  }
+
   const breakpoints = [max];
   for (let i = 1; i < breakpointsMaxImages; i++) {
     const breakpoint = max - (i * (max - min)) / (breakpointsMaxImages - 1);
@@ -34,10 +38,15 @@ exports.createImageNode = ({
   const { cloudName } = getPluginOptions();
 
   let breakpoints = getDefaultBreakpoints(width);
-  if (responsive_breakpoints) {
-    breakpoints = responsive_breakpoints
-      .shift()
-      .breakpoints.map(({ width }) => width);
+  if (
+    responsive_breakpoints &&
+    responsive_breakpoints[0] &&
+    responsive_breakpoints[0].breakpoints &&
+    responsive_breakpoints[0].breakpoints.length > 0
+  ) {
+    breakpoints = responsive_breakpoints[0].breakpoints.map(
+      ({ width }) => width,
+    );
   }
 
   const imageNode = {
