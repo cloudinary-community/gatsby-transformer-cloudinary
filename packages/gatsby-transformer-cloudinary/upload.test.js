@@ -107,7 +107,7 @@ describe('uploadImageToCloudinary', () => {
     expect(cloudinaryUpload).toHaveBeenCalledWith(expectedUrl, expectedOptions);
   });
 
-  test('returns the result return from the Cloudinary uploader', async () => {
+  test('returns the result returned from the Cloudinary uploader', async () => {
     const cloudinaryUpload = jest.fn();
     const cloudinaryUploadResult = 'cloudinaryUploadResult';
     cloudinaryUpload.mockReturnValue(cloudinaryUploadResult);
