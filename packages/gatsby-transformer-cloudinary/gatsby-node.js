@@ -47,6 +47,8 @@ exports.createSchemaCustomization = ({ actions }) => {
       aspectRatio: Float
       base64: String!
       height: Float
+      presentationHeight: Float
+      presentationWidth: Float
       src: String
       srcSet: String
       width: Float

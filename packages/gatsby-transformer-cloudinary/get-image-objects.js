@@ -201,9 +201,15 @@ exports.getFluidImageObject = async ({
     })
     .join();
 
+  const presentationWidth = max;
+  const presentationHeight =
+    (presentationWidth * originalHeight) / originalWidth;
+
   return {
     aspectRatio,
     base64,
+    presentationWidth,
+    presentationHeight,
     sizes,
     src,
     srcSet,
