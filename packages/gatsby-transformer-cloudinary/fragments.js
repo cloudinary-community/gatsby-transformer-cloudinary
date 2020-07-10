@@ -10,6 +10,13 @@ export const cloudinaryAssetFluid = graphql`
   }
 `;
 
+export const cloudinaryAssetFluidLimitPresentationSize = graphql`
+  fragment CloudinaryAssetFluidLimitPresentationSize on CloudinaryAssetFluid {
+    maxHeight: presentationHeight
+    maxWidth: presentationWidth
+  }
+`;
+
 export const cloudinaryAssetFixed = graphql`
   fragment CloudinaryAssetFixed on CloudinaryAssetFixed {
     base64
