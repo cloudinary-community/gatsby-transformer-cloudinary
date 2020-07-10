@@ -1,11 +1,11 @@
 const axios = require('axios');
+const { getPluginOptions } = require('./options');
 // todo: for fluid images when original width and height is not set, use width and height of image as is and make full width
 // todo: investigate graphQL query overrides for width and height and abstract control to user through gql query
 
 // Define default width values for fluid, fixed and base64 images
 const DEFAULT_BASE64_WIDTH = 30;
 const DEFAULT_FIXED_WIDTH = 400;
-const DEFAULT_FLUID_MAX_WIDTH = 650;
 
 // Create Cloudinary image URL with transformations.
 const getImageURL = ({
@@ -155,7 +155,7 @@ exports.getFluidImageObject = async ({
   originalHeight,
   breakpoints = [200, 400, 600],
   version = false,
-  maxWidth = DEFAULT_FLUID_MAX_WIDTH,
+  maxWidth,
   base64Width = DEFAULT_BASE64_WIDTH,
   base64Transformations = [],
   transformations = [],
@@ -165,7 +165,8 @@ exports.getFluidImageObject = async ({
     transformations,
     originalWidth / originalHeight,
   );
-  const max = Math.min(maxWidth, originalWidth);
+  const { fluidMaxWidth } = getPluginOptions();
+  const max = Math.min(maxWidth ? maxWidth : fluidMaxWidth, originalWidth);
   const sizes = `(max-width: ${max}px) 100vw, ${max}px`;
   const { base64, src } = await getSharedImageData({
     public_id,

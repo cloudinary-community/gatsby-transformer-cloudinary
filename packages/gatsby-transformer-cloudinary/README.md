@@ -9,13 +9,16 @@ You’ll need a [Cloudinary account](https://cloudinary.com) to use this plugin.
 > **DISCLAIMER:** If you try running this demo's source code on your own computer, you might face issues as the demo uses assets and [transformations](https://cloudinary.com/documentation/chained_and_named_transformations#named_transformations) from the author’s Cloudinary account. Before running, please remove them or replace them with images and transformations from your own Cloudinary account.
 
 ## Features
+
 - Upload local project media assets to a secure remote CDN
+- Upload remote media assets to a secure remote CDN
 - Utilize media assets on Cloudinary in gatsby-image
 - Use gatsby-image `fluid` and `fixed` formats on Cloudinary assets
 - Retrieve media files in optimized formats with responsive breakpoints
 - Utilize all Cloudinary transformations including chained transformations in gatsby's data layer
 
 ## Example usage
+
 Here's the plugin in action to fetch a fixed asset using the `useStaticQuery` API of gatsby:
 
 ```jsx harmony
@@ -38,20 +41,27 @@ export default () => {
 
   return (
     <div>
-        <h2>Here goes something</h2>
-        <Image fixed={data.file.childCloudinaryAsset.fixed} alt="banner" />
+      <h2>Here goes something</h2>
+      <Image fixed={data.file.childCloudinaryAsset.fixed} alt="banner" />
     </div>
-    );
+  );
 };
 ```
 
 ## Installation
 
-This transformer only works if there are `File` nodes, which are created by [`gatsby-source-filesystem`](https://www.gatsbyjs.org/packages/gatsby-source-filesystem/). 
+This transformer automatically creates childCloudinaryAsset nodes for `File` nodes created by [`gatsby-source-filesystem`](https://www.gatsbyjs.org/packages/gatsby-source-filesystem/).
+
+This transformer also allows you to pass URLs directly to Cloudinary to side-step the need to first download files to your development machine. This can be achieved by calling the `createRemoteImageNode` function from an `onCreateNode` function.
+
 Install the plugins using either `npm` or `yarn`.
 
 ```sh
 npm install --save gatsby-transformer-cloudinary gatsby-source-filesystem
+```
+
+```sh
+yarn add gatsby-transformer-cloudinary gatsby-source-filesystem
 ```
 
 ## How to use
@@ -61,15 +71,13 @@ npm install --save gatsby-transformer-cloudinary gatsby-source-filesystem
 Add the data that shouldn’t be committed to Git into `.env.development`:
 
 ```sh
-# Find this at https://cloudinary.com/console/settings/account
+# Find these values at https://cloudinary.com/console/
 CLOUDINARY_CLOUD_NAME=<your cloud name>
-
-# Generate an API key pair at https://cloudinary.com/console/settings/security
 CLOUDINARY_API_KEY=<your API key>
 CLOUDINARY_API_SECRET=<your API secret>
 ```
 
-> **NOTE:** you’ll also need to set these env vars in your build system (i.e. Netlify).
+> **NOTE:** you’ll also need to set these environment variables in your build system (i.e. Netlify).
 
 ### Configure the plugin
 
@@ -97,29 +105,61 @@ module.exports = {
         apiKey: process.env.CLOUDINARY_API_KEY,
         apiSecret: process.env.CLOUDINARY_API_SECRET,
         uploadFolder: 'gatsby-cloudinary',
-        
       },
     },
   ],
 };
 ```
 
+To directly upload images to Cloudinary from remote sources, you can use the `createRemoteImageNode` function:
+
+```js
+// gatsby-node.js
+import { createRemoteImageNode } from 'gatsby-transformer-cloudinary';
+
+// This example assumes "post" nodes are created in a `sourceNodes` function.
+const POST_NODE_TYPE = 'post';
+
+export async function onCreateNode({
+  node,
+  actions: { createNode },
+  createNodeId,
+  createContentDigest,
+  reporter,
+}) {
+  // In this example, "post" nodes sometimes have a "cover_photo_url" that's a link to an image.
+  if (node.internal.type === POST_NODE_TYPE && node.cover_photo_url) {
+    await createRemoteImageNode({
+      url: node.cover_photo_url,
+      parentNode: node,
+      relationshipName: 'coverPhoto',
+      createNode,
+      createNodeId,
+      createContentDigest,
+      reporter,
+    });
+  }
+}
+```
+
 ### Plugin options
+
 In `gatsby-config.js` the plugin accepts the following options:
 
-| option                 | type      | required | default value | description                                                                                                                                                                             |
-|------------------------|-----------|----------|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `cloudName`            | `String`  | true     | n/a           | Cloud name of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable. |
-| `apiKey`               | `String`  | true     | n/a           | API Key of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable.    |
-| `apiSecret`            | `String`  | true     | n/a           | API Secret of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable. |
-| `uploadFolder`         | `String`  | false    | n/a           | This is the name of the folder the images will be uploaded to on Cloudinary. It will be created on Cloudinary if it is not specified.                                                   |
-| `fluidMaxWidth`        | `Int`     | false    | 1000          | Max width set for responsive breakpoints images generated and returned on image upload.                                                                                                 |
-| `fluidMinWidth`        | `Int`     | false    | 200           | Min width set for responsive breakpoints images generated and returned on image upload.                                                                                                 |
-| `createDerived`        | `Boolean` | false    | true          | This option is specifies the creation of derived images using the specified fluidMinWidth and fluidMaxWidth dimensions specified.                                                       |
-| `breakpointsMaxImages` | `Integer` | false    | 5             | Set maximum number of responsive breakpoint images generated and returned on image upload.                                                                                              |
+| option                     | type      | required | default value | description                                                                                                                                                                                                                                                                                                                                                                                                            |
+| -------------------------- | --------- | -------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `cloudName`                | `String`  | true     | n/a           | Cloud name of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable.                                                                                                                                                                                                                                |
+| `apiKey`                   | `String`  | true     | n/a           | API Key of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable.                                                                                                                                                                                                                                   |
+| `apiSecret`                | `String`  | true     | n/a           | API Secret of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable.                                                                                                                                                                                                                                |
+| `uploadFolder`             | `String`  | false    | n/a           | An optional folder name where the uploaded assets will be stored on Cloudinary.                                                                                                                                                                                                                                                                                                                                        |
+| `fluidMaxWidth`            | `Int`     | false    | 1000          | The maximum width needed for an image. If specifying a width bigger than the original image, the width of the original image is used instead. Used when calculating breakpoints.                                                                                                                                                                                                                                       |
+| `fluidMinWidth`            | `Int`     | false    | 50            | The minimum width needed for an image. Used when calculating breakpoints.                                                                                                                                                                                                                                                                                                                                              |
+| `createDerived`            | `Boolean` | false    | false         | If `true`, create and keep the derived images of the selected breakpoints during the API call. If false, images generated during the analysis process are thrown away. This option is ignored if `useCloudinaryBreakpoints` is `false`. It's recommended that you enable `createDerived` if `useCloudinaryBreakpoints` is true to store the breakpoint images and prevent them from being recalculated on every build. |
+| `breakpointsMaxImages`     | `Integer` | false    | 20            | Set maximum number of responsive breakpoint images generated and returned on image upload. If `useCloudinaryBreakpoints` is false, then exactly `breakpointsMaxImages` breakpoints will be created.                                                                                                                                                                                                                    |
+| `useCloudinaryBreakpoints` | `Boolean` | false    | false         | If `true`, then Cloudinary will be requested to automatically find the best breakpoints for each image. It's recommended that this option be set to `false` in development because this option uses one Cloudinary transformation for every image uploaded to Cloudinary plus one transformation for every derived image created while calculating breakpoints.                                                        |
+| `overwriteExisting`        | `Boolean` | false    | false         | Whether to overwrite existing assets with the same public ID. When set to false, return immediately if an asset with the same Public ID was found. It's recommended that this is set to false in development as each image overwrite costs one Cloudinary transformation.                                                                                                                                              |
 
-> Note: Setting a high max width such as 5000 will lead to the generation of a lot of derived images, between the max and min widths breakpoints on image upload. Use this option with care.
-
+> Note: Each derived image created for a breakpoint will consume one Cloudinary transformation. Enable the `useCloudinaryBreakpoints` option with care. If the `createDerived` option is enabled, transformations will only be consumed when the images are first created. However, created images will consume Cloudinary storage space. If `overwriteExisting` is enabled, each image that you upload will consume one transformation each time your Gatsby cache gets cleared and the image gets re-uploaded. For this reason, it's recommended that you keep `overWriteExisting` disabled and instead set the `overwriteExisting` parameter of `createRemoteImageNode` on a per-image basis when you know that an image has actually been updated.
 
 ### Query for images
 
@@ -213,7 +253,7 @@ Both `fixed` and `fluid` accept arguments. All arguments are optional.
 ### Arguments for both `fixed` and `fluid`
 
 | argument          | type        | required | default                | description                                                                                                                                                                             |
-|-------------------|-------------|----------|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ----------------- | ----------- | -------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `cloudName`       | `String`    | true     | `n/a`                  | Cloud name of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable. |
 | `public_id`       | `String`    | true     | `n/a`                  | Public ID of the image to retrieve from Cloudinary. This can be obtained from your Cloudinary account.                                                                                  |
 | `transformations` | `[String!]` | false    | `[]`                   | Array of transformations to be applied to the image.                                                                                                                                    |
@@ -232,9 +272,9 @@ Both `fixed` and `fluid` accept arguments. All arguments are optional.
 
 ### Arguments for `fluid`
 
-| argument   | type  | default | description                         |
-| ---------- | ----- | ------- | ----------------------------------- |
-| `maxWidth` | `Int` | `650`   | The maximum width for fluid images. |
+| argument   | type  | default                     | description                         |
+| ---------- | ----- | --------------------------- | ----------------------------------- |
+| `maxWidth` | `Int` | Original width of the image | The maximum width for fluid images. |
 
 ### A note about aspect ratios
 
@@ -243,13 +283,16 @@ You’re able to change the aspect ratio of images by supplying the [aspect rati
 > **NOTE:** The aspect ratio _must_ be supplied in the `transformations` array. It **will not** be picked up from the `chained` argument.
 
 ## Other Resources
+
 - [Cloudinary image transformation reference](https://cloudinary.com/documentation/image_transformation_reference)
 - [Try the gatsby-source-cloudinary plugin to source media files into Gatsby file nodes](https://www.npmjs.com/package/gatsby-source-cloudinary)
 - [Using Cloudinary image service for media optimization](https://www.gatsbyjs.org/docs/using-cloudinary-image-service/)
 - [Learn how this plugin was built with Jason Lengstorf](https://www.learnwithjason.dev/build-a-gatsby-transformer-plugin-for-cloudinary)
 
 ## Contribute
+
 Want to contribute to make this tool even better? Feel free to send in issues and pull requests on feature requests, fixes, bugs, typos, performance lapses or any other challenge faced with using this tool.
 
 ## License
-MIT 
+
+MIT
