@@ -4,7 +4,17 @@ const DEFAULT_FLUID_MAX_WIDTH = 1000;
 const DEFAULT_FLUID_MIN_WIDTH = 200;
 
 exports.uploadImageNodeToCloudinary = async (node, options) => {
-  const {cloudName, apiKey, apiSecret, uploadFolder, fluidMaxWidth = DEFAULT_FLUID_MAX_WIDTH, fluidMinWidth = DEFAULT_FLUID_MIN_WIDTH, breakpointsMaxImages = 5, createDerived = true} =  options;
+  const {
+    cloudName,
+    apiKey,
+    apiSecret,
+    uploadFolder,
+    fluidMaxWidth = DEFAULT_FLUID_MAX_WIDTH,
+    fluidMinWidth = DEFAULT_FLUID_MIN_WIDTH,
+    breakpointsMaxImages = 5,
+    createDerived = true,
+    overwrite = true,
+  } = options;
   cloudinary.config({
     cloud_name: cloudName,
     api_key: apiKey,
@@ -16,6 +26,7 @@ exports.uploadImageNodeToCloudinary = async (node, options) => {
       folder: uploadFolder,
       public_id: node.name,
       resource_type: 'auto',
+      overwrite,
       responsive_breakpoints: [
         {
           create_derived: createDerived,
