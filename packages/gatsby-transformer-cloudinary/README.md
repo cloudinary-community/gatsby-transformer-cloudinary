@@ -9,6 +9,7 @@ You’ll need a [Cloudinary account](https://cloudinary.com) to use this plugin.
 > **DISCLAIMER:** If you try running this demo's source code on your own computer, you might face issues as the demo uses assets and [transformations](https://cloudinary.com/documentation/chained_and_named_transformations#named_transformations) from the author’s Cloudinary account. Before running, please remove them or replace them with images and transformations from your own Cloudinary account.
 
 ## Features
+
 - Upload local project media assets to a secure remote CDN
 - Utilize media assets on Cloudinary in gatsby-image
 - Use gatsby-image `fluid` and `fixed` formats on Cloudinary assets
@@ -16,6 +17,7 @@ You’ll need a [Cloudinary account](https://cloudinary.com) to use this plugin.
 - Utilize all Cloudinary transformations including chained transformations in gatsby's data layer
 
 ## Example usage
+
 Here's the plugin in action to fetch a fixed asset using the `useStaticQuery` API of gatsby:
 
 ```jsx harmony
