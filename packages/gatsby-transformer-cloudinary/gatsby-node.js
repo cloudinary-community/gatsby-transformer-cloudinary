@@ -49,8 +49,6 @@ exports.createSchemaCustomization = ({ actions }) => {
       aspectRatio: Float
       base64: String!
       height: Float
-      presentationHeight: Float
-      presentationWidth: Float
       src: String
       srcSet: String
       width: Float
@@ -59,6 +57,8 @@ exports.createSchemaCustomization = ({ actions }) => {
     type CloudinaryAssetFluid {
       aspectRatio: Float!
       base64: String!
+      presentationHeight: Float
+      presentationWidth: Float
       sizes: String!
       src: String!
       srcSet: String!
