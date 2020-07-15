@@ -187,6 +187,25 @@ export default () => {
 };
 ```
 
+### Avoiding stretched images using the fluid type
+
+As mentioned previously, images using the fluid type are stretched to match the container’s width and height. In the case where the image’s width or height is smaller than the available viewport, the image will stretch to match the container, potentially leading to unwanted problems and worsened image quality.
+
+The `CloudinaryAssetFluidLimitPresentationSize` fragment can be used to to `gatsby-image` not to stretch an image larger than its maximum dimensions regardless of the size of its container:
+
+```graphql
+query {
+  file(name: { eq: "avatar" }) {
+    childCloudinaryAsset {
+      fluid {
+        ...CloudinaryAssetFluid
+        ...CloudinaryAssetFluidLimitPresentationSize
+      }
+    }
+  }
+}
+```
+
 ## Manual Usage
 
 It’s also possible to manually create `gatsby-image`-friendly `fixed` and `fluid` objects by importing helper functions from the transformer.
