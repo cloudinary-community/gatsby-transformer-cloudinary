@@ -1,3 +1,10 @@
+# Version 1.0.1
+
+Other changes:
+
+- Added CloudinaryAssetFluidLimitPresentationSize fragment.
+- Added presentationHeight and presentationWidth to CloudinaryAssetFluid.
+
 # Version 1.0.0
 
 Breaking changes:
