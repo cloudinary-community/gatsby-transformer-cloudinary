@@ -6,16 +6,14 @@ export function createCloudinaryAssetNode(
 
 export interface CreateCloudinaryAssetNodeArgs {
   cloudName: string;
-  publicId: string;
-  originalHeight: number;
-  originalWidth: number;
-
-  version?: number;
-
-  parentNode: Node;
-
   createContentDigest: NodePluginArgs['createContentDigest'];
   createNodeId: NodePluginArgs['createNodeId'];
+  originalHeight: number;
+  originalWidth: number;
+  parentNode: Node;
+  publicId: string;
+  relationshipName: string;
+  version?: number;
 }
 
 export function createRemoteImageNode(
