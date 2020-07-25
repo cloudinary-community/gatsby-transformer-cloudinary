@@ -64,11 +64,9 @@ exports.createRemoteImageNode = async ({
   });
 
   const imageNode = createImageNode({
-    relationshipName,
     cloudinaryUploadResult,
     parentNode,
     createContentDigest,
-    createNode,
     createNodeId,
   });
 
