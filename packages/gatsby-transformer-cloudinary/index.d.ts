@@ -1,4 +1,4 @@
-import { NodePluginArgs, Reporter } from 'gatsby';
+import { Node, NodePluginArgs, Reporter } from 'gatsby';
 
 export function createRemoteImageNode(
   args: CreateRemoteImageNodeArgs,
@@ -6,7 +6,7 @@ export function createRemoteImageNode(
 
 export interface CreateRemoteImageNodeArgs {
   url: string;
-  parentNode: any;
+  parentNode: Node;
   relationshipName: string;
   overwriteExisting?: boolean;
   createContentDigest: NodePluginArgs['createContentDigest'];
