@@ -22,6 +22,14 @@ function getDefaultBreakpoints(imageWidth) {
   return breakpoints;
 }
 
+function createFingerprint(objectToFingerprint) {
+  // Perform a mostly stable stringification so that key orders do not shift.
+  return JSON.stringify(
+    objectToFingerprint,
+    Object.keys(objectToFingerprint).sort(),
+  );
+}
+
 exports.createImageNode = ({
   cloudinaryUploadResult: {
     responsive_breakpoints,
@@ -29,7 +37,6 @@ exports.createImageNode = ({
     version,
     height,
     width,
-    secure_url,
   },
   parentNode,
   createContentDigest,
@@ -49,6 +56,14 @@ exports.createImageNode = ({
     );
   }
 
+  const fingerprint = createFingerprint({
+    responsive_breakpoints,
+    public_id,
+    version,
+    height,
+    width,
+  });
+
   const imageNode = {
     // These helper fields are only here so the resolvers have access to them.
     // They will *not* be available via Gatsby’s data layer.
@@ -60,13 +75,13 @@ exports.createImageNode = ({
     breakpoints,
 
     // Add the required internal Gatsby node fields.
-    id: createNodeId(`CloudinaryAsset-${secure_url}`),
+    id: createNodeId(`CloudinaryAsset-${fingerprint}`),
     parent: parentNode.id,
     internal: {
       type: 'CloudinaryAsset',
       // Gatsby uses the content digest to decide when to reprocess a given
       // node. We can use the Cloudinary URL to avoid doing extra work.
-      contentDigest: createContentDigest(secure_url),
+      contentDigest: createContentDigest(fingerprint),
     },
   };
 
