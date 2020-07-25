@@ -41,9 +41,8 @@ exports.createImageNode = ({
   parentNode,
   createContentDigest,
   createNodeId,
+  cloudName,
 }) => {
-  const { cloudName } = getPluginOptions();
-
   let breakpoints = getDefaultBreakpoints(width);
   if (
     responsive_breakpoints &&
@@ -67,7 +66,7 @@ exports.createImageNode = ({
   const imageNode = {
     // These helper fields are only here so the resolvers have access to them.
     // They will *not* be available via Gatsby’s data layer.
-    cloudName: cloudName,
+    cloudName: cloudName || getPluginOptions().cloudName,
     public_id: public_id,
     version: version,
     originalHeight: height,
