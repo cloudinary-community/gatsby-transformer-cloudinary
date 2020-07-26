@@ -156,7 +156,6 @@ async function createAssetNodeFromFile({
     createContentDigest,
     createNode,
     createNodeId,
-    createParentChildLink,
   });
 
   // Add the new node to Gatsby’s data layer.
