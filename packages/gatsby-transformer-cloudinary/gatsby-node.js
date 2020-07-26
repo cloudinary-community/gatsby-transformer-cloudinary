@@ -4,12 +4,8 @@ const {
   getFluidImageObject,
 } = require('./get-image-objects');
 const { setPluginOptions } = require('./options');
-const {
-  createAssetNodeFromFile,
-} = require('./gatsby-node/create-asset-node-from-file');
-const {
-  createAssetNodesFromData,
-} = require('./gatsby-node/create-asset-nodes-from-data');
+const { createAssetNodeFromFile } = require('./gatsby-node/create-asset-node-from-file');
+
 
 exports.onPreExtractQueries = async ({ store, getNodesByType }) => {
   const program = store.getState().program;
