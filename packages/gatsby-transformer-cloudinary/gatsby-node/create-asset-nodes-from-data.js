@@ -27,6 +27,19 @@ exports.createAssetNodesFromData = async ({
   });
 };
 
+function getAssetDataKeys(node) {
+  return Object.keys(node).filter(key => {
+    return (
+      node[key] &&
+      node[key].cloudinaryAssetData === true &&
+      node[key].cloudName &&
+      node[key].publicId &&
+      node[key].originalHeight &&
+      node[key].originalWidth
+    );
+  });
+}
+
 function createCloudinaryAssetNode({
   assetData: { cloudName, originalHeight, originalWidth, publicId, version },
   createContentDigest,
