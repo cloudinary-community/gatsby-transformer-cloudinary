@@ -1,4 +1,4 @@
-exports.createCloudinaryAssetNode = async ({
+exports.createCloudinaryAssetNode = ({
   cloudName,
   createContentDigest,
   createNodeId,
