@@ -205,6 +205,7 @@ async function createAssetNodesFromData({
       parentNode: node,
       publicId: assetData.publicId,
       relationshipName: assetDataKey,
+      reporter,
       version: assetData.version,
     });
   });

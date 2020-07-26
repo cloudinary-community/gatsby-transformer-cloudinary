@@ -10,44 +10,50 @@ exports.createCloudinaryAssetNode = ({
   parentNode,
   publicId,
   relationshipName,
+  reporter,
   version,
 }) => {
+  if (!reporter) {
+    reporter.panic(
+      '`reporter` is a required argument.',
+    );
+  }
   if (!cloudName) {
-    throw Error(
+    reporter.panic(
       '`cloudName` is a required argument. Pass the name of the Cloudinary cloud where the image is stored.',
     );
   }
   if (!createContentDigest) {
-    throw Error('`createContentDigest` is a required argument.');
+    reporter.panic('`createContentDigest` is a required argument.');
   }
   if (!createNode) {
-    throw Error('`createNode` is a required argument.');
+    reporter.panic('`createNode` is a required argument.');
   }
   if (!createNodeId) {
-    throw Error('`createNodeId` is a required argument.');
+    reporter.panic('`createNodeId` is a required argument.');
   }
   if (!originalHeight) {
-    throw Error(
+    reporter.panic(
       '`originalHeight` is a required argument. Pass the original height of the image stored on Cloudinary.',
     );
   }
   if (!originalWidth) {
-    throw Error(
+    reporter.panic(
       '`originalWidth` is a required argument. Pass the original width of the image stored on Cloudinary.',
     );
   }
   if (!parentNode) {
-    throw Error(
+    reporter.panic(
       '`parentNode` is a required argument. Pass the parent node that this Cloudinary image should be a child of.',
     );
   }
   if (!publicId) {
-    throw Error(
+    reporter.panic(
       '`publicId` is a required argument. Pass the Cloudinary public_id under which the image is stored.',
     );
   }
   if (!relationshipName) {
-    throw Error(
+    reporter.panic(
       '`relationshipName` is a required argument. Pass a name for how this image is related to its parent (e.g. "coverPhoto").',
     );
   }
