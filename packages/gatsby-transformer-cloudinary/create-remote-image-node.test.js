@@ -16,7 +16,11 @@ function getDefaultArgs(args) {
     createNode: jest.fn(() => 'createNode'),
     createNodeId: jest.fn(() => 'createNodeId'),
     createContentDigest: jest.fn(() => 'createContentDigest'),
-    reporter: {},
+    reporter: {
+      panic: msg => {
+        throw Error(`[reporter] ${msg}}`);
+      },
+    },
     parentNode: { id: 'abc-123' },
     overwriteExisting: false,
     ...args,
@@ -29,7 +33,7 @@ describe('createRemoteImageNode', () => {
     delete args.url;
 
     await expect(createRemoteImageNode(args)).rejects.toThrow(
-      '`url` is a required argument. Pass the URL where the image is currently hosted so it can be downloaded by Cloudinary.',
+      '[reporter] `url` is a required argument. Pass the URL where the image is currently hosted so it can be downloaded by Cloudinary.',
     );
   });
 
@@ -38,7 +42,7 @@ describe('createRemoteImageNode', () => {
     delete args.parentNode;
 
     await expect(createRemoteImageNode(args)).rejects.toThrow(
-      "`parentNode` is a required argument. This parameter is used to link a newly created node representing the image to a parent node in Gatsby's GraphQL layer.",
+      "[reporter] `parentNode` is a required argument. This parameter is used to link a newly created node representing the image to a parent node in Gatsby's GraphQL layer.",
     );
   });
 
@@ -47,7 +51,7 @@ describe('createRemoteImageNode', () => {
     delete args.relationshipName;
 
     await expect(createRemoteImageNode(args)).rejects.toThrow(
-      "`relationshipName` is a required argument. This parameter sets the name of the relationship between the parent node and the newly created node for this image in Gatsby's GraphQL layer.",
+      "[reporter] `relationshipName` is a required argument. This parameter sets the name of the relationship between the parent node and the newly created node for this image in Gatsby's GraphQL layer.",
     );
   });
 
@@ -56,7 +60,7 @@ describe('createRemoteImageNode', () => {
     delete args.createContentDigest;
 
     await expect(createRemoteImageNode(args)).rejects.toThrow(
-      "`createContentDigest` is a required argument. It's available at `CreateNodeArgs.createContentDigest`.",
+      "[reporter] `createContentDigest` is a required argument. It's available at `CreateNodeArgs.createContentDigest`.",
     );
   });
 
@@ -65,7 +69,7 @@ describe('createRemoteImageNode', () => {
     delete args.createNode;
 
     await expect(createRemoteImageNode(args)).rejects.toThrow(
-      "`createNode` is a required argument. It's available at `CreateNodeArgs.actions.createNode`.",
+      "[reporter] `createNode` is a required argument. It's available at `CreateNodeArgs.actions.createNode`.",
     );
   });
 
@@ -74,7 +78,7 @@ describe('createRemoteImageNode', () => {
     delete args.createNodeId;
 
     await expect(createRemoteImageNode(args)).rejects.toThrow(
-      "`createNodeId` is a required argument. It's available at `CreateNodeArgs.createNodeId`.",
+      "[reporter] `createNodeId` is a required argument. It's available at `CreateNodeArgs.createNodeId`.",
     );
   });
 
