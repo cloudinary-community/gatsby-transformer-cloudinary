@@ -1,5 +1,5 @@
 const stringify = require('fast-json-stable-stringify');
-const { getPluginOptions } = require('./options');
+const { getPluginOptions } = require('../options');
 
 function getDefaultBreakpoints(imageWidth) {
   const {

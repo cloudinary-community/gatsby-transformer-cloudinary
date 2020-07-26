@@ -1,7 +1,7 @@
 const { createImageNode } = require('./create-image-node');
 
-jest.mock('./options');
-const { getPluginOptions } = require('./options');
+jest.mock('../options');
+const { getPluginOptions } = require('../options');
 
 describe('createImageNode', () => {
   function getDefaultArgs(args) {
