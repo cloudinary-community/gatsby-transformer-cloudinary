@@ -7,6 +7,7 @@ export function createCloudinaryAssetNode(
 export interface CreateCloudinaryAssetNodeArgs {
   cloudName: string;
   createContentDigest: NodePluginArgs['createContentDigest'];
+  createNode: NodePluginArgs['actions']['createNode'];
   createNodeId: NodePluginArgs['createNodeId'];
   originalHeight: number;
   originalWidth: number;
