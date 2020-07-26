@@ -49,9 +49,11 @@ exports.createImageNode = ({
   }
 
   const fingerprint = stringify({
-    public_id,
-    version,
+    cloudName,
     height,
+    public_id,
+    breakpoints,
+    version,
     width,
   });
 
