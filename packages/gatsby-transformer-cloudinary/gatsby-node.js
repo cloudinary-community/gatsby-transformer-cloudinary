@@ -185,7 +185,7 @@ function getAssetDataKeys(node) {
 
 async function createAssetNodesFromData({
   node,
-  actions: { createNode, createParentChildLink },
+  actions: { createNode },
   createNodeId,
   createContentDigest,
   reporter,
