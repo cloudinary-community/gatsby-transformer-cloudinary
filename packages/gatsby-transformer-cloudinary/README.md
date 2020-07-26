@@ -1,6 +1,8 @@
 # gatsby-transformer-cloudinary
 
-Creates `CloudinaryAsset` nodes from compatible `File` nodes. The `File` nodes are uploaded to [Cloudinary](https://cloudinary.com), and the `CloudinaryAsset` responses are made up of Cloudinary URLs to transformed images in a format that‘s compatible with [`gatsby-image`](https://www.gatsbyjs.org/packages/gatsby-image/).
+Provides three ways to use [Cloudinary](https://cloudinary.com) with Gatsby: 1) Upload images in `File` nodes to Cloudinary. 2) Upload remote images by their URL to Cloudinary. 3) Create nodes for images that have already been uploaded to Cloudinary.
+
+Each of the three methods above create `CloudinaryAsset` nodes compatible with [`gatsby-image`](https://www.gatsbyjs.org/packages/gatsby-image/).
 
 You’ll need a [Cloudinary account](https://cloudinary.com) to use this plugin. They have a generous free tier, so for most of us this will stay free for quite a while.
 
@@ -111,6 +113,8 @@ module.exports = {
 };
 ```
 
+### Upload remote images
+
 To directly upload images to Cloudinary from remote sources, you can use the `createRemoteImageNode` function:
 
 ```js
@@ -141,6 +145,26 @@ export async function onCreateNode({
   }
 }
 ```
+
+### Use images already on Cloudinary
+
+To create GraphQL nodes for images that are already uploaded to Cloudinary, you need to create nodes containing data that describe the images on Cloudinary. For example, you might have a `post` node that has a cover photo stored on Cloudinary. The data in the post node should look something like...
+
+```js
+{
+  title: "How to beat the pandemic blues",
+  publishedAt: "2020-07-26T21:55:13.358Z",
+  coverPhoto: {
+    cloudinaryAssetData: true,
+    cloudName: "my-amazing-blog",
+    publicId: "blue-blue-blue",
+    originalHeight: 360,
+    originalWidth: 820,
+  }
+}
+```
+
+The `coverPhoto` property in the node above will be deleted and replaced by `gatsby-transformer-cloudinary` with a `CloudinaryAsset` node that can be used with [`gatsby-image`](https://www.gatsbyjs.org/packages/gatsby-image/). This transformation will be done for any top-level properties of nodes that have `cloudinaryAssetData: true`, and values `cloudName`, `publicId`, `originalHeight`, and `originalWidth` properties. The top-level property name, `coverPhoto` in the example above, will be the name of the relationship between the parent node and the `CloudinaryAsset` node that will be created.
 
 ### Plugin options
 
