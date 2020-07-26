@@ -20,6 +20,9 @@ exports.createCloudinaryAssetNode = ({
   if (!createContentDigest) {
     throw Error('`createContentDigest` is a required argument.');
   }
+  if (!createNode) {
+    throw Error('`createNode` is a required argument.');
+  }
   if (!createNodeId) {
     throw Error('`createNodeId` is a required argument.');
   }
