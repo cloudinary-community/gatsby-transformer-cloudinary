@@ -1,3 +1,4 @@
+const stringify = require('fast-json-stable-stringify');
 const { getPluginOptions } = require('./options');
 
 function getDefaultBreakpoints(imageWidth) {
@@ -20,14 +21,6 @@ function getDefaultBreakpoints(imageWidth) {
     breakpoints.push(Math.round(breakpoint));
   }
   return breakpoints;
-}
-
-function createFingerprint(objectToFingerprint) {
-  // Perform a mostly stable stringification so that key orders do not shift.
-  return JSON.stringify(
-    objectToFingerprint,
-    Object.keys(objectToFingerprint).sort(),
-  );
 }
 
 exports.createImageNode = ({
@@ -55,8 +48,7 @@ exports.createImageNode = ({
     );
   }
 
-  const fingerprint = createFingerprint({
-    responsive_breakpoints,
+  const fingerprint = stringify({
     public_id,
     version,
     height,
