@@ -6,6 +6,7 @@ const {
 const { uploadImageNodeToCloudinary } = require('./upload');
 const { setPluginOptions } = require('./options');
 const { createImageNode } = require('./create-image-node');
+const { createCloudinaryAssetNode } = require('./create-cloudinary-asset-node');
 
 const ALLOWED_MEDIA_TYPES = ['image/png', 'image/jpeg', 'image/gif'];
 
@@ -133,13 +134,13 @@ exports.createResolvers = ({ createResolvers }) => {
   createResolvers(resolvers);
 };
 
-exports.onCreateNode = async ({
+async function createAssetNodeFromFile({
   node,
   actions: { createNode, createParentChildLink },
   createNodeId,
   createContentDigest,
   reporter,
-}) => {
+}) {
   if (!ALLOWED_MEDIA_TYPES.includes(node.internal.mediaType)) {
     return;
   }
@@ -168,6 +169,69 @@ exports.onCreateNode = async ({
   });
 
   return imageNode;
+}
+
+function getAssetDataKeys(node) {
+  return Object.keys(node).filter(key => {
+    return (
+      node[key] &&
+      node[key].cloudinaryAssetData === true &&
+      node[key].cloudName &&
+      node[key].publicId &&
+      node[key].originalHeight &&
+      node[key].originalWidth
+    );
+  });
+}
+
+async function createAssetNodesFromData({
+  node,
+  actions: { createNode, createParentChildLink },
+  createNodeId,
+  createContentDigest,
+  reporter,
+}) {
+  const assetDataKeys = getAssetDataKeys(node);
+
+  assetDataKeys.forEach(assetDataKey => {
+    const assetData = { ...node[assetDataKey] };
+    delete node[assetDataKey];
+    createCloudinaryAssetNode({
+      cloudName: assetData.cloudName,
+      createContentDigest,
+      createNode,
+      createNodeId,
+      originalHeight: assetData.originalHeight,
+      originalWidth: assetData.originalWidth,
+      parentNode: node,
+      publicId: assetData.publicId,
+      relationshipName: assetDataKey,
+      version: assetData.version,
+    });
+  });
+}
+
+exports.onCreateNode = async ({
+  node,
+  actions,
+  createNodeId,
+  createContentDigest,
+  reporter,
+}) => {
+  createAssetNodesFromData({
+    node,
+    actions,
+    createNodeId,
+    createContentDigest,
+    reporter,
+  });
+  await createAssetNodeFromFile({
+    node,
+    actions,
+    createNodeId,
+    createContentDigest,
+    reporter,
+  });
 };
 
 exports.onPreInit = ({ reporter }, pluginOptions) => {
