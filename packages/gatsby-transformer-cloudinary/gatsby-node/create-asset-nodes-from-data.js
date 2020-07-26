@@ -1,3 +1,7 @@
+const {
+  createCloudinaryAssetNode,
+} = require('./create-asset-nodes-from-data/create-cloudinary-asset-node');
+
 function getAssetDataKeys(node) {
   return Object.keys(node).filter(key => {
     return (
