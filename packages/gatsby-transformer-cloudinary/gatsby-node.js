@@ -3,10 +3,8 @@ const {
   getFixedImageObject,
   getFluidImageObject,
 } = require('./get-image-objects');
-const { uploadImageNodeToCloudinary } = require('./upload');
 const { setPluginOptions } = require('./options');
-const { createImageNode } = require('./gatsby-node/create-image-node');
-const { createCloudinaryAssetNode } = require('./create-cloudinary-asset-node');
+const { createAssetNodeFromFile } = require('./gatsby-node/create-asset-node-from-file');
 
 const ALLOWED_MEDIA_TYPES = ['image/png', 'image/jpeg', 'image/gif'];
 
@@ -133,82 +131,6 @@ exports.createResolvers = ({ createResolvers }) => {
 
   createResolvers(resolvers);
 };
-
-async function createAssetNodeFromFile({
-  node,
-  actions: { createNode, createParentChildLink },
-  createNodeId,
-  createContentDigest,
-  reporter,
-}) {
-  if (!ALLOWED_MEDIA_TYPES.includes(node.internal.mediaType)) {
-    return;
-  }
-
-  const cloudinaryUploadResult = await uploadImageNodeToCloudinary({
-    node,
-    reporter,
-  });
-
-  const imageNode = createImageNode({
-    cloudinaryUploadResult,
-    parentNode: node,
-    createContentDigest,
-    createNode,
-    createNodeId,
-  });
-
-  // Add the new node to Gatsby’s data layer.
-  createNode(imageNode);
-
-  // Tell Gatsby to add `childCloudinaryAsset` to the parent `File` node.
-  createParentChildLink({
-    parent: node,
-    child: imageNode,
-  });
-
-  return imageNode;
-}
-
-function getAssetDataKeys(node) {
-  return Object.keys(node).filter(key => {
-    return (
-      node[key] &&
-      node[key].cloudinaryAssetData === true &&
-      node[key].cloudName &&
-      node[key].publicId &&
-      node[key].originalHeight &&
-      node[key].originalWidth
-    );
-  });
-}
-
-async function createAssetNodesFromData({
-  node,
-  actions: { createNode },
-  createNodeId,
-  createContentDigest,
-  reporter,
-}) {
-  const assetDataKeys = getAssetDataKeys(node);
-
-  assetDataKeys.forEach(assetDataKey => {
-    const assetData = { ...node[assetDataKey] };
-    delete node[assetDataKey];
-    createCloudinaryAssetNode({
-      cloudName: assetData.cloudName,
-      createContentDigest,
-      createNode,
-      createNodeId,
-      originalHeight: assetData.originalHeight,
-      originalWidth: assetData.originalWidth,
-      parentNode: node,
-      publicId: assetData.publicId,
-      relationshipName: assetDataKey,
-      version: assetData.version,
-    });
-  });
-}
 
 exports.onCreateNode = async ({
   node,
