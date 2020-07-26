@@ -1,6 +1,6 @@
 const path = require('path');
 const { uploadImageToCloudinary } = require('./upload');
-const { createImageNode } = require('./gatsby-node/create-asset-nodes-from-data/create-image-node');
+const { createImageNode } = require('./gatsby-node/create-image-node');
 const { getPluginOptions } = require('./options');
 
 exports.createRemoteImageNode = async ({

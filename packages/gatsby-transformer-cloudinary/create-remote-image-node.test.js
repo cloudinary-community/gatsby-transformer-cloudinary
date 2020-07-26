@@ -1,11 +1,11 @@
 const path = require('path');
 const { createRemoteImageNode } = require('./create-remote-image-node');
 
-jest.mock('./gatsby-node/create-asset-nodes-from-data/create-image-node');
+jest.mock('./gatsby-node/create-image-node');
 jest.mock('./options');
 jest.mock('./upload');
 
-const { createImageNode } = require('./gatsby-node/create-asset-nodes-from-data/create-image-node');
+const { createImageNode } = require('./gatsby-node/create-image-node');
 const { getPluginOptions } = require('./options');
 const { uploadImageToCloudinary } = require('./upload');
 
