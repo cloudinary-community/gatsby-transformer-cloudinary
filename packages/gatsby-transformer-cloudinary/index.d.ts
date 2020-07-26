@@ -2,7 +2,7 @@ import { Node, NodePluginArgs, Reporter } from 'gatsby';
 
 export function createCloudinaryAssetNode(
   args: CreateCloudinaryAssetNodeArgs,
-): Promise<CloudinaryAssetNode>;
+): CloudinaryAssetNode;
 
 export interface CreateCloudinaryAssetNodeArgs {
   cloudName: string;
