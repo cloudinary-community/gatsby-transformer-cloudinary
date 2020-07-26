@@ -14,7 +14,7 @@ exports.createCloudinaryAssetNode = ({
   version,
 }) => {
   if (!reporter) {
-    reporter.panic(
+    throw Error(
       '`reporter` is a required argument.',
     );
   }
