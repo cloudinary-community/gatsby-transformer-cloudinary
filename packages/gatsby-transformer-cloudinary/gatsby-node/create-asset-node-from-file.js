@@ -1,4 +1,4 @@
-const { createImageNode } = require('./create-image-node');
+const { createImageNode } = require('./create-asset-nodes-from-data/create-image-node');
 
 const ALLOWED_MEDIA_TYPES = ['image/png', 'image/jpeg', 'image/gif'];
 
