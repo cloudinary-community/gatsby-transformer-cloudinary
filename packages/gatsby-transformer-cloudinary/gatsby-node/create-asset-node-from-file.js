@@ -1,5 +1,7 @@
 const { createImageNode } = require('./create-image-node');
 
+const ALLOWED_MEDIA_TYPES = ['image/png', 'image/jpeg', 'image/gif'];
+
 exports.createAssetNodeFromFile = async ({
   node,
   actions: { createNode, createParentChildLink },

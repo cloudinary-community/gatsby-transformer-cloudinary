@@ -6,7 +6,6 @@ const {
 const { setPluginOptions } = require('./options');
 const { createAssetNodeFromFile } = require('./gatsby-node/create-asset-node-from-file');
 
-const ALLOWED_MEDIA_TYPES = ['image/png', 'image/jpeg', 'image/gif'];
 
 exports.onPreExtractQueries = async ({ store, getNodesByType }) => {
   const program = store.getState().program;
