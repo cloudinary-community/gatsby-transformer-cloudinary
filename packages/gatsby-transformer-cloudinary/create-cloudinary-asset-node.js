@@ -1,6 +1,9 @@
+const { createImageNode } = require('./create-image-node');
+
 exports.createCloudinaryAssetNode = ({
   cloudName,
   createContentDigest,
+  createNode,
   createNodeId,
   originalHeight,
   originalWidth,
