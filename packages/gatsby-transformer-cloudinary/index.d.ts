@@ -1,22 +1,5 @@
 import { Node, NodePluginArgs, Reporter } from 'gatsby';
 
-export function createCloudinaryAssetNode(
-  args: CreateCloudinaryAssetNodeArgs,
-): CloudinaryAssetNode;
-
-export interface CreateCloudinaryAssetNodeArgs {
-  cloudName: string;
-  createContentDigest: NodePluginArgs['createContentDigest'];
-  createNode: NodePluginArgs['actions']['createNode'];
-  createNodeId: NodePluginArgs['createNodeId'];
-  originalHeight: number;
-  originalWidth: number;
-  parentNode: Node;
-  publicId: string;
-  relationshipName: string;
-  version?: number;
-}
-
 export function createRemoteImageNode(
   args: CreateRemoteImageNodeArgs,
 ): Promise<CloudinaryAssetNode>;
