@@ -1,22 +1,44 @@
-const { createImageNode } = require('./create-image-node');
+const {
+  createCloudinaryAssetNode,
+} = require('./create-asset-nodes-from-data/create-cloudinary-asset-node');
+const { createImageNode } = require('../../create-image-node');
 
-exports.createCloudinaryAssetNode = ({
-  cloudName,
+exports.createAssetNodesFromData = async ({
+  node,
+  actions: { createNode },
+  createNodeId,
+  createContentDigest,
+  reporter,
+}) => {
+  const assetDataKeys = getAssetDataKeys(node);
+
+  assetDataKeys.forEach(assetDataKey => {
+    const assetData = { ...node[assetDataKey] };
+    delete node[assetDataKey];
+    createCloudinaryAssetNode({
+      assetData,
+      createContentDigest,
+      createNode,
+      createNodeId,
+      parentNode: node,
+      relationshipName: assetDataKey,
+      reporter,
+    });
+  });
+};
+
+function createCloudinaryAssetNode({
+  assetData: { cloudName, originalHeight, originalWidth, publicId, version },
   createContentDigest,
   createNode,
   createNodeId,
-  originalHeight,
-  originalWidth,
   parentNode,
-  publicId,
   relationshipName,
   reporter,
   version,
-}) => {
+}) {
   if (!reporter) {
-    throw Error(
-      '`reporter` is a required argument.',
-    );
+    throw Error('`reporter` is a required argument.');
   }
   if (!cloudName) {
     reporter.panic(
@@ -80,4 +102,4 @@ exports.createCloudinaryAssetNode = ({
   const relationshipKey = `${relationshipName}___NODE`;
   parentNode[relationshipKey] = imageNode.id;
   return imageNode;
-};
+}
