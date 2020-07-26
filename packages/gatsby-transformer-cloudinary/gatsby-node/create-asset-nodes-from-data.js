@@ -1,6 +1,3 @@
-const {
-  createCloudinaryAssetNode,
-} = require('./create-asset-nodes-from-data/create-cloudinary-asset-node');
 const { createImageNode } = require('../../create-image-node');
 
 exports.createAssetNodesFromData = async ({
