@@ -1,6 +1,12 @@
+# Version 1.1.0
+
+Additions:
+
+- Added ability to use existing Cloudinary images by marking nodes with `cloudinaryAssetData: true` and providing `cloudName`, `publicId`, `originalHeight`, and `originalWidth` properties.
+
 # Version 1.0.1
 
-Other changes:
+Additions:
 
 - Added CloudinaryAssetFluidLimitPresentationSize fragment.
 - Added presentationHeight and presentationWidth to CloudinaryAssetFluid.
