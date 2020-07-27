@@ -6,6 +6,9 @@ const {
 const { uploadImageNodeToCloudinary } = require('./upload');
 const { setPluginOptions } = require('./options');
 const { createImageNode } = require('./create-image-node');
+const {
+  createAssetNodesFromData,
+} = require('./gatsby-node/create-asset-nodes-from-data');
 
 const ALLOWED_MEDIA_TYPES = ['image/png', 'image/jpeg', 'image/gif'];
 
