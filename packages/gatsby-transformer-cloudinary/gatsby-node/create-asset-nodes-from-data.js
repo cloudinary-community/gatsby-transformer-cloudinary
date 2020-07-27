@@ -42,7 +42,6 @@ function createCloudinaryAssetNode({
   createNodeId,
   parentNode,
   relationshipName,
-  version,
 }) {
   const cloudinaryUploadResult = {
     public_id: publicId,
