@@ -52,10 +52,10 @@ function createCloudinaryAssetNode({
 
   const imageNode = createImageNode({
     cloudinaryUploadResult,
-    parentNode,
+    cloudName,
     createContentDigest,
     createNodeId,
-    cloudName,
+    parentNode,
   });
 
   // Add the new node to Gatsby’s data layer.
