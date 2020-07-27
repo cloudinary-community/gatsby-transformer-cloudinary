@@ -64,5 +64,4 @@ function createCloudinaryAssetNode({
   // Tell Gatsby to add `${relationshipName}` to the parent node.
   const relationshipKey = `${relationshipName}___NODE`;
   parentNode[relationshipKey] = imageNode.id;
-  return imageNode;
 }
