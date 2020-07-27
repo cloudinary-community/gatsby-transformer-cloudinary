@@ -1,6 +1,6 @@
 const { createImageNode } = require('../create-image-node');
 
-exports.createAssetNodesFromData = async ({
+exports.createAssetNodesFromData = ({
   node,
   actions: { createNode },
   createNodeId,
