@@ -104,4 +104,13 @@ describe('createAssetNodesFromData', () => {
     createAssetNodesFromData(args);
     expect(createImageNode).not.toHaveBeenCalled();
   });
+
+  test('deletes nodes with .cloudinaryAssetData === true', () => {
+    const args = getDefaultArgs({
+      node: { authorPhoto: { cloudinaryAssetData: true } },
+    });
+    expect(args.node.authorPhoto).toBeDefined();
+    createAssetNodesFromData(args);
+    expect(args.node.authorPhoto).toBeUndefined();
+  });
 });

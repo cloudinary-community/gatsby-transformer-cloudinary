@@ -11,27 +11,33 @@ exports.createAssetNodesFromData = ({
   assetDataKeys.forEach(assetDataKey => {
     const assetData = { ...node[assetDataKey] };
     delete node[assetDataKey];
-    createCloudinaryAssetNode({
-      assetData,
-      createContentDigest,
-      createNode,
-      createNodeId,
-      parentNode: node,
-      relationshipName: assetDataKey,
-    });
+    if (verifyAssetData(assetData)) {
+      createCloudinaryAssetNode({
+        assetData,
+        createContentDigest,
+        createNode,
+        createNodeId,
+        parentNode: node,
+        relationshipName: assetDataKey,
+      });
+    }
   });
 };
 
+function verifyAssetData(assetData) {
+  return (
+    assetData &&
+    assetData.cloudinaryAssetData === true &&
+    assetData.cloudName &&
+    assetData.publicId &&
+    assetData.originalHeight &&
+    assetData.originalWidth
+  );
+}
+
 function getAssetDataKeys(node) {
   return Object.keys(node).filter(key => {
-    return (
-      node[key] &&
-      node[key].cloudinaryAssetData === true &&
-      node[key].cloudName &&
-      node[key].publicId &&
-      node[key].originalHeight &&
-      node[key].originalWidth
-    );
+    return node[key] && node[key].cloudinaryAssetData === true;
   });
 }
 
