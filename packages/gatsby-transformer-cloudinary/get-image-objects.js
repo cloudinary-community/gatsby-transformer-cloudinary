@@ -7,6 +7,8 @@ const { getPluginOptions } = require('./options');
 const DEFAULT_BASE64_WIDTH = 30;
 const DEFAULT_FIXED_WIDTH = 400;
 
+const base64Cache = {};
+
 // Create Cloudinary image URL with transformations.
 const getImageURL = ({
   public_id,
@@ -36,10 +38,13 @@ const getImageURL = ({
 
 // Fetch and return Base64 image
 const getBase64 = async url => {
-  const result = await axios.get(url, { responseType: 'arraybuffer' });
-  const data = Buffer.from(result.data).toString('base64');
+  if (!base64Cache[url]) {
+    const result = await axios.get(url, { responseType: 'arraybuffer' });
+    const data = Buffer.from(result.data).toString('base64');  
+    base64Cache[url] = `data:image/jpeg;base64,${data}`;
+  }
 
-  return `data:image/jpeg;base64,${data}`;
+  return base64Cache[url];
 };
 
 // retrieve aspect ratio if in transformation else create aspect ratio values
