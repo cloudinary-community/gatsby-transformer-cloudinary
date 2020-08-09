@@ -1,6 +1,6 @@
 # Version Next
 
-Additions:
+Improvements:
 
 - Cached base64 images when running queries to prevent duplicate network requests.
 
