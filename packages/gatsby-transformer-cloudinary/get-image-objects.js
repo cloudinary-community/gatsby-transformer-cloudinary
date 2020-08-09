@@ -40,7 +40,7 @@ const getImageURL = ({
 const getBase64 = async url => {
   if (!base64Cache[url]) {
     const result = await axios.get(url, { responseType: 'arraybuffer' });
-    const data = Buffer.from(result.data).toString('base64');  
+    const data = Buffer.from(result.data).toString('base64');
     base64Cache[url] = `data:image/jpeg;base64,${data}`;
   }
 
