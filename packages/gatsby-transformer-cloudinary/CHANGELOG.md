@@ -1,3 +1,9 @@
+# Version Next
+
+Additions:
+
+- Cached base64 images when running queries to prevent duplicate network requests.
+
 # Version 1.0.1
 
 Other changes:
