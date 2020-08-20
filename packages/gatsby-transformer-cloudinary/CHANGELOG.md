@@ -4,6 +4,11 @@ Additions:
 
 - Added ability to use existing Cloudinary images by marking nodes with `cloudinaryAssetData: true` and providing `cloudName`, `publicId`, `originalHeight`, and `originalWidth` properties.
 
+Improvements:
+
+- Cached base64 images when running queries to prevent duplicate network requests.
+
+
 # Version 1.0.1
 
 Additions:
