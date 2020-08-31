@@ -285,9 +285,10 @@ Both `fixed` and `fluid` accept arguments. All arguments are optional.
 
 ### Arguments for `fixed`
 
-| argument | type  | default | description                                 |
-| -------- | ----- | ------- | ------------------------------------------- |
-| `width`  | `Int` | `400`   | The width that the image should display at. |
+| argument | type  | default | description                                                                                    |
+| -------- | ----- | ------- | ---------------------------------------------------------------------------------------------- |
+| `height` | `Int` | `n/a`   | The height that the image should display at. If `width` is provided, then `height` is ignored. |
+| `width`  | `Int` | `400`   | The width that the image should display at.                                                    |
 
 ### Arguments for `fluid`
 
