@@ -2,6 +2,7 @@
 
 Improvements:
 
+- Added an optional `height` argument to `fixed` queries.
 - Cached base64 images when running queries to prevent duplicate network requests.
 
 # Version 1.0.1
