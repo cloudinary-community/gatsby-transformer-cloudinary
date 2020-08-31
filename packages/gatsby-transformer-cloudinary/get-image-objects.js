@@ -125,11 +125,11 @@ exports.getFixedImageObject = async ({
 
   let displayWidth;
   if (!!width) {
-    displayWidth = width;
+    displayWidth = Math.min(width, originalWidth);
   } else if (!!height) {
-    displayWidth = height * aspectRatio;
+    displayWidth = Math.min(height * aspectRatio, originalWidth);
   } else if (!height && !width) {
-    displayWidth = DEFAULT_FIXED_WIDTH;
+    displayWidth = Math.min(DEFAULT_FIXED_WIDTH, originalWidth);
   }
 
   const sizes = [1, 1.5, 2, 3].map(size => ({

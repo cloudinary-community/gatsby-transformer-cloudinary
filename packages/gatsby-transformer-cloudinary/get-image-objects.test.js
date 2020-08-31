@@ -106,6 +106,36 @@ describe('getFixedImageObject', () => {
     };
   }
 
+  it('uses a width of 400 px if no width is provided', async () => {
+    const options = getDefaultOptions();
+    getPluginOptions.mockReturnValue(options);
+    const args = getDefaultArgs();
+
+    expect(await getFixedImageObject(args)).toEqual(
+      expect.objectContaining({ width: 400 }),
+    );
+  });
+
+  it("uses the image's originalWidth if it is smaller than the requested width", async () => {
+    const options = getDefaultOptions();
+    getPluginOptions.mockReturnValue(options);
+    const args = getDefaultArgs({ width: 20000 });
+
+    expect(await getFixedImageObject(args)).toEqual(
+      expect.objectContaining({ width: 1920 }),
+    );
+  });
+
+  it("uses the image's originalWidth if it is smaller than the default width of 400 px", async () => {
+    const options = getDefaultOptions();
+    getPluginOptions.mockReturnValue(options);
+    const args = getDefaultArgs({ originalWidth: 100 });
+
+    expect(await getFixedImageObject(args)).toEqual(
+      expect.objectContaining({ width: 100 }),
+    );
+  });
+
   it('calculates the height based on the provided width', async () => {
     const options = getDefaultOptions();
     getPluginOptions.mockReturnValue(options);
