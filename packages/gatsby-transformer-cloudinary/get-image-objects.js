@@ -101,7 +101,8 @@ exports.getFixedImageObject = async ({
   originalHeight,
   originalWidth,
   version = false,
-  width = DEFAULT_FIXED_WIDTH,
+  height,
+  width,
   base64Width = DEFAULT_BASE64_WIDTH,
   base64Transformations = [],
   transformations = [],
@@ -122,9 +123,18 @@ exports.getFixedImageObject = async ({
     originalWidth / originalHeight,
   );
 
+  let displayWidth;
+  if (!!width) {
+    displayWidth = width;
+  } else if (!!height) {
+    displayWidth = height * aspectRatio;
+  } else if (!height && !width) {
+    displayWidth = DEFAULT_FIXED_WIDTH;
+  }
+
   const sizes = [1, 1.5, 2, 3].map(size => ({
     resolution: size,
-    width: width * size,
+    width: Math.round(displayWidth * size),
   }));
 
   const srcSet = sizes
@@ -146,10 +156,10 @@ exports.getFixedImageObject = async ({
 
   return {
     base64,
-    height: width / aspectRatio,
+    height: Math.round(displayWidth / aspectRatio),
     src,
     srcSet,
-    width,
+    width: Math.round(displayWidth),
   };
 };
 

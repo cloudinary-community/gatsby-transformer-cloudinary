@@ -32,6 +32,7 @@ exports.createSchemaCustomization = ({ actions }) => {
         base64Width: Int
         base64Transformations: [String!]
         chained: [String!]
+        height: Int
         transformations: [String!]
         width: Int
       ): CloudinaryAssetFixed!
