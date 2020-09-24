@@ -1,4 +1,7 @@
-const { uploadImageToCloudinary } = require('./upload');
+const {
+  uploadImageToCloudinary,
+  uploadImageNodeToCloudinary,
+} = require('./upload');
 
 jest.mock('./options');
 jest.mock('cloudinary');
@@ -118,5 +121,26 @@ describe('uploadImageToCloudinary', () => {
 
     const args = getDefaultArgs();
     expect(await uploadImageToCloudinary(args)).toEqual(cloudinaryUploadResult);
+  });
+});
+
+describe('uploadImageNodeToCloudinary', () => {
+  it("uses the image's relative path without the extension as the public ID", async () => {
+    const cloudinaryUpload = jest.fn();
+    cloudinary.uploader.upload = cloudinaryUpload;
+
+    const reporter = { info: jest.fn() };
+    const node = {
+      relativePath: 'folder-name/image.name.with.dots.jpg',
+    };
+
+    await uploadImageNodeToCloudinary({ node, reporter });
+
+    expect(cloudinaryUpload).toHaveBeenCalledWith(
+      undefined,
+      expect.objectContaining({
+        public_id: 'folder-name/image.name.with.dots',
+      }),
+    );
   });
 });

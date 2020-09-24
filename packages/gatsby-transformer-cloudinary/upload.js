@@ -93,7 +93,8 @@ exports.uploadImageToCloudinary = async ({
 
 exports.uploadImageNodeToCloudinary = async ({ node, reporter }) => {
   const url = node.absolutePath;
-  const publicId = node.name;
+  const relativePathWithoutExtension = node.relativePath.replace(/\.[^.]*$/, "");
+  const publicId = relativePathWithoutExtension;
   const result = await exports.uploadImageToCloudinary({
     url,
     publicId,
