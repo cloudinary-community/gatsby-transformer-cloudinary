@@ -1,3 +1,4 @@
+const stringify = require('fast-json-stable-stringify');
 const { getPluginOptions } = require('./options');
 
 function getDefaultBreakpoints(imageWidth) {
@@ -29,14 +30,12 @@ exports.createImageNode = ({
     version,
     height,
     width,
-    secure_url,
   },
   parentNode,
   createContentDigest,
   createNodeId,
+  cloudName,
 }) => {
-  const { cloudName } = getPluginOptions();
-
   let breakpoints = getDefaultBreakpoints(width);
   if (
     responsive_breakpoints &&
@@ -49,10 +48,19 @@ exports.createImageNode = ({
     );
   }
 
+  const fingerprint = stringify({
+    cloudName,
+    height,
+    public_id,
+    breakpoints,
+    version,
+    width,
+  });
+
   const imageNode = {
     // These helper fields are only here so the resolvers have access to them.
     // They will *not* be available via Gatsby’s data layer.
-    cloudName: cloudName,
+    cloudName: cloudName || getPluginOptions().cloudName,
     public_id: public_id,
     version: version,
     originalHeight: height,
@@ -60,13 +68,13 @@ exports.createImageNode = ({
     breakpoints,
 
     // Add the required internal Gatsby node fields.
-    id: createNodeId(`CloudinaryAsset-${secure_url}`),
+    id: createNodeId(`CloudinaryAsset-${fingerprint}`),
     parent: parentNode.id,
     internal: {
       type: 'CloudinaryAsset',
       // Gatsby uses the content digest to decide when to reprocess a given
       // node. We can use the Cloudinary URL to avoid doing extra work.
-      contentDigest: createContentDigest(secure_url),
+      contentDigest: createContentDigest(fingerprint),
     },
   };
 

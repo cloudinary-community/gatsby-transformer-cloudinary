@@ -153,6 +153,10 @@ exports.getFixedImageObject = async ({
   };
 };
 
+function onlyUnique(element, index, array) {
+  return array.indexOf(element) === index;
+}
+
 exports.getFluidImageObject = async ({
   public_id,
   cloudName,
@@ -184,14 +188,13 @@ exports.getFluidImageObject = async ({
     chained,
   });
 
-  const cleaned = breakpoints
+  const breakpointWidths = breakpoints
     .concat(max) // make sure we get the max size
     .filter(w => w <= max) // don’t add larger sizes
-    .sort((a, b) => a - b); // sort in ascending order
+    .sort((a, b) => a - b) // sort in ascending order
+    .filter(onlyUnique); // remove duplicates
 
-  const deduped = [...new Set(cleaned)];
-
-  const srcSet = deduped
+  const srcSet = breakpointWidths
     .map(breakpointWidth => {
       // Get URL for each image including user-defined transformations.
       const url = getImageURL({

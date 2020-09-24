@@ -6,6 +6,9 @@ const {
 const { uploadImageNodeToCloudinary } = require('./upload');
 const { setPluginOptions } = require('./options');
 const { createImageNode } = require('./create-image-node');
+const {
+  createAssetNodesFromData,
+} = require('./gatsby-node/create-asset-nodes-from-data');
 
 const ALLOWED_MEDIA_TYPES = ['image/png', 'image/jpeg', 'image/gif'];
 
@@ -133,13 +136,13 @@ exports.createResolvers = ({ createResolvers }) => {
   createResolvers(resolvers);
 };
 
-exports.onCreateNode = async ({
+async function createAssetNodeFromFile({
   node,
   actions: { createNode, createParentChildLink },
   createNodeId,
   createContentDigest,
   reporter,
-}) => {
+}) {
   if (!ALLOWED_MEDIA_TYPES.includes(node.internal.mediaType)) {
     return;
   }
@@ -155,7 +158,6 @@ exports.onCreateNode = async ({
     createContentDigest,
     createNode,
     createNodeId,
-    createParentChildLink,
   });
 
   // Add the new node to Gatsby’s data layer.
@@ -168,6 +170,29 @@ exports.onCreateNode = async ({
   });
 
   return imageNode;
+}
+
+exports.onCreateNode = async ({
+  node,
+  actions,
+  createNodeId,
+  createContentDigest,
+  reporter,
+}) => {
+  createAssetNodesFromData({
+    node,
+    actions,
+    createNodeId,
+    createContentDigest,
+    reporter,
+  });
+  await createAssetNodeFromFile({
+    node,
+    actions,
+    createNodeId,
+    createContentDigest,
+    reporter,
+  });
 };
 
 exports.onPreInit = ({ reporter }, pluginOptions) => {

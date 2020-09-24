@@ -13,39 +13,39 @@ exports.createRemoteImageNode = async ({
   createNodeId,
   reporter,
 }) => {
-  if (!url) {
+  if (!reporter) {
     throw Error(
-      "`url` is a required argument. Pass the URL where the image is currently hosted so it can be downloaded by Cloudinary.",
+      "`reporter` is a required argument. It's available at `CreateNodeArgs.reporter`.",
+    );
+  }
+  if (!url) {
+    reporter.panic(
+      '`url` is a required argument. Pass the URL where the image is currently hosted so it can be downloaded by Cloudinary.',
     );
   }
   if (!parentNode) {
-    throw Error(
+    reporter.panic(
       "`parentNode` is a required argument. This parameter is used to link a newly created node representing the image to a parent node in Gatsby's GraphQL layer.",
     );
   }
   if (!relationshipName) {
-    throw Error(
+    reporter.panic(
       "`relationshipName` is a required argument. This parameter sets the name of the relationship between the parent node and the newly created node for this image in Gatsby's GraphQL layer.",
     );
   }
   if (!createContentDigest) {
-    throw Error(
+    reporter.panic(
       "`createContentDigest` is a required argument. It's available at `CreateNodeArgs.createContentDigest`.",
     );
   }
   if (!createNode) {
-    throw Error(
+    reporter.panic(
       "`createNode` is a required argument. It's available at `CreateNodeArgs.actions.createNode`.",
     );
   }
   if (!createNodeId) {
-    throw Error(
+    reporter.panic(
       "`createNodeId` is a required argument. It's available at `CreateNodeArgs.createNodeId`.",
-    );
-  }
-  if (!reporter) {
-    throw Error(
-      "`reporter` is a required argument. It's available at `CreateNodeArgs.reporter`.",
     );
   }
 
@@ -64,11 +64,9 @@ exports.createRemoteImageNode = async ({
   });
 
   const imageNode = createImageNode({
-    relationshipName,
     cloudinaryUploadResult,
     parentNode,
     createContentDigest,
-    createNode,
     createNodeId,
   });
 

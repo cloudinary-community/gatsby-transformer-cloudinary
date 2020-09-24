@@ -153,12 +153,23 @@ describe('createImageNode', () => {
     getPluginOptions.mockReturnValue(options);
 
     const createNodeId = jest.fn(createNodeIdArg => {
-      expect(createNodeIdArg).toEqual('CloudinaryAsset-secure_url');
+      expect(createNodeIdArg).toEqual(
+        'CloudinaryAsset-{"breakpoints":[20,35],"cloudName":"cloudName","height":100,"public_id":"public_id","version":7,"width":200}',
+      );
       return 'createNodeIdResult';
     });
     const args = getDefaultArgs({
       createNodeId,
-      cloudinaryUploadResult: { secure_url: 'secure_url' },
+      cloudinaryUploadResult: {
+        height: 100,
+        public_id: 'public_id',
+        responsive_breakpoints: [
+          { breakpoints: [{ width: 20 }, { width: 35 }] },
+        ],
+        version: 7,
+        width: 200,
+      },
+      cloudName: 'cloudName',
     });
     const actual = createImageNode(args);
 
@@ -184,12 +195,23 @@ describe('createImageNode', () => {
     getPluginOptions.mockReturnValue(options);
 
     const createContentDigest = jest.fn(createContentDigestArg => {
-      expect(createContentDigestArg).toEqual('secure_url');
+      expect(createContentDigestArg).toEqual(
+        '{"breakpoints":[20,35],"cloudName":"cloudName","height":100,"public_id":"public_id","version":7,"width":200}',
+      );
       return 'createContentDigestResult';
     });
     const args = getDefaultArgs({
       createContentDigest,
-      cloudinaryUploadResult: { secure_url: 'secure_url' },
+      cloudinaryUploadResult: {
+        height: 100,
+        public_id: 'public_id',
+        responsive_breakpoints: [
+          { breakpoints: [{ width: 20 }, { width: 35 }] },
+        ],
+        version: 7,
+        width: 200,
+      },
+      cloudName: 'cloudName',
     });
     const actual = createImageNode(args);
 
