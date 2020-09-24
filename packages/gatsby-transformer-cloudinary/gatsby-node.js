@@ -35,6 +35,7 @@ exports.createSchemaCustomization = ({ actions }) => {
         base64Width: Int
         base64Transformations: [String!]
         chained: [String!]
+        height: Int
         transformations: [String!]
         width: Int
       ): CloudinaryAssetFixed!
@@ -79,6 +80,7 @@ exports.createResolvers = ({ createResolvers }) => {
           {
             base64Width,
             base64Transformations,
+            height,
             width,
             transformations,
             chained,
@@ -90,6 +92,7 @@ exports.createResolvers = ({ createResolvers }) => {
             cloudName,
             originalHeight,
             originalWidth,
+            height,
             width,
             base64Width,
             base64Transformations,
