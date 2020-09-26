@@ -1,14 +1,17 @@
-# Version Next
+# Version 1.1.0
 
 Additions:
 
 - Added ability to use existing Cloudinary images by marking nodes with `cloudinaryAssetData: true` and providing `cloudName`, `publicId`, `originalHeight`, and `originalWidth` properties.
+- Added an optional `height` argument to `fixed` queries.
 
 Improvements:
 
-- Added an optional `height` argument to `fixed` queries.
-- Cached base64 images when running queries to prevent duplicate network requests.
+- Cache base64 images when running queries to prevent duplicate network requests.
 
+Fixes:
+
+- Changed the public_id to be the relative path of files without the extension instead of just the file's name. This fixes an [issue with childrenCloudinaryAsset nodes](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/42) being created instead of childCloudinaryAsset nodes. 
 
 # Version 1.0.1
 
