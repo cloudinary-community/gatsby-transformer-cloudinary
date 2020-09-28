@@ -7,7 +7,6 @@ const defaultOptions = {
   createDerived: false,
   useCloudinaryBreakpoints: false,
   overwriteExisting: false,
-  defaultTransformations: ['f_auto', 'q_auto'],
 };
 
 const requiredOptions = ['apiKey', 'apiSecret', 'cloudName'];
@@ -31,8 +30,9 @@ exports.setPluginOptions = ({ pluginOptions, reporter }) => {
   }
 
   // Set default transformations based on plugin option sent by the user
+  const defaultTransformations = ['f_auto', 'q_auto'];
   if(pluginOptions.enableDefaultTranformations === true){
-    pluginOptions.defaultTransformations = defaultOptions.defaultTransformations;
+    pluginOptions.defaultTransformations = defaultTransformations;
   }else{
     pluginOptions.defaultTransformations = [];
   }
