@@ -7,6 +7,7 @@ const defaultOptions = {
   createDerived: false,
   useCloudinaryBreakpoints: false,
   overwriteExisting: false,
+  defaultTransformations: ['f_auto', 'q_auto'],
 };
 
 const requiredOptions = ['apiKey', 'apiSecret', 'cloudName'];
@@ -27,6 +28,13 @@ exports.setPluginOptions = ({ pluginOptions, reporter }) => {
     reporter.panic(
       `[gatsby-transformer-cloudinary] "breakpointsMaxImages" must be at least 1. You can modify it in your gatsby-config file.`,
     );
+  }
+
+  // Set default transformations based on plugin option sent by the user
+  if(pluginOptions.enableDefaultTranformations === true){
+    pluginOptions.defaultTransformations = defaultOptions.defaultTransformations;
+  }else{
+    pluginOptions.defaultTransformations = [];
   }
 
   options = {

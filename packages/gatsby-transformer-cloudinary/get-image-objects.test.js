@@ -94,6 +94,7 @@ describe('getFixedImageObject', () => {
     return {
       public_id: 'public_id',
       cloudName: 'cloudName',
+      // enableDefaultTranformations: true,
       originalWidth: 1920,
       originalHeight: 1080,
       ...args,
@@ -162,10 +163,10 @@ describe('getFixedImageObject', () => {
     const args = getDefaultArgs({ width: 160 });
 
     const expectedSrcSet = [
-      'https://res.cloudinary.com/cloudName/image/upload/w_160,f_auto,q_auto/public_id 1x',
-      'https://res.cloudinary.com/cloudName/image/upload/w_240,f_auto,q_auto/public_id 1.5x',
-      'https://res.cloudinary.com/cloudName/image/upload/w_320,f_auto,q_auto/public_id 2x',
-      'https://res.cloudinary.com/cloudName/image/upload/w_480,f_auto,q_auto/public_id 3x',
+      'https://res.cloudinary.com/cloudName/image/upload/w_160/public_id 1x',
+      'https://res.cloudinary.com/cloudName/image/upload/w_240/public_id 1.5x',
+      'https://res.cloudinary.com/cloudName/image/upload/w_320/public_id 2x',
+      'https://res.cloudinary.com/cloudName/image/upload/w_480/public_id 3x',
     ];
     expect(await getFixedImageObject(args)).toEqual(
       expect.objectContaining({
@@ -180,10 +181,10 @@ describe('getFixedImageObject', () => {
     const args = getDefaultArgs({ height: 100 });
 
     const expectedSrcSet = [
-      'https://res.cloudinary.com/cloudName/image/upload/w_178,f_auto,q_auto/public_id 1x',
-      'https://res.cloudinary.com/cloudName/image/upload/w_267,f_auto,q_auto/public_id 1.5x',
-      'https://res.cloudinary.com/cloudName/image/upload/w_356,f_auto,q_auto/public_id 2x',
-      'https://res.cloudinary.com/cloudName/image/upload/w_533,f_auto,q_auto/public_id 3x',
+      'https://res.cloudinary.com/cloudName/image/upload/w_178/public_id 1x',
+      'https://res.cloudinary.com/cloudName/image/upload/w_267/public_id 1.5x',
+      'https://res.cloudinary.com/cloudName/image/upload/w_356/public_id 2x',
+      'https://res.cloudinary.com/cloudName/image/upload/w_533/public_id 3x',
     ];
     expect(await getFixedImageObject(args)).toEqual(
       expect.objectContaining({

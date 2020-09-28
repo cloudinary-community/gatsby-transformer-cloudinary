@@ -15,9 +15,11 @@ const getImageURL = ({
   cloudName,
   transformations = [],
   chained = [],
-  defaults = ['f_auto', 'q_auto'],
+  defaults,
   version = false,
 }) => {
+  const { defaultTransformations } = getPluginOptions();
+  defaults = defaultTransformations ?? [];
   const baseURL = 'https://res.cloudinary.com/';
   const allTransformations = [transformations.concat(defaults).join()]
     .concat(chained)
