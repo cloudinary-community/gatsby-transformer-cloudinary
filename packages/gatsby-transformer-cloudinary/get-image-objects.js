@@ -19,7 +19,7 @@ const getImageURL = ({
   version = false,
 }) => {
   const { defaultTransformations } = getPluginOptions();
-  defaults = defaultTransformations ?? [];
+  defaults = defaultTransformations || [];
   const baseURL = 'https://res.cloudinary.com/';
   const allTransformations = [transformations.concat(defaults).join()]
     .concat(chained)
