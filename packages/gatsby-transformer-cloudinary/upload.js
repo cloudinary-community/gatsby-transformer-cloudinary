@@ -9,7 +9,6 @@ const FIVE_MINUTES = 5 * 60 * 1000;
 exports.uploadImageToCloudinary = async ({
   url,
   publicId,
-  overwrite,
   reporter,
 }) => {
   const {
@@ -21,6 +20,7 @@ exports.uploadImageToCloudinary = async ({
     fluidMaxWidth,
     fluidMinWidth,
     uploadFolder,
+    overwriteExisting,
     useCloudinaryBreakpoints,
   } = getPluginOptions();
   cloudinary.config({
@@ -31,7 +31,7 @@ exports.uploadImageToCloudinary = async ({
 
   const uploadOptions = {
     folder: uploadFolder,
-    overwrite,
+    overwrite: overwriteExisting,
     public_id: publicId,
     resource_type: 'auto',
     timeout: FIVE_MINUTES,

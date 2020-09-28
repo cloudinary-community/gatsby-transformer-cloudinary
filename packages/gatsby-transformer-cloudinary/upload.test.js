@@ -13,7 +13,7 @@ describe('uploadImageToCloudinary', () => {
   function getDefaultArgs(args) {
     return {
       url: 'url',
-      overwrite: 'overwrite',
+      // overwrite: 'overwrite',
       publicId: 'publicId',
       reporter: {
         info: jest.fn(),
@@ -30,6 +30,7 @@ describe('uploadImageToCloudinary', () => {
       apiKey: 'apiKey',
       apiSecret: 'apiSecret',
       uploadFolder: 'uploadFolder',
+      overwriteExisting: false,
       createDerived: false,
       breakpointsMaxImages: 234,
       fluidMaxWidth: 345,
@@ -69,7 +70,28 @@ describe('uploadImageToCloudinary', () => {
     const expectedUrl = args.url;
     const expectedOptions = {
       folder: options.uploadFolder,
-      overwrite: args.overwrite,
+      overwrite: options.overwriteExisting,
+      public_id: args.publicId,
+      resource_type: 'auto',
+      timeout: 5 * 60 * 1000,
+    };
+    expect(cloudinaryUpload).toHaveBeenCalledWith(expectedUrl, expectedOptions);
+  });
+
+  test('overwrite only when overwriteExisting is set to true', async () => {
+    const cloudinaryUpload = jest.fn();
+    cloudinary.uploader.upload = cloudinaryUpload;
+
+    const options = getDefaultOptions({ overwriteExisting: true });
+    getPluginOptions.mockReturnValue(options);
+
+    const args = getDefaultArgs();
+    await uploadImageToCloudinary(args);
+
+    const expectedUrl = args.url;
+    const expectedOptions = {
+      folder: options.uploadFolder,
+      overwrite: true,
       public_id: args.publicId,
       resource_type: 'auto',
       timeout: 5 * 60 * 1000,
@@ -93,7 +115,7 @@ describe('uploadImageToCloudinary', () => {
     const expectedUrl = args.url;
     const expectedOptions = {
       folder: options.uploadFolder,
-      overwrite: args.overwrite,
+      overwrite: options.overwriteExisting,
       public_id: args.publicId,
       resource_type: 'auto',
       timeout: 5 * 60 * 1000,
