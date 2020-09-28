@@ -31,7 +31,7 @@ exports.setPluginOptions = ({ pluginOptions, reporter }) => {
 
   // Set default transformations based on plugin option sent by the user
   const defaultTransformations = ['f_auto', 'q_auto'];
-  if(pluginOptions.enableDefaultTransformations === true){
+  if(pluginOptions.enableDefaultTransformations && pluginOptions.enableDefaultTransformations === true){
     pluginOptions.defaultTransformations = defaultTransformations;
   }else{
     pluginOptions.defaultTransformations = [];
