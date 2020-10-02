@@ -14,7 +14,6 @@ Fixes:
 
 - Typo fix.
 
-
 # Version 1.1.2
 
 Fixes:
