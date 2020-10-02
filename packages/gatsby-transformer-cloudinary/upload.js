@@ -9,6 +9,7 @@ const FIVE_MINUTES = 5 * 60 * 1000;
 exports.uploadImageToCloudinary = async ({
   url,
   publicId,
+  overwrite,
   reporter,
 }) => {
   const {
@@ -20,7 +21,6 @@ exports.uploadImageToCloudinary = async ({
     fluidMaxWidth,
     fluidMinWidth,
     uploadFolder,
-    overwriteExisting,
     useCloudinaryBreakpoints,
   } = getPluginOptions();
   cloudinary.config({
@@ -31,7 +31,7 @@ exports.uploadImageToCloudinary = async ({
 
   const uploadOptions = {
     folder: uploadFolder,
-    overwrite: overwriteExisting,
+    overwrite,
     public_id: publicId,
     resource_type: 'auto',
     timeout: FIVE_MINUTES,
@@ -93,11 +93,16 @@ exports.uploadImageToCloudinary = async ({
 
 exports.uploadImageNodeToCloudinary = async ({ node, reporter }) => {
   const url = node.absolutePath;
-  const relativePathWithoutExtension = node.relativePath.replace(/\.[^.]*$/, "");
+  const relativePathWithoutExtension = node.relativePath.replace(
+    /\.[^.]*$/,
+    '',
+  );
   const publicId = relativePathWithoutExtension;
+  const overwrite = getPluginOptions().overwriteExisting;
   const result = await exports.uploadImageToCloudinary({
     url,
     publicId,
+    overwrite,
     reporter,
   });
   return result;
