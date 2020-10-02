@@ -13,7 +13,7 @@ describe('uploadImageToCloudinary', () => {
   function getDefaultArgs(args) {
     return {
       url: 'url',
-      // overwrite: 'overwrite',
+      overwrite: 'overwrite',
       publicId: 'publicId',
       reporter: {
         info: jest.fn(),
@@ -30,7 +30,6 @@ describe('uploadImageToCloudinary', () => {
       apiKey: 'apiKey',
       apiSecret: 'apiSecret',
       uploadFolder: 'uploadFolder',
-      overwriteExisting: false,
       createDerived: false,
       breakpointsMaxImages: 234,
       fluidMaxWidth: 345,
@@ -39,7 +38,7 @@ describe('uploadImageToCloudinary', () => {
     };
   }
 
-  test('configures cloudinary with the appropriate plugin options', async () => {
+  it('configures cloudinary with the appropriate plugin options', async () => {
     const cloudinaryConfig = jest.fn();
     cloudinary.config = cloudinaryConfig;
 
@@ -57,7 +56,7 @@ describe('uploadImageToCloudinary', () => {
     expect(cloudinaryConfig).toHaveBeenCalledWith(expected);
   });
 
-  test('does not ask for responsive breakpoints when useCloudinaryBreakpoints is false', async () => {
+  it('does not ask for responsive breakpoints when useCloudinaryBreakpoints is false', async () => {
     const cloudinaryUpload = jest.fn();
     cloudinary.uploader.upload = cloudinaryUpload;
 
@@ -70,7 +69,7 @@ describe('uploadImageToCloudinary', () => {
     const expectedUrl = args.url;
     const expectedOptions = {
       folder: options.uploadFolder,
-      overwrite: options.overwriteExisting,
+      overwrite: args.overwrite,
       public_id: args.publicId,
       resource_type: 'auto',
       timeout: 5 * 60 * 1000,
@@ -78,14 +77,14 @@ describe('uploadImageToCloudinary', () => {
     expect(cloudinaryUpload).toHaveBeenCalledWith(expectedUrl, expectedOptions);
   });
 
-  test('overwrite only when overwriteExisting is set to true', async () => {
+  it('overwrites when passed overwrite:true', async () => {
     const cloudinaryUpload = jest.fn();
     cloudinary.uploader.upload = cloudinaryUpload;
 
-    const options = getDefaultOptions({ overwriteExisting: true });
+    const options = getDefaultOptions();
     getPluginOptions.mockReturnValue(options);
 
-    const args = getDefaultArgs();
+    const args = getDefaultArgs({ overwrite: true });
     await uploadImageToCloudinary(args);
 
     const expectedUrl = args.url;
@@ -99,7 +98,7 @@ describe('uploadImageToCloudinary', () => {
     expect(cloudinaryUpload).toHaveBeenCalledWith(expectedUrl, expectedOptions);
   });
 
-  test('asks for responsive breakpoints when useCloudinaryBreakpoints is true', async () => {
+  it('asks for responsive breakpoints when useCloudinaryBreakpoints is true', async () => {
     const cloudinaryUpload = jest.fn();
     cloudinary.uploader.upload = cloudinaryUpload;
 
@@ -115,7 +114,7 @@ describe('uploadImageToCloudinary', () => {
     const expectedUrl = args.url;
     const expectedOptions = {
       folder: options.uploadFolder,
-      overwrite: options.overwriteExisting,
+      overwrite: args.overwrite,
       public_id: args.publicId,
       resource_type: 'auto',
       timeout: 5 * 60 * 1000,
@@ -132,7 +131,7 @@ describe('uploadImageToCloudinary', () => {
     expect(cloudinaryUpload).toHaveBeenCalledWith(expectedUrl, expectedOptions);
   });
 
-  test('returns the result returned from the Cloudinary uploader', async () => {
+  it('returns the result returned from the Cloudinary uploader', async () => {
     const cloudinaryUpload = jest.fn();
     const cloudinaryUploadResult = 'cloudinaryUploadResult';
     cloudinaryUpload.mockReturnValue(cloudinaryUploadResult);
@@ -162,6 +161,27 @@ describe('uploadImageNodeToCloudinary', () => {
       undefined,
       expect.objectContaining({
         public_id: 'folder-name/image.name.with.dots',
+      }),
+    );
+  });
+
+  it('passes the overwrite setting from the plugin options', async () => {
+    const cloudinaryUpload = jest.fn();
+    cloudinary.uploader.upload = cloudinaryUpload;
+
+    const reporter = { info: jest.fn() };
+    const node = {
+      relativePath: 'relativePath.jpg',
+    };
+    const overwriteExisting = 'overwriteExistingDouble';
+    getPluginOptions.mockReturnValue({ overwriteExisting });
+
+    await uploadImageNodeToCloudinary({ node, reporter });
+
+    expect(cloudinaryUpload).toHaveBeenCalledWith(
+      undefined,
+      expect.objectContaining({
+        overwrite: overwriteExisting,
       }),
     );
   });
