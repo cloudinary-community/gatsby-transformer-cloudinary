@@ -1,3 +1,32 @@
+# Version 2.0.0
+
+Changes:
+
+- This is a major version bump to call attention to the change in default behavior introduced in version 1.1.1. (`f_auto` and `q_auto` are no longer added to image URLs by default.)
+
+Fixes:
+
+- Images uploaded using the `createRemoteImageNode` function respect the `overwriteExisting` argument when provided and fall back to using the `overwriteExisting` plugin option.
+
+# Version 1.1.3
+
+Fixes:
+
+- Typo fix.
+
+
+# Version 1.1.2
+
+Fixes:
+
+- Local images uploaded to Cloudinary now respect the `overwriteExisting` plugin option.
+
+# Version 1.1.1
+
+Changes:
+
+- Added `enableDefaultTransformations` plugin option. When set to true, `f_auto` and `q_auto` are added to all source URLs automatically. Previously, this was on by default. This behavior is now opt-in.
+
 # Version 1.1.0
 
 Additions:
