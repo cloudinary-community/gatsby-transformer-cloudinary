@@ -328,6 +328,20 @@ You’re able to change the aspect ratio of images by supplying the [aspect rati
 
 > **NOTE:** The aspect ratio _must_ be supplied in the `transformations` array. It **will not** be picked up from the `chained` argument.
 
+## Running Tests
+
+Run the tests once:
+
+```
+yarn workspace gatsby-transformer-cloudinary test
+```
+
+Run the tests in watch mode:
+
+```
+yarn workspace gatsby-transformer-cloudinary test:watch
+```
+
 ## Other Resources
 
 - [Cloudinary image transformation reference](https://cloudinary.com/documentation/image_transformation_reference)
