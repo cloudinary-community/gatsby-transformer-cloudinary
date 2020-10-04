@@ -7,6 +7,7 @@ const defaultOptions = {
   createDerived: false,
   useCloudinaryBreakpoints: false,
   overwriteExisting: false,
+  alwaysUseDefaultBase64: false,
 };
 
 const requiredOptions = ['apiKey', 'apiSecret', 'cloudName'];

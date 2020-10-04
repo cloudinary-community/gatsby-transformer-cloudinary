@@ -60,8 +60,10 @@ exports.getBase64 = async ({
   base64Width,
   chained,
 }) => {
-  if (!ignoreDefaultBase64 && defaultBase64) {
-    return defaultBase64
+  if (defaultBase64) {
+    if (!ignoreDefaultBase64 || getPluginOptions().alwaysUseDefaultBase64) {
+      return defaultBase64;
+    }
   }
 
   const b64Transformations = base64Transformations || transformations;
