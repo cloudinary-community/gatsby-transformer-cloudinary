@@ -76,10 +76,18 @@ exports.createResolvers = ({ createResolvers }) => {
       fixed: {
         type: 'CloudinaryAssetFixed!',
         resolve: (
-          { public_id, version, cloudName, originalHeight, originalWidth },
+          {
+            public_id,
+            version,
+            cloudName,
+            originalHeight,
+            originalWidth,
+            defaultBase64,
+          },
           {
             base64Width,
             base64Transformations,
+            ignoreDefaultBase64,
             height,
             width,
             transformations,
@@ -96,6 +104,8 @@ exports.createResolvers = ({ createResolvers }) => {
             width,
             base64Width,
             base64Transformations,
+            defaultBase64,
+            ignoreDefaultBase64,
             transformations,
             chained,
           }),

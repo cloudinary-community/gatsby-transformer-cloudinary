@@ -24,6 +24,8 @@ exports.getFixedImageObject = async ({
   chained = [],
 }) => {
   const base64 = await getBase64({
+    defaultBase64,
+    ignoreDefaultBase64,
     public_id,
     version,
     cloudName,
@@ -96,6 +98,8 @@ exports.getFluidImageObject = async ({
   maxWidth,
   base64Width = DEFAULT_BASE64_WIDTH,
   base64Transformations = [],
+  defaultBase64,
+  ignoreDefaultBase64 = false,
   transformations = [],
   chained = [],
 }) => {
@@ -107,12 +111,14 @@ exports.getFluidImageObject = async ({
   const max = Math.min(maxWidth ? maxWidth : fluidMaxWidth, originalWidth);
   const sizes = `(max-width: ${max}px) 100vw, ${max}px`;
   const base64 = await getBase64({
+    defaultBase64,
+    ignoreDefaultBase64,
     public_id,
     version,
     cloudName,
     base64Transformations,
-    transformations,
     base64Width,
+    transformations,
     chained,
   });
   const src = getImageURL({
