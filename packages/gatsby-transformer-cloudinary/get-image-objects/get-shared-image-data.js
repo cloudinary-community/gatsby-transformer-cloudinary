@@ -81,7 +81,7 @@ exports.getBase64 = async ({
   return base64;
 };
 
-const fetchBase64 = async url => {
+async function fetchBase64(url) {
   if (!base64Cache[url]) {
     const result = await axios.get(url, { responseType: 'arraybuffer' });
     const data = Buffer.from(result.data).toString('base64');
