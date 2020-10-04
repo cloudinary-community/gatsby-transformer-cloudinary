@@ -7,6 +7,7 @@ const defaultOptions = {
   createDerived: false,
   useCloudinaryBreakpoints: false,
   overwriteExisting: false,
+  enableDefaultTransformations: false,
   alwaysUseDefaultBase64: false,
 };
 
@@ -28,14 +29,6 @@ exports.setPluginOptions = ({ pluginOptions, reporter }) => {
     reporter.panic(
       `[gatsby-transformer-cloudinary] "breakpointsMaxImages" must be at least 1. You can modify it in your gatsby-config file.`,
     );
-  }
-
-  // Set default transformations based on plugin option sent by the user
-  const defaultTransformations = ['f_auto', 'q_auto'];
-  if(pluginOptions.enableDefaultTransformations && pluginOptions.enableDefaultTransformations === true){
-    pluginOptions.defaultTransformations = defaultTransformations;
-  }else{
-    pluginOptions.defaultTransformations = [];
   }
 
   options = {

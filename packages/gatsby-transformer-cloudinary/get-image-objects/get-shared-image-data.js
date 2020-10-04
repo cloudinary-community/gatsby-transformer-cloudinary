@@ -9,15 +9,17 @@ exports.getImageURL = ({
   cloudName,
   transformations = [],
   chained = [],
-  defaults,
   version = false,
 }) => {
-  const { defaultTransformations } = getPluginOptions();
-  defaults = defaultTransformations || [];
   const baseURL = 'https://res.cloudinary.com/';
-  const allTransformations = [transformations.concat(defaults).join()]
-    .concat(chained)
-    .join('/');
+
+  const defaultTransformations = getPluginOptions().enableDefaultTransformations
+    ? ['f_auto', 'q_auto']
+    : [];
+  const initialTransformations = transformations
+    .concat(defaultTransformations)
+    .join(",");
+  const allTransformations = [initialTransformations].concat(chained).join('/');
 
   const imagePath = [
     cloudName,
