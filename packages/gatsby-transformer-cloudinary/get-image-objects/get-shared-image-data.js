@@ -89,4 +89,4 @@ async function fetchBase64(url) {
   }
 
   return base64Cache[url];
-};
+}
