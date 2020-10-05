@@ -148,6 +148,19 @@ describe('createImageNode', () => {
     expect(actual).toEqual(expect.objectContaining(expected));
   });
 
+  it('sets the defaultBase64 image', async () => {
+    const options = getDefaultOptions();
+    getPluginOptions.mockReturnValue(options);
+
+    const args = getDefaultArgs({
+      defaultBase64: 'defaultBase64',
+    });
+    const actual = createImageNode(args);
+
+    const expected = { defaultBase64: 'defaultBase64' };
+    expect(actual).toEqual(expect.objectContaining(expected));
+  });
+
   it('creates a node ID', async () => {
     const options = getDefaultOptions();
     getPluginOptions.mockReturnValue(options);
