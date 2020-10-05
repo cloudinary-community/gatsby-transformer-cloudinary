@@ -38,6 +38,7 @@ exports.createSchemaCustomization = ({ actions }) => {
         height: Int
         transformations: [String!]
         width: Int
+        ignoreDefaultBase64: Boolean
       ): CloudinaryAssetFixed!
 
       fluid(
@@ -46,6 +47,7 @@ exports.createSchemaCustomization = ({ actions }) => {
         chained: [String!]
         maxWidth: Int
         transformations: [String!]
+        ignoreDefaultBase64: Boolean
       ): CloudinaryAssetFluid!
     }
 
