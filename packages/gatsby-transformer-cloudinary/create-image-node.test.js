@@ -20,7 +20,7 @@ describe('createImageNode', () => {
     };
   }
 
-  test('calculates breakpoints when they are not provided', async () => {
+  it('calculates breakpoints when they are not provided', async () => {
     const options = getDefaultOptions({
       breakpointsMaxImages: 6,
       fluidMinWidth: 300,
@@ -36,7 +36,7 @@ describe('createImageNode', () => {
     expect(actual).toEqual(expect.objectContaining(expected));
   });
 
-  test('calculates breakpoints when they are not provided and the image is small', async () => {
+  it('calculates breakpoints when they are not provided and the image is small', async () => {
     const options = getDefaultOptions({
       breakpointsMaxImages: 6,
       fluidMinWidth: 300,
@@ -52,7 +52,7 @@ describe('createImageNode', () => {
     expect(actual).toEqual(expect.objectContaining(expected));
   });
 
-  test('calculates breakpoints when they are not provided and the image is really small', async () => {
+  it('calculates breakpoints when they are not provided and the image is really small', async () => {
     const options = getDefaultOptions({
       breakpointsMaxImages: 6,
       fluidMinWidth: 300,
@@ -68,7 +68,7 @@ describe('createImageNode', () => {
     expect(actual).toEqual(expect.objectContaining(expected));
   });
 
-  test('uses breakpoints when they are provided', async () => {
+  it('uses breakpoints when they are provided', async () => {
     const options = getDefaultOptions();
     getPluginOptions.mockReturnValue(options);
 
@@ -85,7 +85,7 @@ describe('createImageNode', () => {
     expect(actual).toEqual(expect.objectContaining(expected));
   });
 
-  test('sets the cloud name', async () => {
+  it('sets the cloud name', async () => {
     const options = getDefaultOptions({ cloudName: 'cloudName' });
     getPluginOptions.mockReturnValue(options);
 
@@ -96,7 +96,7 @@ describe('createImageNode', () => {
     expect(actual).toEqual(expect.objectContaining(expected));
   });
 
-  test('sets the public ID', async () => {
+  it('sets the public ID', async () => {
     const options = getDefaultOptions();
     getPluginOptions.mockReturnValue(options);
 
@@ -109,7 +109,7 @@ describe('createImageNode', () => {
     expect(actual).toEqual(expect.objectContaining(expected));
   });
 
-  test('sets the version', async () => {
+  it('sets the version', async () => {
     const options = getDefaultOptions();
     getPluginOptions.mockReturnValue(options);
 
@@ -122,7 +122,7 @@ describe('createImageNode', () => {
     expect(actual).toEqual(expect.objectContaining(expected));
   });
 
-  test('sets the original height', async () => {
+  it('sets the original height', async () => {
     const options = getDefaultOptions();
     getPluginOptions.mockReturnValue(options);
 
@@ -135,7 +135,7 @@ describe('createImageNode', () => {
     expect(actual).toEqual(expect.objectContaining(expected));
   });
 
-  test('sets the original width', async () => {
+  it('sets the original width', async () => {
     const options = getDefaultOptions();
     getPluginOptions.mockReturnValue(options);
 
@@ -148,7 +148,7 @@ describe('createImageNode', () => {
     expect(actual).toEqual(expect.objectContaining(expected));
   });
 
-  test('creates a node ID', async () => {
+  it('creates a node ID', async () => {
     const options = getDefaultOptions();
     getPluginOptions.mockReturnValue(options);
 
@@ -177,7 +177,7 @@ describe('createImageNode', () => {
     expect(actual).toEqual(expect.objectContaining(expected));
   });
 
-  test('sets the parent', async () => {
+  it('sets the parent', async () => {
     const options = getDefaultOptions();
     getPluginOptions.mockReturnValue(options);
 
@@ -190,7 +190,7 @@ describe('createImageNode', () => {
     expect(actual).toEqual(expect.objectContaining(expected));
   });
 
-  test('creates the content digest', async () => {
+  it('creates the content digest', async () => {
     const options = getDefaultOptions();
     getPluginOptions.mockReturnValue(options);
 
