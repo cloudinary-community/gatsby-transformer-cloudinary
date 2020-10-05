@@ -18,7 +18,7 @@ exports.getImageURL = ({
     : [];
   const initialTransformations = transformations
     .concat(defaultTransformations)
-    .join(",");
+    .join(',');
   const allTransformations = [initialTransformations].concat(chained).join('/');
 
   const imagePath = [
