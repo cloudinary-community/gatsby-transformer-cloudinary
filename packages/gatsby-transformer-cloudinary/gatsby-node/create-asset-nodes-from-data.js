@@ -42,7 +42,14 @@ function getAssetDataKeys(node) {
 }
 
 function createCloudinaryAssetNode({
-  assetData: { cloudName, originalHeight, originalWidth, publicId, version },
+  assetData: {
+    cloudName,
+    defaultBase64,
+    originalHeight,
+    originalWidth,
+    publicId,
+    version,
+  },
   createContentDigest,
   createNode,
   createNodeId,
@@ -62,6 +69,7 @@ function createCloudinaryAssetNode({
     createContentDigest,
     createNodeId,
     parentNode,
+    defaultBase64,
   });
 
   // Add the new node to Gatsby’s data layer.
