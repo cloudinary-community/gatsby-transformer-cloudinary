@@ -30,7 +30,39 @@ describe('createAssetNodesFromData', () => {
     };
   }
 
-  test('passes the right data to createImageNode', () => {
+  it('works for nested asset data nodes', () => {
+    const nestedNode = {
+      blog: {
+        author: {
+          photo: {
+            cloudinaryAssetData: true,
+            cloudName: 'cloudName',
+            publicId: 'publicId',
+            originalHeight: 1080,
+            originalWidth: 1920,
+          },
+        },
+      },
+    };
+    const args = getDefaultArgs({ node: nestedNode });
+    const assetData = { ...args.node.blog.author.photo };
+    createAssetNodesFromData(args);
+    expect(createImageNode).toHaveBeenCalledWith(
+      expect.objectContaining({
+        cloudinaryUploadResult: {
+          height: assetData.originalHeight,
+          width: assetData.originalWidth,
+          public_id: assetData.publicId,
+        },
+        cloudName: assetData.cloudName,
+        createContentDigest: args.createContentDigest,
+        createNodeId: args.createNodeId,
+        parentNode: args.node,
+      }),
+    );
+  });
+
+  it('passes the right data to createImageNode', () => {
     const args = getDefaultArgs();
     const assetData = { ...args.node.authorPhoto };
     createAssetNodesFromData(args);
@@ -49,7 +81,7 @@ describe('createAssetNodesFromData', () => {
     );
   });
 
-  test('passes the result of createImageNode to createNode', () => {
+  it('passes the result of createImageNode to createNode', () => {
     const createImageNodeResult = 'create-image-node-result';
     createImageNode.mockReturnValue(createImageNodeResult);
 
@@ -61,7 +93,7 @@ describe('createAssetNodesFromData', () => {
     );
   });
 
-  test('adds a relationship to the parent node', () => {
+  it('adds a relationship to the parent node', () => {
     const createImageNodeResult = { id: 'created-image-node-id' };
     createImageNode.mockReturnValue(createImageNodeResult);
 
@@ -70,42 +102,42 @@ describe('createAssetNodesFromData', () => {
     expect(args.node).toEqual({ authorPhoto___NODE: createImageNodeResult.id });
   });
 
-  test('does not call createImageNode if cloudinaryAssetData !== true', () => {
+  it('does not call createImageNode if cloudinaryAssetData !== true', () => {
     const args = getDefaultArgs();
     args.node.authorPhoto.cloudinaryAssetData = 'true';
     createAssetNodesFromData(args);
     expect(createImageNode).not.toHaveBeenCalled();
   });
 
-  test('does not call createImageNode if cloudName is missing', () => {
+  it('does not call createImageNode if cloudName is missing', () => {
     const args = getDefaultArgs();
     args.node.authorPhoto.cloudName = null;
     createAssetNodesFromData(args);
     expect(createImageNode).not.toHaveBeenCalled();
   });
 
-  test('does not call createImageNode if publicId is missing', () => {
+  it('does not call createImageNode if publicId is missing', () => {
     const args = getDefaultArgs();
     args.node.authorPhoto.publicId = null;
     createAssetNodesFromData(args);
     expect(createImageNode).not.toHaveBeenCalled();
   });
 
-  test('does not call createImageNode if originalHeight is missing', () => {
+  it('does not call createImageNode if originalHeight is missing', () => {
     const args = getDefaultArgs();
     args.node.authorPhoto.originalHeight = null;
     createAssetNodesFromData(args);
     expect(createImageNode).not.toHaveBeenCalled();
   });
 
-  test('does not call createImageNode if originalWidth is missing', () => {
+  it('does not call createImageNode if originalWidth is missing', () => {
     const args = getDefaultArgs();
     args.node.authorPhoto.originalWidth = null;
     createAssetNodesFromData(args);
     expect(createImageNode).not.toHaveBeenCalled();
   });
 
-  test('deletes nodes with .cloudinaryAssetData === true', () => {
+  it('deletes nodes with .cloudinaryAssetData === true', () => {
     const args = getDefaultArgs({
       node: { authorPhoto: { cloudinaryAssetData: true } },
     });

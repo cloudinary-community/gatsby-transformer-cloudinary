@@ -1,3 +1,6 @@
+const get = require('lodash/get');
+const set = require('lodash/set');
+const unset = require('lodash/unset');
 const { createImageNode } = require('../create-image-node');
 
 exports.createAssetNodesFromData = ({
@@ -22,6 +25,28 @@ exports.createAssetNodesFromData = ({
       });
     }
   });
+
+  const assetDataPaths = getAssetDataPaths({ node });
+  assetDataPaths.forEach(assetDataPath => {
+    const assetData = {
+      ...get(node, assetDataPath),
+    };
+    unset(node, assetDataPath);
+    const assetDataPathParts = assetDataPath.split('.');
+    const relationshipName = assetDataPathParts[assetDataPathParts.length - 1];
+    console.log('relationshipName', relationshipName);
+    if (verifyAssetData(assetData)) {
+      createCloudinaryAssetNode({
+        assetData,
+        createContentDigest,
+        createNode,
+        createNodeId,
+        parentNode: node,
+        relationshipName,
+        assetDataPath,
+      });
+    }
+  });
 };
 
 function verifyAssetData(assetData) {
@@ -41,8 +66,42 @@ function getAssetDataKeys(node) {
   });
 }
 
+function getAssetDataPaths({ node, basePath = '' }) {
+  const currentNode = basePath === '' ? node : get(node, basePath);
+
+  const directAssetDataPaths = Object.keys(currentNode)
+    .filter(key => {
+      return currentNode[key] && currentNode[key].cloudinaryAssetData === true;
+    })
+    .map(subPath => {
+      return basePath === '' ? subPath : `${basePath}.${subPath}`;
+    });
+
+  const objectPaths = Object.keys(currentNode)
+    .filter(key => {
+      return isObject(currentNode[key]);
+    })
+    .map(subPath => {
+      return basePath === '' ? subPath : `${basePath}.${subPath}`;
+    });
+
+  const indirectAssetDataPaths = objectPaths
+    .map(objectPath => {
+      return getAssetDataPaths({ node, basePath: objectPath });
+    })
+    .flat();
+
+  const assetDataPaths = [...directAssetDataPaths, ...indirectAssetDataPaths];
+  return assetDataPaths;
+}
+
+function isObject(thing) {
+  return typeof thing === 'object' && thing != null;
+}
+
 function createCloudinaryAssetNode({
   assetData: { cloudName, originalHeight, originalWidth, publicId, version },
+  assetDataPath = null,
   createContentDigest,
   createNode,
   createNodeId,
@@ -69,5 +128,5 @@ function createCloudinaryAssetNode({
 
   // Tell Gatsby to add `${relationshipName}` to the parent node.
   const relationshipKey = `${relationshipName}___NODE`;
-  parentNode[relationshipKey] = imageNode.id;
+  set(parentNode, assetDataPath || relationshipKey, imageNode.id);
 }
