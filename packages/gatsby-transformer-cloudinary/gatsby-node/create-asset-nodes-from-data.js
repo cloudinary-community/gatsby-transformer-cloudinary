@@ -67,11 +67,9 @@ function getAssetDataPaths({ node, basePath = '' }) {
       return basePath === '' ? subPath : `${basePath}.${subPath}`;
     });
 
-  const indirectAssetDataPaths = objectPaths
-    .map(objectPath => {
-      return getAssetDataPaths({ node, basePath: objectPath });
-    })
-    .flat();
+  const indirectAssetDataPaths = objectPaths.flatMap(objectPath => {
+    return getAssetDataPaths({ node, basePath: objectPath });
+  });
 
   const assetDataPaths = [...directAssetDataPaths, ...indirectAssetDataPaths];
   return assetDataPaths;
