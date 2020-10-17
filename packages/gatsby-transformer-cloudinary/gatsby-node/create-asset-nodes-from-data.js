@@ -9,23 +9,6 @@ exports.createAssetNodesFromData = ({
   createNodeId,
   createContentDigest,
 }) => {
-  const assetDataKeys = getAssetDataKeys(node);
-
-  assetDataKeys.forEach(assetDataKey => {
-    const assetData = { ...node[assetDataKey] };
-    delete node[assetDataKey];
-    if (verifyAssetData(assetData)) {
-      createCloudinaryAssetNode({
-        assetData,
-        createContentDigest,
-        createNode,
-        createNodeId,
-        parentNode: node,
-        relationshipName: assetDataKey,
-      });
-    }
-  });
-
   const assetDataPaths = getAssetDataPaths({ node });
   assetDataPaths.forEach(assetDataPath => {
     const assetData = {
@@ -34,7 +17,6 @@ exports.createAssetNodesFromData = ({
     unset(node, assetDataPath);
     const assetDataPathParts = assetDataPath.split('.');
     const relationshipName = assetDataPathParts[assetDataPathParts.length - 1];
-    console.log('relationshipName', relationshipName);
     if (verifyAssetData(assetData)) {
       createCloudinaryAssetNode({
         assetData,
@@ -127,6 +109,6 @@ function createCloudinaryAssetNode({
   createNode(imageNode, { name: 'gatsby-transformer-cloudinary' });
 
   // Tell Gatsby to add `${relationshipName}` to the parent node.
-  const relationshipKey = `${relationshipName}___NODE`;
-  set(parentNode, assetDataPath || relationshipKey, imageNode.id);
+  const relationshipKey = `${assetDataPath || relationshipName}___NODE`;
+  set(parentNode, relationshipKey, imageNode.id);
 }

@@ -30,21 +30,30 @@ describe('createAssetNodesFromData', () => {
     };
   }
 
-  it('works for nested asset data nodes', () => {
-    const nestedNode = {
-      blog: {
-        author: {
-          photo: {
-            cloudinaryAssetData: true,
-            cloudName: 'cloudName',
-            publicId: 'publicId',
-            originalHeight: 1080,
-            originalWidth: 1920,
+  function getDefaultNestedArgs(args) {
+    return {
+      node: {
+        blog: {
+          author: {
+            photo: {
+              cloudinaryAssetData: true,
+              cloudName: 'cloudName',
+              publicId: 'publicId',
+              originalHeight: 1080,
+              originalWidth: 1920,
+            },
           },
         },
       },
+      actions: { createNode: jest.fn() },
+      createNodeId: jest.fn(),
+      createContentDigest: jest.fn(),
+      ...args,
     };
-    const args = getDefaultArgs({ node: nestedNode });
+  }
+
+  it('passes deeply nested asset data to createImageNode', () => {
+    const args = getDefaultNestedArgs();
     const assetData = { ...args.node.blog.author.photo };
     createAssetNodesFromData(args);
     expect(createImageNode).toHaveBeenCalledWith(
@@ -60,6 +69,17 @@ describe('createAssetNodesFromData', () => {
         parentNode: args.node,
       }),
     );
+  });
+
+  it('adds a relationship to the parent node for nested data', () => {
+    const createImageNodeResult = { id: 'created-image-node-id' };
+    createImageNode.mockReturnValue(createImageNodeResult);
+
+    const args = getDefaultNestedArgs();
+    createAssetNodesFromData(args);
+    expect(args.node).toEqual({
+      blog: { author: { photo___NODE: createImageNodeResult.id } },
+    });
   });
 
   it('passes the right data to createImageNode', () => {
