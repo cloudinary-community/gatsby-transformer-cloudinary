@@ -157,6 +157,16 @@ describe('getFixedImageObject', () => {
     );
   });
 
+  it('allows the user to set the width and height simultaneously', async () => {
+    const options = getDefaultOptions();
+    getPluginOptions.mockReturnValue(options);
+    const args = getDefaultArgs({ width: 100, height: 100 });
+
+    expect(await getFixedImageObject(args)).toEqual(
+      expect.objectContaining({ width: 100, height: 100 }),
+    );
+  });
+
   it('creates a srcset with multiple images based on the provided width', async () => {
     const options = getDefaultOptions();
     getPluginOptions.mockReturnValue(options);
@@ -187,6 +197,21 @@ describe('getFixedImageObject', () => {
     expect((await getFixedImageObject(args)).srcSet).toEqual(
       expectedSrcSet.join(','),
     );
+  });
+
+  it('creates a srcset with multiple images based on the provided width and height', async () => {
+    const options = getDefaultOptions();
+    getPluginOptions.mockReturnValue(options);
+    const args = getDefaultArgs({ width: 89, height: 97 });
+
+    const expectedSrcSet = [
+      'https://res.cloudinary.com/cloudName/image/upload/w_89,h_97/public_id 1x',
+      'https://res.cloudinary.com/cloudName/image/upload/w_134,h_146/public_id 1.5x',
+      'https://res.cloudinary.com/cloudName/image/upload/w_178,h_194/public_id 2x',
+      'https://res.cloudinary.com/cloudName/image/upload/w_267,h_291/public_id 3x',
+    ];
+    expect((await getFixedImageObject(args)).srcSet).toEqual(
+      expectedSrcSet.join(','),
     );
   });
 
