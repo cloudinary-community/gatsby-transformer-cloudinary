@@ -186,13 +186,13 @@ describe('getFixedImageObject', () => {
   it('creates a srcset with multiple images based on the provided height', async () => {
     const options = getDefaultOptions();
     getPluginOptions.mockReturnValue(options);
-    const args = getDefaultArgs({ height: 100 });
+    const args = getDefaultArgs({ height: 97 });
 
     const expectedSrcSet = [
-      'https://res.cloudinary.com/cloudName/image/upload/w_178/public_id 1x',
-      'https://res.cloudinary.com/cloudName/image/upload/w_267/public_id 1.5x',
-      'https://res.cloudinary.com/cloudName/image/upload/w_356/public_id 2x',
-      'https://res.cloudinary.com/cloudName/image/upload/w_533/public_id 3x',
+      'https://res.cloudinary.com/cloudName/image/upload/h_97/public_id 1x',
+      'https://res.cloudinary.com/cloudName/image/upload/h_146/public_id 1.5x',
+      'https://res.cloudinary.com/cloudName/image/upload/h_194/public_id 2x',
+      'https://res.cloudinary.com/cloudName/image/upload/h_291/public_id 3x',
     ];
     expect((await getFixedImageObject(args)).srcSet).toEqual(
       expectedSrcSet.join(','),
