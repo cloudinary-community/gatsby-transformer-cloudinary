@@ -168,10 +168,8 @@ describe('getFixedImageObject', () => {
       'https://res.cloudinary.com/cloudName/image/upload/w_320/public_id 2x',
       'https://res.cloudinary.com/cloudName/image/upload/w_480/public_id 3x',
     ];
-    expect(await getFixedImageObject(args)).toEqual(
-      expect.objectContaining({
-        srcSet: expectedSrcSet.join(','),
-      }),
+    expect((await getFixedImageObject(args)).srcSet).toEqual(
+      expectedSrcSet.join(','),
     );
   });
 
@@ -186,10 +184,9 @@ describe('getFixedImageObject', () => {
       'https://res.cloudinary.com/cloudName/image/upload/w_356/public_id 2x',
       'https://res.cloudinary.com/cloudName/image/upload/w_533/public_id 3x',
     ];
-    expect(await getFixedImageObject(args)).toEqual(
-      expect.objectContaining({
-        srcSet: expectedSrcSet.join(','),
-      }),
+    expect((await getFixedImageObject(args)).srcSet).toEqual(
+      expectedSrcSet.join(','),
+    );
     );
   });
 
