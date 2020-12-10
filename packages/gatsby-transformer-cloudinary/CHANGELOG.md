@@ -3,7 +3,7 @@
 Additions:
 
 - Added the ability to use both width and height parameters simultaneously for fixed queries.
-- Added the ability to use pre-computed base64 images. When precomputed base64 images are used, build times should improve and Cloudinary usage should decrease.
+- Added the ability to use precomputed base64 images. When precomputed base64 images are used, build times should improve and Cloudinary usage should decrease.
 
 Fixes:
 
