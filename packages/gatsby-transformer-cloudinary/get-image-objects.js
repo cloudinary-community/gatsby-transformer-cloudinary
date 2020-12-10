@@ -11,30 +11,32 @@ const {
 const DEFAULT_BASE64_WIDTH = 30;
 
 exports.getFixedImageObject = async ({
-  public_id,
+  base64Transformations = [],
+  base64Width = DEFAULT_BASE64_WIDTH,
+  chained = [],
   cloudName,
+  defaultBase64,
+  height,
+  ignoreDefaultBase64 = false,
   originalHeight,
   originalWidth,
-  version = false,
-  height,
-  width,
-  base64Width = DEFAULT_BASE64_WIDTH,
-  base64Transformations = [],
-  defaultBase64,
-  ignoreDefaultBase64 = false,
+  public_id,
+  reporter = {},
   transformations = [],
-  chained = [],
+  version = false,
+  width,
 }) => {
   const base64 = await getBase64({
+    base64Transformations,
+    base64Width,
+    chained,
+    cloudName,
     defaultBase64,
     ignoreDefaultBase64,
     public_id,
-    version,
-    cloudName,
-    base64Transformations,
+    reporter,
     transformations,
-    base64Width,
-    chained,
+    version,
   });
 
   const src = getImageURL({
@@ -104,19 +106,20 @@ exports.getFixedImageObject = async ({
 };
 
 exports.getFluidImageObject = async ({
-  public_id,
-  cloudName,
-  originalWidth,
-  originalHeight,
-  breakpoints = [200, 400, 600],
-  version = false,
-  maxWidth,
-  base64Width = DEFAULT_BASE64_WIDTH,
   base64Transformations = [],
+  base64Width = DEFAULT_BASE64_WIDTH,
+  breakpoints = [200, 400, 600],
+  chained = [],
+  cloudName,
   defaultBase64,
   ignoreDefaultBase64 = false,
+  maxWidth,
+  originalHeight,
+  originalWidth,
+  public_id,
+  reporter = {},
   transformations = [],
-  chained = [],
+  version = false,
 }) => {
   const aspectRatio = getAspectRatio(
     transformations,
@@ -126,15 +129,16 @@ exports.getFluidImageObject = async ({
   const max = Math.min(maxWidth ? maxWidth : fluidMaxWidth, originalWidth);
   const sizes = `(max-width: ${max}px) 100vw, ${max}px`;
   const base64 = await getBase64({
+    base64Transformations,
+    base64Width,
+    chained,
+    cloudName,
     defaultBase64,
     ignoreDefaultBase64,
     public_id,
-    version,
-    cloudName,
-    base64Transformations,
-    base64Width,
+    reporter,
     transformations,
-    chained,
+    version,
   });
   const src = getImageURL({
     public_id,

@@ -52,15 +52,16 @@ exports.getAspectRatio = (transformations, originalAspectRatio) => {
 };
 
 exports.getBase64 = async ({
+  base64Transformations,
+  base64Width,
+  chained,
+  cloudName,
   defaultBase64,
   ignoreDefaultBase64,
   public_id,
-  version,
-  cloudName,
-  base64Transformations,
+  reporter,
   transformations,
-  base64Width,
-  chained,
+  version,
 }) => {
   if (defaultBase64) {
     if (!ignoreDefaultBase64 || getPluginOptions().alwaysUseDefaultBase64) {
@@ -76,7 +77,7 @@ exports.getBase64 = async ({
     cloudName,
     chained,
   });
-  const base64 = await fetchBase64(base64URL);
+  const base64 = await fetchBase64(base64URL, reporter);
 
   return base64;
 };

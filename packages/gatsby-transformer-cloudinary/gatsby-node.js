@@ -72,7 +72,7 @@ exports.createSchemaCustomization = ({ actions }) => {
   `);
 };
 
-exports.createResolvers = ({ createResolvers }) => {
+exports.createResolvers = ({ createResolvers, reporter }) => {
   const resolvers = {
     CloudinaryAsset: {
       fixed: {
@@ -97,19 +97,20 @@ exports.createResolvers = ({ createResolvers }) => {
           },
         ) =>
           getFixedImageObject({
-            public_id,
-            version,
+            base64Transformations,
+            base64Width,
+            chained,
             cloudName,
+            defaultBase64,
+            height,
+            ignoreDefaultBase64,
             originalHeight,
             originalWidth,
-            height,
-            width,
-            base64Width,
-            base64Transformations,
-            defaultBase64,
-            ignoreDefaultBase64,
+            public_id,
+            reporter,
             transformations,
-            chained,
+            version,
+            width,
           }),
       },
       fluid: {
@@ -132,17 +133,18 @@ exports.createResolvers = ({ createResolvers }) => {
           },
         ) =>
           getFluidImageObject({
-            public_id,
-            version,
+            base64Transformations,
+            base64Width,
+            breakpoints,
+            chained,
             cloudName,
             maxWidth,
-            breakpoints,
             originalHeight,
             originalWidth,
-            base64Width,
-            base64Transformations,
+            public_id,
+            reporter,
             transformations,
-            chained,
+            version,
           }),
       },
     },
