@@ -238,4 +238,52 @@ describe('getFixedImageObject', () => {
     }
     expect(get).toHaveBeenCalledTimes(1);
   });
+
+  it('uses defaultBase64 images when provided', async () => {
+    const options = getDefaultOptions();
+    getPluginOptions.mockReturnValue(options);
+
+    const defaultBase64 = 'defaultBase64';
+    const args = getDefaultArgs({ defaultBase64 });
+
+    expect(await getFluidImageObject(args)).toEqual(
+      expect.objectContaining({ base64: defaultBase64 }),
+    );
+  });
+
+  it('ignores defaultBase64 images when ignoreDefaultBase64 is true', async () => {
+    const options = getDefaultOptions();
+    getPluginOptions.mockReturnValue(options);
+
+    const defaultBase64 = 'defaultBase64';
+    const args = getDefaultArgs({ defaultBase64, ignoreDefaultBase64: true });
+
+    expect(await getFluidImageObject(args)).toEqual(
+      expect.objectContaining({ base64: 'data:image/jpeg;base64,AQID' }),
+    );
+  });
+
+  it('uses defaultBase64 images when ignoreDefaultBase64 is true and alwaysUseDefaultBase64 is true', async () => {
+    const options = getDefaultOptions({ alwaysUseDefaultBase64: true });
+    getPluginOptions.mockReturnValue(options);
+
+    const defaultBase64 = 'defaultBase64';
+    const args = getDefaultArgs({ defaultBase64, ignoreDefaultBase64: true });
+
+    expect(await getFluidImageObject(args)).toEqual(
+      expect.objectContaining({ base64: defaultBase64 }),
+    );
+  });
+
+  it('uses defaultBase64 images when ignoreDefaultBase64 is false and alwaysUseDefaultBase64 is true', async () => {
+    const options = getDefaultOptions({ alwaysUseDefaultBase64: true });
+    getPluginOptions.mockReturnValue(options);
+
+    const defaultBase64 = 'defaultBase64';
+    const args = getDefaultArgs({ defaultBase64, ignoreDefaultBase64: true });
+
+    expect(await getFluidImageObject(args)).toEqual(
+      expect.objectContaining({ base64: defaultBase64 }),
+    );
+  });
 });

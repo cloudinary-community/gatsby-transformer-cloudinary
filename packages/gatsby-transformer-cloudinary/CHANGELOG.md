@@ -1,12 +1,13 @@
-# Version next
-
-Fixes:
-
-- Deeply nested asset data is now transformed into CloudinaryAsset nodes.
+# Version 2.1.0
 
 Additions:
 
 - Added the ability to use both width and height parameters simultaneously for fixed queries.
+- Added the ability to use precomputed base64 images. When precomputed base64 images are used, build times should improve and Cloudinary usage should decrease.
+
+Fixes:
+
+- Deeply nested asset data is now transformed into CloudinaryAsset nodes.
 
 # Version 2.0.0
 
@@ -49,7 +50,7 @@ Improvements:
 
 Fixes:
 
-- Changed the public_id to be the relative path of files without the extension instead of just the file's name. This fixes an [issue with childrenCloudinaryAsset nodes](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/42) being created instead of childCloudinaryAsset nodes. 
+- Changed the public_id to be the relative path of files without the extension instead of just the file's name. This fixes an [issue with childrenCloudinaryAsset nodes](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/42) being created instead of childCloudinaryAsset nodes.
 
 # Version 1.0.1
 

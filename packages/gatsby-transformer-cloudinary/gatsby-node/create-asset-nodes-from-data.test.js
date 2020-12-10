@@ -21,6 +21,7 @@ describe('createAssetNodesFromData', () => {
           publicId: 'publicId',
           originalHeight: 1080,
           originalWidth: 1920,
+          defaultBase64: 'defaultBase64',
         },
       },
       actions: { createNode: jest.fn() },
@@ -97,6 +98,7 @@ describe('createAssetNodesFromData', () => {
         createContentDigest: args.createContentDigest,
         createNodeId: args.createNodeId,
         parentNode: args.node,
+        defaultBase64: assetData.defaultBase64,
       }),
     );
   });

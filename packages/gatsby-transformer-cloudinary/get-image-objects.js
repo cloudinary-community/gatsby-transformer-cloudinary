@@ -1,103 +1,14 @@
-const axios = require('axios');
 const { getPluginOptions } = require('./options');
+const {
+  getAspectRatio,
+  getBase64,
+  getImageURL,
+} = require('./get-image-objects/get-shared-image-data');
 const {
   getDisplayDimensions,
 } = require('./get-image-objects/get-display-dimensions');
-// todo: for fluid images when original width and height is not set, use width and height of image as is and make full width
-// todo: investigate graphQL query overrides for width and height and abstract control to user through gql query
-
 // Define default width values for fluid, fixed and base64 images
 const DEFAULT_BASE64_WIDTH = 30;
-
-const base64Cache = {};
-
-// Create Cloudinary image URL with transformations.
-const getImageURL = ({
-  public_id,
-  cloudName,
-  transformations = [],
-  chained = [],
-  defaults,
-  version = false,
-}) => {
-  const { defaultTransformations } = getPluginOptions();
-  defaults = defaultTransformations || [];
-  const baseURL = 'https://res.cloudinary.com/';
-  const allTransformations = [transformations.concat(defaults).join()]
-    .concat(chained)
-    .join('/');
-
-  const imagePath = [
-    cloudName,
-    '/image/upload/',
-    allTransformations,
-    version ? `/v${version}/` : '/',
-    public_id,
-  ]
-    .join('')
-    .replace('//', '/');
-
-  return baseURL + imagePath;
-};
-
-// Fetch and return Base64 image
-const getBase64 = async url => {
-  if (!base64Cache[url]) {
-    const result = await axios.get(url, { responseType: 'arraybuffer' });
-    const data = Buffer.from(result.data).toString('base64');
-    base64Cache[url] = `data:image/jpeg;base64,${data}`;
-  }
-
-  return base64Cache[url];
-};
-
-// retrieve aspect ratio if in transformation else create aspect ratio values
-const getAspectRatio = (transformations, originalAspectRatio) => {
-  const arTransform = transformations.find(t => t.startsWith('ar_'));
-  if (!arTransform) {
-    return originalAspectRatio;
-  }
-
-  const newAspectRatio = arTransform.replace('ar_', '');
-  if (newAspectRatio.indexOf(':') === -1) {
-    return Number(newAspectRatio);
-  }
-
-  const [w, h] = newAspectRatio.split(':').map(Number);
-
-  return w / h;
-};
-
-// Create shared image data for both fixed and fluid. Returns src and Base64
-const getSharedImageData = async ({
-  public_id,
-  version,
-  cloudName,
-  base64Transformations,
-  transformations,
-  base64Width,
-  chained,
-}) => {
-  const b64Transformations = base64Transformations || transformations;
-  const base64URL = getImageURL({
-    transformations: b64Transformations.concat(`w_${base64Width}`),
-    public_id,
-    version,
-    cloudName,
-    chained,
-  });
-  const base64 = await getBase64(base64URL);
-
-  const src = getImageURL({
-    public_id,
-    version,
-    cloudName,
-    transformations,
-    chained,
-  });
-
-  return { base64, src };
-};
 
 exports.getFixedImageObject = async ({
   public_id,
@@ -109,16 +20,28 @@ exports.getFixedImageObject = async ({
   width,
   base64Width = DEFAULT_BASE64_WIDTH,
   base64Transformations = [],
+  defaultBase64,
+  ignoreDefaultBase64 = false,
   transformations = [],
   chained = [],
 }) => {
-  const { base64, src } = await getSharedImageData({
+  const base64 = await getBase64({
+    defaultBase64,
+    ignoreDefaultBase64,
     public_id,
     version,
     cloudName,
     base64Transformations,
     transformations,
     base64Width,
+    chained,
+  });
+
+  const src = getImageURL({
+    public_id,
+    version,
+    cloudName,
+    transformations,
     chained,
   });
 
@@ -155,7 +78,7 @@ exports.getFixedImageObject = async ({
         finalTransformations.push(`w_${size.width}`);
         finalTransformations.push(`h_${size.height}`);
       } else {
-        throw Error("This should never happen.");
+        throw Error('This should never happen.');
       }
       // Get URL for each image including user-defined transformations.
       const url = getImageURL({
@@ -180,10 +103,6 @@ exports.getFixedImageObject = async ({
   };
 };
 
-function onlyUnique(element, index, array) {
-  return array.indexOf(element) === index;
-}
-
 exports.getFluidImageObject = async ({
   public_id,
   cloudName,
@@ -194,6 +113,8 @@ exports.getFluidImageObject = async ({
   maxWidth,
   base64Width = DEFAULT_BASE64_WIDTH,
   base64Transformations = [],
+  defaultBase64,
+  ignoreDefaultBase64 = false,
   transformations = [],
   chained = [],
 }) => {
@@ -204,14 +125,22 @@ exports.getFluidImageObject = async ({
   const { fluidMaxWidth } = getPluginOptions();
   const max = Math.min(maxWidth ? maxWidth : fluidMaxWidth, originalWidth);
   const sizes = `(max-width: ${max}px) 100vw, ${max}px`;
-  const { base64, src } = await getSharedImageData({
+  const base64 = await getBase64({
+    defaultBase64,
+    ignoreDefaultBase64,
     public_id,
     version,
     cloudName,
-    breakpoints,
     base64Transformations,
-    transformations,
     base64Width,
+    transformations,
+    chained,
+  });
+  const src = getImageURL({
+    public_id,
+    version,
+    cloudName,
+    transformations,
     chained,
   });
 
@@ -252,3 +181,7 @@ exports.getFluidImageObject = async ({
     srcSet,
   };
 };
+
+function onlyUnique(element, index, array) {
+  return array.indexOf(element) === index;
+}
