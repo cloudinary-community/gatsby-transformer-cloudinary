@@ -1,11 +1,13 @@
 const axios = require('axios');
 const { getPluginOptions } = require('./options');
+const {
+  getDisplayDimensions,
+} = require('./get-image-objects/get-display-dimensions');
 // todo: for fluid images when original width and height is not set, use width and height of image as is and make full width
 // todo: investigate graphQL query overrides for width and height and abstract control to user through gql query
 
 // Define default width values for fluid, fixed and base64 images
 const DEFAULT_BASE64_WIDTH = 30;
-const DEFAULT_FIXED_WIDTH = 400;
 
 const base64Cache = {};
 
@@ -125,27 +127,40 @@ exports.getFixedImageObject = async ({
     originalWidth / originalHeight,
   );
 
-  let displayWidth;
-  if (!!width) {
-    displayWidth = Math.min(width, originalWidth);
-  } else if (!!height) {
-    displayWidth = Math.min(height * aspectRatio, originalWidth);
-  } else if (!height && !width) {
-    displayWidth = Math.min(DEFAULT_FIXED_WIDTH, originalWidth);
-  }
+  const { displayWidth, displayHeight } = getDisplayDimensions({
+    aspectRatio,
+    width,
+    height,
+    originalWidth,
+    originalHeight,
+  });
 
   const sizes = [1, 1.5, 2, 3].map(size => ({
     resolution: size,
     width: Math.round(displayWidth * size),
+    height: Math.round(displayHeight * size),
   }));
 
   const srcSet = sizes
     .filter(size => size.width <= originalWidth)
     .map(size => {
+      const finalTransformations = [...transformations];
+      if (!width && !height) {
+        finalTransformations.push(`w_${size.width}`);
+      } else if (!!width && !height) {
+        finalTransformations.push(`w_${size.width}`);
+      } else if (!!height && !width) {
+        finalTransformations.push(`h_${size.height}`);
+      } else if (!!height && !!width) {
+        finalTransformations.push(`w_${size.width}`);
+        finalTransformations.push(`h_${size.height}`);
+      } else {
+        throw Error("This should never happen.");
+      }
       // Get URL for each image including user-defined transformations.
       const url = getImageURL({
         // Add the size at the end to override width for srcSet support.
-        transformations: transformations.concat(`w_${size.width}`),
+        transformations: finalTransformations,
         chained,
         public_id,
         version,
@@ -158,7 +173,7 @@ exports.getFixedImageObject = async ({
 
   return {
     base64,
-    height: Math.round(displayWidth / aspectRatio),
+    height: Math.round(displayHeight),
     src,
     srcSet,
     width: Math.round(displayWidth),

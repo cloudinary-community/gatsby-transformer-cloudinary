@@ -4,6 +4,10 @@ Fixes:
 
 - Deeply nested asset data is now transformed into CloudinaryAsset nodes.
 
+Additions:
+
+- Added the ability to use both width and height parameters simultaneously for fixed queries.
+
 # Version 2.0.0
 
 Changes:
