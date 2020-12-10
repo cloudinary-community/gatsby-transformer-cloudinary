@@ -102,5 +102,34 @@ function logBase64Retrieval(url, reporter) {
       `[gatsby-transformer-cloudinary] Fetching base64 image ` +
         `#${fetchedBase64ImageCount} from Cloudinary: ${url}`,
     );
+    if (fetchedBase64ImageCount == 100) {
+      reporter.info(
+        '[gatsby-transformer-cloudinary] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',
+      );
+      reporter.info(
+        'It looks like your project has a lot of images. To improve your build times, ',
+      );
+      reporter.info(
+        'you should consider (1) using images that are already on Cloudinary, (2) ',
+      );
+      reporter.info(
+        'precomputing the base64 images and providing them to this plugin as the ',
+      );
+      reporter.info(
+        '`defaultBase64` property, and (3) setting the plugin option ',
+      );
+      reporter.info(
+        '`alwaysUseDefaultBase64` to true. Doing so will reduce the number of base64 ',
+      );
+      reporter.info(
+        'images that need to be fetched from Cloudinary and speed up your Gatsby "query" ',
+      );
+      reporter.info(
+        'build steps. (See the section "Use images already on Cloudinary" in the README.)',
+      );
+      reporter.info(
+        '[gatsby-transformer-cloudinary] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',
+      );
+    }
   }
 }
