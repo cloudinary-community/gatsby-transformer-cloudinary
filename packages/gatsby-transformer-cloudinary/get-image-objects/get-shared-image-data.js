@@ -82,20 +82,25 @@ exports.getBase64 = async ({
   return base64;
 };
 
-let base64ImageCount = 0;
-
 async function fetchBase64(url, reporter) {
   if (!base64Cache[url]) {
-    base64ImageCount += 1;
-    if (typeof reporter.info === 'function')
-      reporter.info(
-        `[gatsby-transformer-cloudinary] Fetching base64 image ` +
-          `#${base64ImageCount} from Cloudinary: ${url}`,
-      );
+    logBase64Retrieval(url, reporter);
     const result = await axios.get(url, { responseType: 'arraybuffer' });
     const data = Buffer.from(result.data).toString('base64');
     base64Cache[url] = `data:image/jpeg;base64,${data}`;
   }
 
   return base64Cache[url];
+}
+
+let fetchedBase64ImageCount = 0;
+
+function logBase64Retrieval(url, reporter) {
+  fetchedBase64ImageCount += 1;
+  if (typeof reporter.info === 'function') {
+    reporter.info(
+      `[gatsby-transformer-cloudinary] Fetching base64 image ` +
+        `#${fetchedBase64ImageCount} from Cloudinary: ${url}`,
+    );
+  }
 }
