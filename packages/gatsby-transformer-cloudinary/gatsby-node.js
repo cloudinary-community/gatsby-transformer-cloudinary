@@ -117,19 +117,21 @@ exports.createResolvers = ({ createResolvers, reporter }) => {
         type: 'CloudinaryAssetFluid!',
         resolve: (
           {
-            public_id,
-            version,
+            breakpoints,
             cloudName,
+            defaultBase64,
             originalHeight,
             originalWidth,
-            breakpoints,
+            public_id,
+            version,
           },
           {
-            base64Width,
             base64Transformations,
+            base64Width,
+            chained,
+            ignoreDefaultBase64,
             maxWidth,
             transformations,
-            chained,
           },
         ) =>
           getFluidImageObject({
@@ -138,6 +140,8 @@ exports.createResolvers = ({ createResolvers, reporter }) => {
             breakpoints,
             chained,
             cloudName,
+            defaultBase64,
+            ignoreDefaultBase64,
             maxWidth,
             originalHeight,
             originalWidth,
