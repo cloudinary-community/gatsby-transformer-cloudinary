@@ -161,6 +161,7 @@ To create GraphQL nodes for images that are already uploaded to Cloudinary, you 
     originalHeight: 360,
     originalWidth: 820,
     defaultBase64: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMXG/8HwAEwAI0Bj1bnwAAAABJRU5ErkJggg==",
+    defaultTracedSVG: "data:image/svg+xml,%3Csvg%20height%3D%229999%22%20viewBox%3D%220%200%209999%209999%22%20width%3D%229999%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22m0%200h9999v9999h-9999z%22%20fill%3D%22%23f9fafb%22%2F%3E%3C%2Fsvg%3E",
   }
 }
 ```
@@ -170,6 +171,8 @@ The `coverPhoto` property in the node above will be deleted and replaced by `gat
 The property `defaultBase64` in the node above can be used by your CMS/backend API to provide precomputed or cached base64 URIs for your images. The provided string must comply with [RFC 2397](https://tools.ietf.org/html/rfc2397). This base64 image will be used unless `ignoreDefaultBase64: true` is set in your GraphQL query. In cases where you prefer to have an accurate base64 image with the same transformations applied as you full-size image, you should use `ignoreDefaultBase64: true` in your GraphQL query. When a defaultBase64 property is not supplied or `ignoreDefaultBase64` is true, an API call to Cloudinary will be made when resolving your GraphQL queries to fetch the base64 image.
 
 When providing `defaultBase64` properties, it's recommended that you set the plugin option `alwaysUseDefaultBase64` to true in development. This may result in your base64 images looking different in development and production, but it will also result in much faster development build times as fewer API calls to Cloudinary will be made. The `alwaysUseDefaultBase64` plugin option overrides the `ignoreDefaultBase64` GraphQL query parameter and forces `gatsby-transformer-cloudinary` to always use `defaultBase64` images when they are provided.
+
+The property `defaultTracedSVG` in the node above can be used by your CMS/backend to provide precomputed or cached SVG placeholders for your images. The provided string must comply with [RFC 2397](https://tools.ietf.org/html/rfc2397). It should also be encoded with something like JavaScript's `encodeURIComponent()`.
 
 ### Plugin options
 
@@ -217,6 +220,17 @@ export default () => {
   return <Image fluid={data.file.childCloudinaryAsset.fluid} alt="avatar" />;
 };
 ```
+
+### Fragments
+
+The fragments below can be used when querying your Cloudinary assets:
+
+- `CloudinaryAssetFluid`
+- `CloudinaryAssetFluid_noBase64`
+- `CloudinaryAssetFluid_tracedSVG`
+- `CloudinaryAssetFixed`
+- `CloudinaryAssetFixed_noBase64`
+- `CloudinaryAssetFixed_tracedSVG`
 
 ### Avoiding stretched images using the fluid type
 
