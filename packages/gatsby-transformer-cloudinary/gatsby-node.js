@@ -57,6 +57,7 @@ exports.createSchemaCustomization = ({ actions }) => {
       height: Float
       src: String
       srcSet: String
+      tracedSVG: String
       width: Float
     }
 
@@ -68,6 +69,7 @@ exports.createSchemaCustomization = ({ actions }) => {
       sizes: String!
       src: String!
       srcSet: String!
+      tracedSVG: String
     }
   `);
 };
@@ -85,6 +87,7 @@ exports.createResolvers = ({ createResolvers, reporter }) => {
             originalHeight,
             originalWidth,
             defaultBase64,
+            defaultTracedSVG,
           },
           {
             base64Width,
@@ -102,6 +105,7 @@ exports.createResolvers = ({ createResolvers, reporter }) => {
             chained,
             cloudName,
             defaultBase64,
+            defaultTracedSVG,
             height,
             ignoreDefaultBase64,
             originalHeight,
@@ -120,6 +124,7 @@ exports.createResolvers = ({ createResolvers, reporter }) => {
             breakpoints,
             cloudName,
             defaultBase64,
+            defaultTracedSVG,
             originalHeight,
             originalWidth,
             public_id,
@@ -141,6 +146,7 @@ exports.createResolvers = ({ createResolvers, reporter }) => {
             chained,
             cloudName,
             defaultBase64,
+            defaultTracedSVG,
             ignoreDefaultBase64,
             maxWidth,
             originalHeight,
