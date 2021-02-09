@@ -36,6 +36,7 @@ exports.createImageNode = ({
   createNodeId,
   cloudName,
   defaultBase64,
+  defaultTracedSVG,
 }) => {
   let breakpoints = getDefaultBreakpoints(width);
   if (
@@ -68,6 +69,7 @@ exports.createImageNode = ({
     originalWidth: width,
     breakpoints,
     defaultBase64,
+    defaultTracedSVG,
 
     // Add the required internal Gatsby node fields.
     id: createNodeId(`CloudinaryAsset-${fingerprint}`),
