@@ -18,6 +18,7 @@ describe('getFluidImageObject', () => {
       cloudName: 'cloudName',
       originalWidth: 1920,
       originalHeight: 1080,
+      defaultTracedSVG: 'defaultTracedSVG',
       ...args,
     };
   }
@@ -77,6 +78,18 @@ describe('getFluidImageObject', () => {
     );
   });
 
+  it('returns a tracedSVG image', async () => {
+    const options = getDefaultOptions();
+    getPluginOptions.mockReturnValue(options);
+    const args = getDefaultArgs();
+
+    const expectedTracedSVG = args.defaultTracedSVG;
+
+    expect(await getFluidImageObject(args)).toEqual(
+      expect.objectContaining({ tracedSVG: expectedTracedSVG }),
+    );
+  });
+
   it('does not fetch base64 images multiple times', async () => {
     const options = getDefaultOptions();
     getPluginOptions.mockReturnValue(options);
@@ -94,9 +107,9 @@ describe('getFixedImageObject', () => {
     return {
       public_id: 'public_id',
       cloudName: 'cloudName',
-      // enableDefaultTranformations: true,
       originalWidth: 1920,
       originalHeight: 1080,
+      defaultTracedSVG: 'defaultTracedSVG',
       ...args,
     };
   }
@@ -225,6 +238,18 @@ describe('getFixedImageObject', () => {
 
     expect(await getFluidImageObject(args)).toEqual(
       expect.objectContaining({ base64: expectedBase64Image }),
+    );
+  });
+
+  it('returns a tracedSVG image', async () => {
+    const options = getDefaultOptions();
+    getPluginOptions.mockReturnValue(options);
+    const args = getDefaultArgs();
+
+    const expectedTracedSVG = args.defaultTracedSVG;
+
+    expect(await getFluidImageObject(args)).toEqual(
+      expect.objectContaining({ tracedSVG: expectedTracedSVG }),
     );
   });
 
