@@ -84,6 +84,7 @@ function createCloudinaryAssetNode({
   assetData: {
     cloudName,
     defaultBase64,
+    defaultTracedSVG,
     originalHeight,
     originalWidth,
     publicId,
@@ -110,6 +111,7 @@ function createCloudinaryAssetNode({
     createNodeId,
     parentNode,
     defaultBase64,
+    defaultTracedSVG,
   });
 
   // Add the new node to Gatsby’s data layer.

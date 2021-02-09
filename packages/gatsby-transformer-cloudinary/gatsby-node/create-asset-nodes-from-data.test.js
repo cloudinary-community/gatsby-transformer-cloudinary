@@ -22,6 +22,7 @@ describe('createAssetNodesFromData', () => {
           originalHeight: 1080,
           originalWidth: 1920,
           defaultBase64: 'defaultBase64',
+          defaultTracedSVG: 'defaultTracedSVG',
         },
       },
       actions: { createNode: jest.fn() },
@@ -99,6 +100,7 @@ describe('createAssetNodesFromData', () => {
         createNodeId: args.createNodeId,
         parentNode: args.node,
         defaultBase64: assetData.defaultBase64,
+        defaultTracedSVG: assetData.defaultTracedSVG,
       }),
     );
   });
