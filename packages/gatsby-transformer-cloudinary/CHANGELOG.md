@@ -1,5 +1,11 @@
 # Version Next
 
+Fixes:
+
+- base64 images are no longer generated unless a query requesting them is run.
+
+# Version 2.1.1
+
 Additions:
 
 - Added logging for each time we have to fetch a base64 image from Cloudinary to explain long query steps in the Gatsby build process.
