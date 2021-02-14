@@ -18,6 +18,7 @@ describe('getFluidImageObject', () => {
       cloudName: 'cloudName',
       originalWidth: 1920,
       originalHeight: 1080,
+      fieldsToSelect: ['base64'],
       ...args,
     };
   }
@@ -77,6 +78,14 @@ describe('getFluidImageObject', () => {
     );
   });
 
+  it('does not return base64 if base64 is not a field to select', async () => {
+    const options = getDefaultOptions();
+    getPluginOptions.mockReturnValue(options);
+    const args = getDefaultArgs({ fieldsToSelect: [] });
+
+    expect((await getFluidImageObject(args)).base64).toEqual(undefined);
+  });
+
   it('does not fetch base64 images multiple times', async () => {
     const options = getDefaultOptions();
     getPluginOptions.mockReturnValue(options);
@@ -97,6 +106,7 @@ describe('getFixedImageObject', () => {
       // enableDefaultTranformations: true,
       originalWidth: 1920,
       originalHeight: 1080,
+      fieldsToSelect: ['base64'],
       ...args,
     };
   }
@@ -226,6 +236,14 @@ describe('getFixedImageObject', () => {
     expect(await getFluidImageObject(args)).toEqual(
       expect.objectContaining({ base64: expectedBase64Image }),
     );
+  });
+
+  it('does not return base64 if base64 is not a field to select', async () => {
+    const options = getDefaultOptions();
+    getPluginOptions.mockReturnValue(options);
+    const args = getDefaultArgs({ fieldsToSelect: [] });
+
+    expect((await getFluidImageObject(args)).base64).toEqual(undefined);
   });
 
   it('does not fetch base64 images multiple times', async () => {
