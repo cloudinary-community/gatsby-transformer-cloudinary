@@ -12,6 +12,7 @@ exports.uploadImageToCloudinary = async ({
   overwrite,
   reporter,
 }) => {
+  verifyRequiredOptions();
   const {
     apiKey,
     apiSecret,
@@ -107,3 +108,15 @@ exports.uploadImageNodeToCloudinary = async ({ node, reporter }) => {
   });
   return result;
 };
+
+function verifyRequiredOptions() {
+  const requiredOptions = ['apiKey', 'apiSecret', 'cloudName'];
+  const pluginOptions = getPluginOptions();
+  requiredOptions.forEach(optionKey => {
+    if (pluginOptions[optionKey] == null) {
+      reporter.panic(
+        `[gatsby-transformer-cloudinary] "${optionKey}" is a required plugin option. You can add it to the options object for "gatsby-transformer-cloudinary" in your gatsby-config file.`,
+      );
+    }
+  });
+}
