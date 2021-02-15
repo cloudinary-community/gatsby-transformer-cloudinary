@@ -11,17 +11,7 @@ const defaultOptions = {
   alwaysUseDefaultBase64: false,
 };
 
-const requiredOptions = ['apiKey', 'apiSecret', 'cloudName'];
-
 exports.setPluginOptions = ({ pluginOptions, reporter }) => {
-  requiredOptions.forEach(optionKey => {
-    if (pluginOptions[optionKey] == null) {
-      reporter.panic(
-        `[gatsby-transformer-cloudinary] "${optionKey}" is a required plugin option. You can add it to the options object for "gatsby-transformer-cloudinary" in your gatsby-config file.`,
-      );
-    }
-  });
-
   if (
     pluginOptions.breakpointsMaxImages &&
     pluginOptions.breakpointsMaxImages < 1
