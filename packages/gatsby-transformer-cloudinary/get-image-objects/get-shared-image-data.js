@@ -85,12 +85,11 @@ exports.getBase64 = async ({
 async function fetchBase64(url, reporter) {
   if (!base64Cache[url]) {
     logBase64Retrieval(url, reporter);
-    const result = await axios.get(url, { responseType: 'arraybuffer' });
-    const data = Buffer.from(result.data).toString('base64');
-    base64Cache[url] = `data:image/jpeg;base64,${data}`;
+    base64Cache[url] = axios.get(url, { responseType: 'arraybuffer' });
   }
-
-  return base64Cache[url];
+  const response = await base64Cache[url];
+  const data = Buffer.from(response.data).toString('base64');
+  return `data:image/jpeg;base64,${data}`;
 }
 
 let fetchedBase64ImageCount = 0;
