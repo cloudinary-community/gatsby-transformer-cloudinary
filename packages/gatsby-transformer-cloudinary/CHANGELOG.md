@@ -1,5 +1,11 @@
 # Version Next
 
+Fixes:
+
+- Improved base64 caching so that if a second request for the same base64 image is made before the first response is received, only one request is made.
+
+# Version 2.1.1
+
 Additions:
 
 - Added logging for each time we have to fetch a base64 image from Cloudinary to explain long query steps in the Gatsby build process.
