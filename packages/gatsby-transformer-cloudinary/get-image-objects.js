@@ -16,6 +16,7 @@ exports.getFixedImageObject = async ({
   chained = [],
   cloudName,
   defaultBase64,
+  defaultTracedSVG,
   height,
   ignoreDefaultBase64 = false,
   originalHeight,
@@ -101,6 +102,7 @@ exports.getFixedImageObject = async ({
     height: Math.round(displayHeight),
     src,
     srcSet,
+    tracedSVG: defaultTracedSVG,
     width: Math.round(displayWidth),
   };
 };
@@ -112,6 +114,7 @@ exports.getFluidImageObject = async ({
   chained = [],
   cloudName,
   defaultBase64,
+  defaultTracedSVG,
   ignoreDefaultBase64 = false,
   maxWidth,
   originalHeight,
@@ -183,6 +186,7 @@ exports.getFluidImageObject = async ({
     sizes,
     src,
     srcSet,
+    tracedSVG: defaultTracedSVG,
   };
 };
 

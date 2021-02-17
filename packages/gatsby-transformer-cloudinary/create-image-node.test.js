@@ -161,6 +161,19 @@ describe('createImageNode', () => {
     expect(actual).toEqual(expect.objectContaining(expected));
   });
 
+  it('sets the defaultTracedSVG image', async () => {
+    const options = getDefaultOptions();
+    getPluginOptions.mockReturnValue(options);
+
+    const args = getDefaultArgs({
+      defaultTracedSVG: 'defaultTracedSVG',
+    });
+    const actual = createImageNode(args);
+
+    const expected = { defaultTracedSVG: 'defaultTracedSVG' };
+    expect(actual).toEqual(expect.objectContaining(expected));
+  });
+
   it('creates a node ID', async () => {
     const options = getDefaultOptions();
     getPluginOptions.mockReturnValue(options);
