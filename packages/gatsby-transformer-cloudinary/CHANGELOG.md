@@ -1,5 +1,11 @@
 # Version Next
 
+Improvements:
+
+- Only throw an error on missing Cloudinary credentials if those credentials are actually needed to upload an image to Cloudinary.
+
+# Version 2.1.1
+
 Additions:
 
 - defaultTracedSVG values are now passed along as tracedSVG values.

@@ -9,6 +9,12 @@ jest.mock('cloudinary');
 const { getPluginOptions } = require('./options');
 const cloudinary = require('cloudinary').v2;
 
+const defaultPluginOptions = {
+  apiKey: 'apiKey',
+  apiSecret: 'apiSecret',
+  cloudName: 'cloudName',
+};
+
 describe('uploadImageToCloudinary', () => {
   function getDefaultArgs(args) {
     return {
@@ -174,7 +180,10 @@ describe('uploadImageNodeToCloudinary', () => {
       relativePath: 'relativePath.jpg',
     };
     const overwriteExisting = 'overwriteExistingDouble';
-    getPluginOptions.mockReturnValue({ overwriteExisting });
+    getPluginOptions.mockReturnValue({
+      ...defaultPluginOptions,
+      overwriteExisting,
+    });
 
     await uploadImageNodeToCloudinary({ node, reporter });
 
@@ -183,6 +192,69 @@ describe('uploadImageNodeToCloudinary', () => {
       expect.objectContaining({
         overwrite: overwriteExisting,
       }),
+    );
+  });
+
+  it('requires the apiKey option', async () => {
+    const reporter = {
+      panic: jest.fn(() => {
+        throw Error();
+      }),
+    };
+    const node = { relativePath: 'relativePath.jpg' };
+    getPluginOptions.mockReturnValue({
+      ...defaultPluginOptions,
+      apiKey: null,
+    });
+
+    try {
+      await uploadImageNodeToCloudinary({ node, reporter });
+    } catch {}
+
+    expect(reporter.panic).toHaveBeenCalledWith(
+      '[gatsby-transformer-cloudinary] "apiKey" is a required plugin option. You can add it to the options object for "gatsby-transformer-cloudinary" in your gatsby-config file.',
+    );
+  });
+
+  it('requires the apiSecret option', async () => {
+    const reporter = {
+      panic: jest.fn(() => {
+        throw Error();
+      }),
+    };
+    const node = { relativePath: 'relativePath.jpg' };
+    getPluginOptions.mockReturnValue({
+      ...defaultPluginOptions,
+      apiSecret: null,
+    });
+
+    try {
+      await uploadImageNodeToCloudinary({ node, reporter });
+    } catch {}
+
+    expect(reporter.panic).toHaveBeenCalledWith(
+      '[gatsby-transformer-cloudinary] "apiSecret" is a required plugin option. You can add it to the options object for "gatsby-transformer-cloudinary" in your gatsby-config file.',
+    );
+  });
+
+  it('requires the cloudName option', async () => {
+    const reporter = {
+      panic: jest.fn(() => {
+        throw Error();
+      }),
+    };
+    const node = { relativePath: 'relativePath.jpg' };
+    getPluginOptions.mockReturnValue({
+      ...defaultPluginOptions,
+      cloudName: null,
+    });
+
+    try {
+      await uploadImageNodeToCloudinary({ node, reporter });
+    } catch {}
+
+    expect(reporter.panic).toHaveBeenCalledWith(
+      '[gatsby-transformer-cloudinary] "cloudName" is a required plugin option. You can add it to the options object for "gatsby-transformer-cloudinary" in your gatsby-config file.',
     );
   });
 });
