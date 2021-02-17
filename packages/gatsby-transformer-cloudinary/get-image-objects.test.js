@@ -85,6 +85,7 @@ describe('getFluidImageObject', () => {
     const args = getDefaultArgs({ fieldsToSelect: [] });
 
     expect((await getFluidImageObject(args)).base64).toEqual(undefined);
+  });
 
   it('returns a tracedSVG image', async () => {
     const options = getDefaultOptions();
@@ -257,6 +258,7 @@ describe('getFixedImageObject', () => {
     const args = getDefaultArgs({ fieldsToSelect: [] });
 
     expect((await getFluidImageObject(args)).base64).toEqual(undefined);
+  });
 
   it('returns a tracedSVG image', async () => {
     const options = getDefaultOptions();
