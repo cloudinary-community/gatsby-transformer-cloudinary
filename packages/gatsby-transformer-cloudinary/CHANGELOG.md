@@ -8,6 +8,12 @@ Fixes:
 
 Additions:
 
+- defaultTracedSVG values are now passed along as tracedSVG values.
+
+# Version 2.1.1
+
+Additions:
+
 - Added logging for each time we have to fetch a base64 image from Cloudinary to explain long query steps in the Gatsby build process.
 
 Fixes:

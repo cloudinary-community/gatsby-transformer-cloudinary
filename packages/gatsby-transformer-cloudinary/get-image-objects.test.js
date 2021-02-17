@@ -19,6 +19,7 @@ describe('getFluidImageObject', () => {
       originalWidth: 1920,
       originalHeight: 1080,
       fieldsToSelect: ['base64'],
+      defaultTracedSVG: 'defaultTracedSVG',
       ...args,
     };
   }
@@ -84,6 +85,17 @@ describe('getFluidImageObject', () => {
     const args = getDefaultArgs({ fieldsToSelect: [] });
 
     expect((await getFluidImageObject(args)).base64).toEqual(undefined);
+
+  it('returns a tracedSVG image', async () => {
+    const options = getDefaultOptions();
+    getPluginOptions.mockReturnValue(options);
+    const args = getDefaultArgs();
+
+    const expectedTracedSVG = args.defaultTracedSVG;
+
+    expect(await getFluidImageObject(args)).toEqual(
+      expect.objectContaining({ tracedSVG: expectedTracedSVG }),
+    );
   });
 
   it('does not fetch base64 images multiple times', async () => {
@@ -103,10 +115,10 @@ describe('getFixedImageObject', () => {
     return {
       public_id: 'public_id',
       cloudName: 'cloudName',
-      // enableDefaultTranformations: true,
       originalWidth: 1920,
       originalHeight: 1080,
       fieldsToSelect: ['base64'],
+      defaultTracedSVG: 'defaultTracedSVG',
       ...args,
     };
   }
@@ -238,12 +250,24 @@ describe('getFixedImageObject', () => {
     );
   });
 
+
   it('does not return base64 if base64 is not a field to select', async () => {
     const options = getDefaultOptions();
     getPluginOptions.mockReturnValue(options);
     const args = getDefaultArgs({ fieldsToSelect: [] });
 
     expect((await getFluidImageObject(args)).base64).toEqual(undefined);
+
+  it('returns a tracedSVG image', async () => {
+    const options = getDefaultOptions();
+    getPluginOptions.mockReturnValue(options);
+    const args = getDefaultArgs();
+
+    const expectedTracedSVG = args.defaultTracedSVG;
+
+    expect(await getFluidImageObject(args)).toEqual(
+      expect.objectContaining({ tracedSVG: expectedTracedSVG }),
+    );
   });
 
   it('does not fetch base64 images multiple times', async () => {
