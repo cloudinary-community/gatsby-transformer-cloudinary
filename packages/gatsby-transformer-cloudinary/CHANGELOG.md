@@ -1,25 +1,10 @@
-# Version 2.1.1
+# Version 2.2.0
 
 Improvements:
 
 - Only throw an error on missing Cloudinary credentials if those credentials are actually needed to upload an image to Cloudinary.
-
-# Version 2.1.1
-
-Fixes:
-
 - base64 images are no longer generated unless a query requesting them is run.
-
-# Version 2.1.1
-
-Additions:
-
 - defaultTracedSVG values are now passed along as tracedSVG values.
-
-# Version 2.1.1
-
-Fixes:
-
 - Improved base64 caching so that if a second request for the same base64 image is made before the first response is received, only one request is made.
 
 # Version 2.1.1
