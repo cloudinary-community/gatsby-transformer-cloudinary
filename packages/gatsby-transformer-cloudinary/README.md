@@ -172,6 +172,8 @@ The property `defaultBase64` in the node above can be used by your CMS/backend A
 
 When providing `defaultBase64` properties, it's recommended that you set the plugin option `alwaysUseDefaultBase64` to true in development. This may result in your base64 images looking different in development and production, but it will also result in much faster development build times as fewer API calls to Cloudinary will be made. The `alwaysUseDefaultBase64` plugin option overrides the `ignoreDefaultBase64` GraphQL query parameter and forces `gatsby-transformer-cloudinary` to always use `defaultBase64` images when they are provided.
 
+No API calls to Cloudinary for base64 images will be made if your GraphQL queries do not request base64 images.
+
 The property `defaultTracedSVG` in the node above can be used by your CMS/backend to provide precomputed or cached SVG placeholders for your images. The provided string must comply with [RFC 2397](https://tools.ietf.org/html/rfc2397). It should also be encoded with something like JavaScript's `encodeURIComponent()`.
 
 ### Plugin options

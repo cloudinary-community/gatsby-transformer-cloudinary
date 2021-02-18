@@ -6,6 +6,12 @@ Improvements:
 
 # Version 2.1.1
 
+Fixes:
+
+- base64 images are no longer generated unless a query requesting them is run.
+
+# Version 2.1.1
+
 Additions:
 
 - defaultTracedSVG values are now passed along as tracedSVG values.

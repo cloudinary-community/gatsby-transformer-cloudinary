@@ -53,7 +53,7 @@ exports.createSchemaCustomization = ({ actions }) => {
 
     type CloudinaryAssetFixed {
       aspectRatio: Float
-      base64: String!
+      base64: String
       height: Float
       src: String
       srcSet: String
@@ -63,7 +63,7 @@ exports.createSchemaCustomization = ({ actions }) => {
 
     type CloudinaryAssetFluid {
       aspectRatio: Float!
-      base64: String!
+      base64: String
       presentationHeight: Float
       presentationWidth: Float
       sizes: String!
@@ -98,13 +98,19 @@ exports.createResolvers = ({ createResolvers, reporter }) => {
             transformations,
             chained,
           },
-        ) =>
-          getFixedImageObject({
+          _context,
+          info,
+        ) => {
+          const fieldsToSelect = info.fieldNodes[0].selectionSet.selections.map(
+            item => item.name.value,
+          );
+          return getFixedImageObject({
             base64Transformations,
             base64Width,
             chained,
             cloudName,
             defaultBase64,
+            fieldsToSelect,
             defaultTracedSVG,
             height,
             ignoreDefaultBase64,
@@ -115,7 +121,8 @@ exports.createResolvers = ({ createResolvers, reporter }) => {
             transformations,
             version,
             width,
-          }),
+          });
+        },
       },
       fluid: {
         type: 'CloudinaryAssetFluid!',
@@ -138,14 +145,20 @@ exports.createResolvers = ({ createResolvers, reporter }) => {
             maxWidth,
             transformations,
           },
-        ) =>
-          getFluidImageObject({
+          _context,
+          info,
+        ) => {
+          const fieldsToSelect = info.fieldNodes[0].selectionSet.selections.map(
+            item => item.name.value,
+          );
+          return getFluidImageObject({
             base64Transformations,
             base64Width,
             breakpoints,
             chained,
             cloudName,
             defaultBase64,
+            fieldsToSelect,
             defaultTracedSVG,
             ignoreDefaultBase64,
             maxWidth,
@@ -155,7 +168,8 @@ exports.createResolvers = ({ createResolvers, reporter }) => {
             reporter,
             transformations,
             version,
-          }),
+          });
+        },
       },
     },
   };
