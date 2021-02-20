@@ -268,10 +268,10 @@ This is an advanced use case — if possible, try not to do this when Gatsby’s
 ```js
 import React from 'react';
 import Image from 'gatsby-image';
-import { getFluidImageObject } from 'gatsby-transformer-cloudinary';
+import { getFluidImageObject } from 'gatsby-transformer-cloudinary/api';
 
 export default () => {
-  const [fluid, setFluid] = useState(false);
+  const [fluid, setFluid] = useState(undefined);
 
   useEffect(() => {
     getFluidImageObject({
@@ -294,10 +294,10 @@ export default () => {
 ```js
 import React from 'react';
 import Image from 'gatsby-image';
-import { getFixedImageObject } from 'gatsby-transformer-cloudinary';
+import { getFixedImageObject } from 'gatsby-transformer-cloudinary/api';
 
 export default () => {
-  const [fixed, setFixed] = useState(false);
+  const [fixed, setFixed] = useState(undefined);
 
   useEffect(() => {
     getFixedImageObject({
