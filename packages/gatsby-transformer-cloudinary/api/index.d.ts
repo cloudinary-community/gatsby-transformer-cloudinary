@@ -26,12 +26,12 @@ export interface GetFixedImageObjectArgs {
 }
 
 export interface FixedImageObject {
-  height: number,
+  height?: number,
   src: string
-  srcSet: string,
-  tracedSVG: string,
-  width: number,
-  base64: string | undefined
+  srcSet?: string,
+  tracedSVG?: string,
+  width?: number,
+  base64?: string | undefined
 }
 
 export interface GetFluidImageObjectArgs extends Omit<GetFixedImageObjectArgs, "height" | "width">{
@@ -40,8 +40,8 @@ export interface GetFluidImageObjectArgs extends Omit<GetFixedImageObjectArgs, "
 }
 
 export interface FluidImageObject extends Omit<FixedImageObject, "height" | "width">{
-  aspectRatio: number,
-  presentationWidth: number,
-  presentationHeight: number,
-  sizes: string,
+  aspectRatio?: number,
+  presentationWidth?: number,
+  presentationHeight?: number,
+  sizes?: string,
 }
