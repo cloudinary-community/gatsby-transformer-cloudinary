@@ -71,6 +71,9 @@ exports.createImageNode = ({
     defaultBase64,
     defaultTracedSVG,
 
+    // These fields will be available via Gatsby's data layer
+    publicId: public_id,
+
     // Add the required internal Gatsby node fields.
     id: createNodeId(`CloudinaryAsset-${fingerprint}`),
     parent: parentNode.id,

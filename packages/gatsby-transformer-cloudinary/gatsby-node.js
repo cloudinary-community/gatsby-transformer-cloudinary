@@ -31,6 +31,8 @@ exports.onPreExtractQueries = async ({ store, getNodesByType }) => {
 exports.createSchemaCustomization = ({ actions }) => {
   actions.createTypes(`
     type CloudinaryAsset implements Node @dontInfer {
+      publicId: String!
+
       fixed(
         base64Width: Int
         base64Transformations: [String!]
