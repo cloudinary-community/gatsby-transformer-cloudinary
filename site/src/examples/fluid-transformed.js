@@ -2,7 +2,7 @@ import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
 import Image from 'gatsby-image';
 
-export default () => {
+const FluidTransformed = () => {
   const query = `
     query {
       image: file(name: { eq: "marisa" }) {
@@ -47,3 +47,5 @@ export default () => {
     </div>
   );
 };
+
+export default FluidTransformed;

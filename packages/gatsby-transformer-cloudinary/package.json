@@ -27,6 +27,9 @@
   "devDependencies": {
     "jest": "^26.1.0"
   },
+  "peerDependencies": {
+    "gatsby": "^3.0.0"
+  },
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch"

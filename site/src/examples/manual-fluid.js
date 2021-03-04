@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'gatsby-image';
-import { getFluidImageObject } from 'gatsby-transformer-cloudinary';
+import { getFluidImageObject } from 'gatsby-transformer-cloudinary/api';
 
-export default () => {
+const ManualFluid = () => {
   const [fluid, setFluid] = useState(false);
 
   useEffect(() => {
@@ -22,10 +22,10 @@ export default () => {
     import React from 'react';
     import Image from 'gatsby-image';
     import { getFluidImageObject } from 'gatsby-transformer-cloudinary';
-    
+
     export default () => {
       const [fluid, setFluid] = useState(false);
-    
+
       useEffect(() => {
         getFluidImageObject({
           public_id: 'gatsby-cloudinary/jason',
@@ -37,7 +37,7 @@ export default () => {
           chained: ['e_grayscale,e_tint:100:663399:0p:white:100p', 't_lwj'],
         }).then(result => setFluid(result));
       }, []);
-    
+
       return fluid ? <Image fluid={fluid} alt="Jason" /> : <p>loading...</p>;
     };
   `
@@ -52,3 +52,5 @@ export default () => {
     </div>
   );
 };
+
+export default ManualFluid;

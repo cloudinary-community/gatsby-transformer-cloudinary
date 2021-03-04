@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'gatsby-image';
-import { getFixedImageObject } from 'gatsby-transformer-cloudinary';
+import { getFixedImageObject } from 'gatsby-transformer-cloudinary/api';
 
-export default () => {
+const ManualFixed = () => {
   const [fixed, setFixed] = useState(false);
 
   useEffect(() => {
@@ -19,10 +19,10 @@ export default () => {
     import React from 'react';
     import Image from 'gatsby-image';
     import { getFixedImageObject } from 'gatsby-transformer-cloudinary';
-    
+
     export default () => {
       const [fixed, setFixed] = useState(false);
-    
+
       useEffect(() => {
         getFixedImageObject({
           public_id: 'gatsby-cloudinary/jason',
@@ -31,7 +31,7 @@ export default () => {
           originalWidth: 4032,
         }).then(result => setFixed(result));
       }, []);
-    
+
       return fixed ? <Image fixed={fixed} alt="Jason" /> : <p>loading...</p>;
     };
   `
@@ -46,3 +46,5 @@ export default () => {
     </div>
   );
 };
+
+export default ManualFixed;
