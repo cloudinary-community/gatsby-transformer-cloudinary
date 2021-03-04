@@ -5,7 +5,7 @@ import FluidTransformed from '../examples/fluid-transformed';
 import FluidPixelated from '../examples/fluid-pixelated';
 import FluidSilly from '../examples/fluid-silly';
 
-export default () => (
+const FluidPage = () => (
   <Layout>
     <h1>Fluid Images</h1>
     <p>
@@ -20,3 +20,5 @@ export default () => (
     </div>
   </Layout>
 );
+
+export default FluidPage;
