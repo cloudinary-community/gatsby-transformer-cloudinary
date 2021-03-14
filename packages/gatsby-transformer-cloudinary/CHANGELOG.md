@@ -1,3 +1,7 @@
+# Version 2.2.4
+Fixes:
+- API key & secret is no longer required when using the plugin for only remote images.
+
 # Version 2.2.1
 
 Additions: 
