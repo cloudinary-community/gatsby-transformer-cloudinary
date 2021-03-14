@@ -10,6 +10,10 @@ const {
   createAssetNodesFromData,
 } = require('./gatsby-node/create-asset-nodes-from-data');
 
+//import plugin options, used to check for API key before uploading assets to Cloudinary
+const { getPluginOptions } = require('./options');
+const pluginOptions = getPluginOptions();
+
 const ALLOWED_MEDIA_TYPES = ['image/png', 'image/jpeg', 'image/gif'];
 
 exports.onPreExtractQueries = async ({ store, getNodesByType }) => {
@@ -220,6 +224,7 @@ exports.onCreateNode = async ({
   createContentDigest,
   reporter,
 }) => {
+  // Create nodes from existing data with CloudinaryAssetData node type
   createAssetNodesFromData({
     node,
     actions,
@@ -227,13 +232,17 @@ exports.onCreateNode = async ({
     createContentDigest,
     reporter,
   });
-  await createAssetNodeFromFile({
-    node,
-    actions,
-    createNodeId,
-    createContentDigest,
-    reporter,
-  });
+
+  // Create nodes for files to be uploaded to cloudinary
+  if (pluginOptions.apiKey && pluginOptions.apiSecret && pluginOptions.cloudName ){
+    await createAssetNodeFromFile({
+      node,
+      actions,
+      createNodeId,
+      createContentDigest,
+      reporter,
+    });
+  }
 };
 
 exports.onPreInit = ({ reporter }, pluginOptions) => {
