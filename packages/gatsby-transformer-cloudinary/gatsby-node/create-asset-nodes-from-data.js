@@ -11,7 +11,7 @@ exports.createAssetNodesFromData = ({
   createContentDigest,
 }) => {
   const assetDataPaths = getAssetDataPaths({ node });
-  assetDataPaths.forEach(assetDataPath => {
+  assetDataPaths.forEach((assetDataPath) => {
     const assetData = {
       ...get(node, assetDataPath),
     };
@@ -44,7 +44,7 @@ function verifyAssetData(assetData) {
 }
 
 function getAssetDataKeys(node) {
-  return Object.keys(node).filter(key => {
+  return Object.keys(node).filter((key) => {
     return node[key] && node[key].cloudinaryAssetData === true;
   });
 }
@@ -52,23 +52,27 @@ function getAssetDataKeys(node) {
 function getAssetDataPaths({ node, basePath = '' }) {
   const currentNode = basePath === '' ? node : get(node, basePath);
 
+  if (currentNode === null || currentNode === undefined) {
+    currentNode = {};
+  }
+
   const directAssetDataPaths = Object.keys(currentNode)
-    .filter(key => {
+    .filter((key) => {
       return currentNode[key] && currentNode[key].cloudinaryAssetData === true;
     })
-    .map(subPath => {
+    .map((subPath) => {
       return basePath === '' ? subPath : `${basePath}.${subPath}`;
     });
 
   const objectPaths = Object.keys(currentNode)
-    .filter(key => {
+    .filter((key) => {
       return isObject(currentNode[key]);
     })
-    .map(subPath => {
+    .map((subPath) => {
       return basePath === '' ? subPath : `${basePath}.${subPath}`;
     });
 
-  const indirectAssetDataPaths = flatMap(objectPaths, objectPath => {
+  const indirectAssetDataPaths = flatMap(objectPaths, (objectPath) => {
     return getAssetDataPaths({ node, basePath: objectPath });
   });
 
