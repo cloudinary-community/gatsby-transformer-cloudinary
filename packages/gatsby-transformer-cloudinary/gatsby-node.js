@@ -28,7 +28,7 @@ exports.onPreExtractQueries = async ({ store, getNodesByType }) => {
   // We have CloudinaryAsset nodes so let’s add our fragments to .cache/fragments.
   await fs.copy(
     require.resolve(`./fragments.js`),
-    `${program.directory}/.cache/fragments/cloudinary-asset-fragments.js`,
+    `${program.directory}/.cache/fragments/cloudinary-asset-fragments.js`
   );
 };
 
@@ -103,10 +103,10 @@ exports.createResolvers = ({ createResolvers, reporter }) => {
             chained,
           },
           _context,
-          info,
+          info
         ) => {
           const fieldsToSelect = info.fieldNodes[0].selectionSet.selections.map(
-            item => item.name.value,
+            (item) => item.name.value
           );
           return getFixedImageObject({
             base64Transformations,
@@ -150,10 +150,10 @@ exports.createResolvers = ({ createResolvers, reporter }) => {
             transformations,
           },
           _context,
-          info,
+          info
         ) => {
           const fieldsToSelect = info.fieldNodes[0].selectionSet.selections.map(
-            item => item.name.value,
+            (item) => item.name.value
           );
           return getFluidImageObject({
             base64Transformations,
@@ -234,7 +234,11 @@ exports.onCreateNode = async ({
   });
 
   // Create nodes for files to be uploaded to cloudinary
-  if (pluginOptions.apiKey && pluginOptions.apiSecret && pluginOptions.cloudName ){
+  if (
+    pluginOptions.apiKey &&
+    pluginOptions.apiSecret &&
+    pluginOptions.cloudName
+  ) {
     await createAssetNodeFromFile({
       node,
       actions,

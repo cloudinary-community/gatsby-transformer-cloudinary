@@ -14,7 +14,7 @@ export default () => {
       breakpoints: [200, 400, 600, 800],
       transformations: ['ar_16:10', 'c_fill'],
       chained: ['e_grayscale,e_tint:100:663399:0p:white:100p', 't_lwj'],
-    }).then(result => setFluid(result));
+    }).then((result) => setFluid(result));
   }, []);
 
   // Duplicate the query so we can display it on the page.

@@ -1,7 +1,7 @@
 import { Node, NodePluginArgs, Reporter } from 'gatsby';
 
 export function createRemoteImageNode(
-  args: CreateRemoteImageNodeArgs,
+  args: CreateRemoteImageNodeArgs
 ): Promise<CloudinaryAssetNode>;
 
 export interface CreateRemoteImageNodeArgs {

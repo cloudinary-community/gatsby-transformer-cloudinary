@@ -1,14 +1,18 @@
 # Version 2.2.4
+
 Fixes:
+
 - API key & secret is no longer required when using the plugin for only remote images.
 
 # Version 2.2.1
 
-Additions: 
+Additions:
+
 - Added types for `fixedImageObject` and `fluidImageObject`.
 
 Fixes:
-- `fixedImageObject` and `fluidImageObject` uses default plugin options properly in runtime.  
+
+- `fixedImageObject` and `fluidImageObject` uses default plugin options properly in runtime.
 - Moved `fixedImageObject` and `fluidImageObject` APIs to `/api`. Fixes `fs` error when importing from `index.js`.
 - Set default value for `fieldsToSelect` in `fixedImageObject` and `fluidImageObject` to empty array.
 

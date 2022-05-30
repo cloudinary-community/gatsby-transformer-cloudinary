@@ -38,7 +38,7 @@ describe('getFluidImageObject', () => {
 
     const presentationWidth = options.fluidMaxWidth;
     expect(await getFluidImageObject(args)).toEqual(
-      expect.objectContaining({ presentationWidth }),
+      expect.objectContaining({ presentationWidth })
     );
   });
 
@@ -49,7 +49,7 @@ describe('getFluidImageObject', () => {
 
     const presentationWidth = args.originalWidth;
     expect(await getFluidImageObject(args)).toEqual(
-      expect.objectContaining({ presentationWidth }),
+      expect.objectContaining({ presentationWidth })
     );
   });
 
@@ -59,10 +59,10 @@ describe('getFluidImageObject', () => {
     const args = getDefaultArgs();
 
     const presentationHeight = Math.round(
-      (options.fluidMaxWidth * args.originalHeight) / args.originalWidth,
+      (options.fluidMaxWidth * args.originalHeight) / args.originalWidth
     );
     expect(await getFluidImageObject(args)).toEqual(
-      expect.objectContaining({ presentationHeight }),
+      expect.objectContaining({ presentationHeight })
     );
   });
 
@@ -75,7 +75,7 @@ describe('getFluidImageObject', () => {
     const expectedBase64Image = `data:image/jpeg;base64,${base64}`;
 
     expect(await getFluidImageObject(args)).toEqual(
-      expect.objectContaining({ base64: expectedBase64Image }),
+      expect.objectContaining({ base64: expectedBase64Image })
     );
   });
 
@@ -95,7 +95,7 @@ describe('getFluidImageObject', () => {
     const expectedTracedSVG = args.defaultTracedSVG;
 
     expect(await getFluidImageObject(args)).toEqual(
-      expect.objectContaining({ tracedSVG: expectedTracedSVG }),
+      expect.objectContaining({ tracedSVG: expectedTracedSVG })
     );
   });
 
@@ -136,7 +136,7 @@ describe('getFixedImageObject', () => {
     const args = getDefaultArgs();
 
     expect(await getFixedImageObject(args)).toEqual(
-      expect.objectContaining({ width: 400 }),
+      expect.objectContaining({ width: 400 })
     );
   });
 
@@ -146,7 +146,7 @@ describe('getFixedImageObject', () => {
     const args = getDefaultArgs({ width: 20000 });
 
     expect(await getFixedImageObject(args)).toEqual(
-      expect.objectContaining({ width: 1920 }),
+      expect.objectContaining({ width: 1920 })
     );
   });
 
@@ -156,7 +156,7 @@ describe('getFixedImageObject', () => {
     const args = getDefaultArgs({ originalWidth: 100 });
 
     expect(await getFixedImageObject(args)).toEqual(
-      expect.objectContaining({ width: 100 }),
+      expect.objectContaining({ width: 100 })
     );
   });
 
@@ -166,7 +166,7 @@ describe('getFixedImageObject', () => {
     const args = getDefaultArgs({ width: 100 });
 
     expect(await getFixedImageObject(args)).toEqual(
-      expect.objectContaining({ width: 100, height: 56 }),
+      expect.objectContaining({ width: 100, height: 56 })
     );
   });
 
@@ -176,7 +176,7 @@ describe('getFixedImageObject', () => {
     const args = getDefaultArgs({ height: 100 });
 
     expect(await getFixedImageObject(args)).toEqual(
-      expect.objectContaining({ width: 178, height: 100 }),
+      expect.objectContaining({ width: 178, height: 100 })
     );
   });
 
@@ -186,7 +186,7 @@ describe('getFixedImageObject', () => {
     const args = getDefaultArgs({ width: 100, height: 100 });
 
     expect(await getFixedImageObject(args)).toEqual(
-      expect.objectContaining({ width: 100, height: 100 }),
+      expect.objectContaining({ width: 100, height: 100 })
     );
   });
 
@@ -202,7 +202,7 @@ describe('getFixedImageObject', () => {
       'https://res.cloudinary.com/cloudName/image/upload/w_480/public_id 3x',
     ];
     expect((await getFixedImageObject(args)).srcSet).toEqual(
-      expectedSrcSet.join(','),
+      expectedSrcSet.join(',')
     );
   });
 
@@ -218,7 +218,7 @@ describe('getFixedImageObject', () => {
       'https://res.cloudinary.com/cloudName/image/upload/h_291/public_id 3x',
     ];
     expect((await getFixedImageObject(args)).srcSet).toEqual(
-      expectedSrcSet.join(','),
+      expectedSrcSet.join(',')
     );
   });
 
@@ -234,7 +234,7 @@ describe('getFixedImageObject', () => {
       'https://res.cloudinary.com/cloudName/image/upload/w_267,h_291/public_id 3x',
     ];
     expect((await getFixedImageObject(args)).srcSet).toEqual(
-      expectedSrcSet.join(','),
+      expectedSrcSet.join(',')
     );
   });
 
@@ -247,10 +247,9 @@ describe('getFixedImageObject', () => {
     const expectedBase64Image = `data:image/jpeg;base64,${base64}`;
 
     expect(await getFluidImageObject(args)).toEqual(
-      expect.objectContaining({ base64: expectedBase64Image }),
+      expect.objectContaining({ base64: expectedBase64Image })
     );
   });
-
 
   it('does not return base64 if base64 is not a field to select', async () => {
     const options = getDefaultOptions();
@@ -268,7 +267,7 @@ describe('getFixedImageObject', () => {
     const expectedTracedSVG = args.defaultTracedSVG;
 
     expect(await getFluidImageObject(args)).toEqual(
-      expect.objectContaining({ tracedSVG: expectedTracedSVG }),
+      expect.objectContaining({ tracedSVG: expectedTracedSVG })
     );
   });
 
@@ -291,7 +290,7 @@ describe('getFixedImageObject', () => {
     const args = getDefaultArgs({ defaultBase64 });
 
     expect(await getFluidImageObject(args)).toEqual(
-      expect.objectContaining({ base64: defaultBase64 }),
+      expect.objectContaining({ base64: defaultBase64 })
     );
   });
 
@@ -303,7 +302,7 @@ describe('getFixedImageObject', () => {
     const args = getDefaultArgs({ defaultBase64, ignoreDefaultBase64: true });
 
     expect(await getFluidImageObject(args)).toEqual(
-      expect.objectContaining({ base64: 'data:image/jpeg;base64,AQID' }),
+      expect.objectContaining({ base64: 'data:image/jpeg;base64,AQID' })
     );
   });
 
@@ -315,7 +314,7 @@ describe('getFixedImageObject', () => {
     const args = getDefaultArgs({ defaultBase64, ignoreDefaultBase64: true });
 
     expect(await getFluidImageObject(args)).toEqual(
-      expect.objectContaining({ base64: defaultBase64 }),
+      expect.objectContaining({ base64: defaultBase64 })
     );
   });
 
@@ -327,7 +326,7 @@ describe('getFixedImageObject', () => {
     const args = getDefaultArgs({ defaultBase64, ignoreDefaultBase64: true });
 
     expect(await getFluidImageObject(args)).toEqual(
-      expect.objectContaining({ base64: defaultBase64 }),
+      expect.objectContaining({ base64: defaultBase64 })
     );
   });
 });

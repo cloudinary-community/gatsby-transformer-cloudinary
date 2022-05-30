@@ -38,7 +38,7 @@ exports.getFixedImageObject = async ({
 
   const aspectRatio = getAspectRatio(
     transformations,
-    originalWidth / originalHeight,
+    originalWidth / originalHeight
   );
 
   const { displayWidth, displayHeight } = getDisplayDimensions({
@@ -49,15 +49,15 @@ exports.getFixedImageObject = async ({
     originalHeight,
   });
 
-  const sizes = [1, 1.5, 2, 3].map(size => ({
+  const sizes = [1, 1.5, 2, 3].map((size) => ({
     resolution: size,
     width: Math.round(displayWidth * size),
     height: Math.round(displayHeight * size),
   }));
 
   const srcSet = sizes
-    .filter(size => size.width <= originalWidth)
-    .map(size => {
+    .filter((size) => size.width <= originalWidth)
+    .map((size) => {
       const finalTransformations = [...transformations];
       if (!width && !height) {
         finalTransformations.push(`w_${size.width}`);
@@ -131,7 +131,7 @@ exports.getFluidImageObject = async ({
 }) => {
   const aspectRatio = getAspectRatio(
     transformations,
-    originalWidth / originalHeight,
+    originalWidth / originalHeight
   );
   const { fluidMaxWidth } = getPluginOptions();
   const max = Math.min(maxWidth ? maxWidth : fluidMaxWidth, originalWidth);
@@ -146,12 +146,12 @@ exports.getFluidImageObject = async ({
 
   const breakpointWidths = breakpoints
     .concat(max) // make sure we get the max size
-    .filter(w => w <= max) // don’t add larger sizes
+    .filter((w) => w <= max) // don’t add larger sizes
     .sort((a, b) => a - b) // sort in ascending order
     .filter(onlyUnique); // remove duplicates
 
   const srcSet = breakpointWidths
-    .map(breakpointWidth => {
+    .map((breakpointWidth) => {
       // Get URL for each image including user-defined transformations.
       const url = getImageURL({
         // Add the size at the end to override width for srcSet support.
@@ -168,7 +168,7 @@ exports.getFluidImageObject = async ({
 
   const presentationWidth = max;
   const presentationHeight = Math.round(
-    (presentationWidth * originalHeight) / originalWidth,
+    (presentationWidth * originalHeight) / originalWidth
   );
 
   const fluidImageObject = {

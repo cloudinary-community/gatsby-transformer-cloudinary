@@ -69,7 +69,7 @@ describe('createAssetNodesFromData', () => {
         createContentDigest: args.createContentDigest,
         createNodeId: args.createNodeId,
         parentNode: args.node,
-      }),
+      })
     );
   });
 
@@ -101,7 +101,7 @@ describe('createAssetNodesFromData', () => {
         parentNode: args.node,
         defaultBase64: assetData.defaultBase64,
         defaultTracedSVG: assetData.defaultTracedSVG,
-      }),
+      })
     );
   });
 
@@ -113,7 +113,7 @@ describe('createAssetNodesFromData', () => {
     createAssetNodesFromData(args);
     expect(args.actions.createNode).toHaveBeenCalledWith(
       createImageNodeResult,
-      { name: 'gatsby-transformer-cloudinary' },
+      { name: 'gatsby-transformer-cloudinary' }
     );
   });
 
