@@ -5,6 +5,9 @@
     "site"
   ],
   "scripts": {
+    "develop": "yarn workspace site develop",
+    "clean": "yarn workspace site clean",
+    "test": "yarn workspace gatsby-transformer-cloudinary test",
     "prettier": "prettier --write ."
   },
   "dependencies": {
