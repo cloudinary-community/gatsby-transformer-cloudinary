@@ -11,7 +11,7 @@ export default () => {
       cloudName: 'jlengstorf',
       originalHeight: 3024,
       originalWidth: 4032,
-    }).then(result => setFixed(result));
+    }).then((result) => setFixed(result));
   }, []);
 
   // Duplicate the query so we can display it on the page.

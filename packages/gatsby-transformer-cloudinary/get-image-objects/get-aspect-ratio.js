@@ -1,6 +1,6 @@
 // retrieve aspect ratio if in transformation else create aspect ratio values
 exports.getAspectRatio = (transformations, originalAspectRatio) => {
-  const arTransform = transformations.find(t => t.startsWith('ar_'));
+  const arTransform = transformations.find((t) => t.startsWith('ar_'));
   if (!arTransform) {
     return originalAspectRatio;
   }

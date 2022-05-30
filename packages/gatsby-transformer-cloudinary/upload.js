@@ -72,8 +72,8 @@ exports.uploadImageToCloudinary = async ({
       )
         reporter.info(
           `[gatsby-transformer-cloudinary] Uploaded ${uploadedImages} of ${totalImages} images to Cloudinary. (${Math.round(
-            (100 * uploadedImages) / totalImages,
-          )}%)`,
+            (100 * uploadedImages) / totalImages
+          )}%)`
         );
       return result;
     } catch (error) {
@@ -81,11 +81,11 @@ exports.uploadImageToCloudinary = async ({
       if (attempts < 3) {
         attempts += 1;
         reporter.warn(
-          `An error occurred when uploading ${url} to Cloudinary: ${stringifiedError}`,
+          `An error occurred when uploading ${url} to Cloudinary: ${stringifiedError}`
         );
       } else {
         reporter.panic(
-          `Unable to upload ${url} to Cloudinary after ${attempts} attempts: ${stringifiedError}`,
+          `Unable to upload ${url} to Cloudinary after ${attempts} attempts: ${stringifiedError}`
         );
       }
     }
@@ -96,7 +96,7 @@ exports.uploadImageNodeToCloudinary = async ({ node, reporter }) => {
   const url = node.absolutePath;
   const relativePathWithoutExtension = node.relativePath.replace(
     /\.[^.]*$/,
-    '',
+    ''
   );
   const publicId = relativePathWithoutExtension;
   const overwrite = getPluginOptions().overwriteExisting;
@@ -112,10 +112,10 @@ exports.uploadImageNodeToCloudinary = async ({ node, reporter }) => {
 function verifyRequiredOptions(reporter) {
   const requiredOptions = ['apiKey', 'apiSecret', 'cloudName'];
   const pluginOptions = getPluginOptions();
-  requiredOptions.forEach(optionKey => {
+  requiredOptions.forEach((optionKey) => {
     if (pluginOptions[optionKey] == null) {
       reporter.panic(
-        `[gatsby-transformer-cloudinary] "${optionKey}" is a required plugin option. You can add it to the options object for "gatsby-transformer-cloudinary" in your gatsby-config file.`,
+        `[gatsby-transformer-cloudinary] "${optionKey}" is a required plugin option. You can add it to the options object for "gatsby-transformer-cloudinary" in your gatsby-config file.`
       );
     }
   });

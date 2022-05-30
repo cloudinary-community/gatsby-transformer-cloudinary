@@ -3,5 +3,11 @@
   "workspaces": [
     "packages/*",
     "site"
-  ]
+  ],
+  "scripts": {
+    "prettier": "prettier --write ."
+  },
+  "dependencies": {
+    "prettier": "2.6.2"
+  }
 }

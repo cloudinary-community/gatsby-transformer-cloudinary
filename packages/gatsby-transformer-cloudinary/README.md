@@ -282,7 +282,7 @@ export default () => {
       breakpoints: [200, 400, 600, 800],
       transformations: ['ar_16:10', 'c_fill'],
       chained: ['e_grayscale,e_tint:100:663399:0p:white:100p', 't_lwj'],
-    }).then(result => setFluid(result));
+    }).then((result) => setFluid(result));
   }, []);
 
   return fluid ? <Image fluid={fluid} alt="Jason" /> : <p>loading...</p>;
@@ -305,7 +305,7 @@ export default () => {
       cloudName: 'jlengstorf',
       originalHeight: 3024,
       originalWidth: 4032,
-    }).then(result => setFixed(result));
+    }).then((result) => setFixed(result));
   }, []);
 
   return fixed ? <Image fixed={fixed} alt="Jason" /> : <p>loading...</p>;

@@ -12,7 +12,7 @@ const defaultOptions = {
 };
 
 // Assign defaultOptions to options for run time operations
-Object.assign(options, defaultOptions)
+Object.assign(options, defaultOptions);
 
 exports.setPluginOptions = ({ pluginOptions, reporter }) => {
   if (
@@ -20,7 +20,7 @@ exports.setPluginOptions = ({ pluginOptions, reporter }) => {
     pluginOptions.breakpointsMaxImages < 1
   ) {
     reporter.panic(
-      `[gatsby-transformer-cloudinary] "breakpointsMaxImages" must be at least 1. You can modify it in your gatsby-config file.`,
+      `[gatsby-transformer-cloudinary] "breakpointsMaxImages" must be at least 1. You can modify it in your gatsby-config file.`
     );
   }
 
@@ -29,7 +29,7 @@ exports.setPluginOptions = ({ pluginOptions, reporter }) => {
   //   ...pluginOptions,
   // };
 
-  Object.assign(options, pluginOptions)
+  Object.assign(options, pluginOptions);
 };
 
 exports.getPluginOptions = () => {

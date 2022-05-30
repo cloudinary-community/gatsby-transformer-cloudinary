@@ -15,37 +15,37 @@ exports.createRemoteImageNode = async ({
 }) => {
   if (!reporter) {
     throw Error(
-      "`reporter` is a required argument. It's available at `CreateNodeArgs.reporter`.",
+      "`reporter` is a required argument. It's available at `CreateNodeArgs.reporter`."
     );
   }
   if (!url) {
     reporter.panic(
-      '`url` is a required argument. Pass the URL where the image is currently hosted so it can be downloaded by Cloudinary.',
+      '`url` is a required argument. Pass the URL where the image is currently hosted so it can be downloaded by Cloudinary.'
     );
   }
   if (!parentNode) {
     reporter.panic(
-      "`parentNode` is a required argument. This parameter is used to link a newly created node representing the image to a parent node in Gatsby's GraphQL layer.",
+      "`parentNode` is a required argument. This parameter is used to link a newly created node representing the image to a parent node in Gatsby's GraphQL layer."
     );
   }
   if (!relationshipName) {
     reporter.panic(
-      "`relationshipName` is a required argument. This parameter sets the name of the relationship between the parent node and the newly created node for this image in Gatsby's GraphQL layer.",
+      "`relationshipName` is a required argument. This parameter sets the name of the relationship between the parent node and the newly created node for this image in Gatsby's GraphQL layer."
     );
   }
   if (!createContentDigest) {
     reporter.panic(
-      "`createContentDigest` is a required argument. It's available at `CreateNodeArgs.createContentDigest`.",
+      "`createContentDigest` is a required argument. It's available at `CreateNodeArgs.createContentDigest`."
     );
   }
   if (!createNode) {
     reporter.panic(
-      "`createNode` is a required argument. It's available at `CreateNodeArgs.actions.createNode`.",
+      "`createNode` is a required argument. It's available at `CreateNodeArgs.actions.createNode`."
     );
   }
   if (!createNodeId) {
     reporter.panic(
-      "`createNodeId` is a required argument. It's available at `CreateNodeArgs.createNodeId`.",
+      "`createNodeId` is a required argument. It's available at `CreateNodeArgs.createNodeId`."
     );
   }
 

@@ -178,9 +178,9 @@ describe('createImageNode', () => {
     const options = getDefaultOptions();
     getPluginOptions.mockReturnValue(options);
 
-    const createNodeId = jest.fn(createNodeIdArg => {
+    const createNodeId = jest.fn((createNodeIdArg) => {
       expect(createNodeIdArg).toEqual(
-        'CloudinaryAsset-{"breakpoints":[20,35],"cloudName":"cloudName","height":100,"public_id":"public_id","version":7,"width":200}',
+        'CloudinaryAsset-{"breakpoints":[20,35],"cloudName":"cloudName","height":100,"public_id":"public_id","version":7,"width":200}'
       );
       return 'createNodeIdResult';
     });
@@ -220,9 +220,9 @@ describe('createImageNode', () => {
     const options = getDefaultOptions();
     getPluginOptions.mockReturnValue(options);
 
-    const createContentDigest = jest.fn(createContentDigestArg => {
+    const createContentDigest = jest.fn((createContentDigestArg) => {
       expect(createContentDigestArg).toEqual(
-        '{"breakpoints":[20,35],"cloudName":"cloudName","height":100,"public_id":"public_id","version":7,"width":200}',
+        '{"breakpoints":[20,35],"cloudName":"cloudName","height":100,"public_id":"public_id","version":7,"width":200}'
       );
       return 'createContentDigestResult';
     });

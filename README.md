@@ -16,4 +16,4 @@ Get all the automatic performance and developer experience benefits of using [`g
   </a>
 </p>
 
-The hard part of this plugin (auto-uploading photos from Gatsby to Cloudinary and creating new image nodes) was tackled by [Jason Lengstorf](https://lengstorf.com) on an [episode of _Learn With Jason_](https://www.learnwithjason.dev/build-a-gatsby-transformer-plugin-for-cloudinary). 
+The hard part of this plugin (auto-uploading photos from Gatsby to Cloudinary and creating new image nodes) was tackled by [Jason Lengstorf](https://lengstorf.com) on an [episode of _Learn With Jason_](https://www.learnwithjason.dev/build-a-gatsby-transformer-plugin-for-cloudinary).

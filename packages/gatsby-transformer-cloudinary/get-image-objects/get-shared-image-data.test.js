@@ -22,7 +22,7 @@ describe('getImageURL', () => {
 
     const actual = getImageURL(args);
     expect(actual).toEqual(
-      'https://res.cloudinary.com/cloudName/image/upload/w_400,e_grayscale,f_auto,q_auto/c_crop/g_face/v555/public_id',
+      'https://res.cloudinary.com/cloudName/image/upload/w_400,e_grayscale,f_auto,q_auto/c_crop/g_face/v555/public_id'
     );
   });
 
@@ -33,7 +33,7 @@ describe('getImageURL', () => {
 
     const actual = getImageURL(args);
     expect(actual).toEqual(
-      'https://res.cloudinary.com/cloudName/image/upload/w_400,e_grayscale/c_crop/g_face/v555/public_id',
+      'https://res.cloudinary.com/cloudName/image/upload/w_400,e_grayscale/c_crop/g_face/v555/public_id'
     );
   });
 });

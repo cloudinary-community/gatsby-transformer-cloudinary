@@ -2,11 +2,8 @@ const stringify = require('fast-json-stable-stringify');
 const { getPluginOptions } = require('./options');
 
 function getDefaultBreakpoints(imageWidth) {
-  const {
-    breakpointsMaxImages,
-    fluidMinWidth,
-    fluidMaxWidth,
-  } = getPluginOptions();
+  const { breakpointsMaxImages, fluidMinWidth, fluidMaxWidth } =
+    getPluginOptions();
 
   const max = Math.min(imageWidth, fluidMaxWidth);
   const min = fluidMinWidth;
@@ -46,7 +43,7 @@ exports.createImageNode = ({
     responsive_breakpoints[0].breakpoints.length > 0
   ) {
     breakpoints = responsive_breakpoints[0].breakpoints.map(
-      ({ width }) => width,
+      ({ width }) => width
     );
   }
 

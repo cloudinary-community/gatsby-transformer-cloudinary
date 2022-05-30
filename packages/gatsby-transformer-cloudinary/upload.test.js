@@ -167,7 +167,7 @@ describe('uploadImageNodeToCloudinary', () => {
       undefined,
       expect.objectContaining({
         public_id: 'folder-name/image.name.with.dots',
-      }),
+      })
     );
   });
 
@@ -191,7 +191,7 @@ describe('uploadImageNodeToCloudinary', () => {
       undefined,
       expect.objectContaining({
         overwrite: overwriteExisting,
-      }),
+      })
     );
   });
 
@@ -212,7 +212,7 @@ describe('uploadImageNodeToCloudinary', () => {
     } catch {}
 
     expect(reporter.panic).toHaveBeenCalledWith(
-      '[gatsby-transformer-cloudinary] "apiKey" is a required plugin option. You can add it to the options object for "gatsby-transformer-cloudinary" in your gatsby-config file.',
+      '[gatsby-transformer-cloudinary] "apiKey" is a required plugin option. You can add it to the options object for "gatsby-transformer-cloudinary" in your gatsby-config file.'
     );
   });
 
@@ -233,7 +233,7 @@ describe('uploadImageNodeToCloudinary', () => {
     } catch {}
 
     expect(reporter.panic).toHaveBeenCalledWith(
-      '[gatsby-transformer-cloudinary] "apiSecret" is a required plugin option. You can add it to the options object for "gatsby-transformer-cloudinary" in your gatsby-config file.',
+      '[gatsby-transformer-cloudinary] "apiSecret" is a required plugin option. You can add it to the options object for "gatsby-transformer-cloudinary" in your gatsby-config file.'
     );
   });
 
@@ -254,7 +254,7 @@ describe('uploadImageNodeToCloudinary', () => {
     } catch {}
 
     expect(reporter.panic).toHaveBeenCalledWith(
-      '[gatsby-transformer-cloudinary] "cloudName" is a required plugin option. You can add it to the options object for "gatsby-transformer-cloudinary" in your gatsby-config file.',
+      '[gatsby-transformer-cloudinary] "cloudName" is a required plugin option. You can add it to the options object for "gatsby-transformer-cloudinary" in your gatsby-config file.'
     );
   });
 });

@@ -17,7 +17,7 @@ function getDefaultArgs(args) {
     createNodeId: jest.fn(() => 'createNodeId'),
     createContentDigest: jest.fn(() => 'createContentDigest'),
     reporter: {
-      panic: msg => {
+      panic: (msg) => {
         throw Error(`[reporter] ${msg}}`);
       },
     },
@@ -33,7 +33,7 @@ describe('createRemoteImageNode', () => {
     delete args.url;
 
     await expect(createRemoteImageNode(args)).rejects.toThrow(
-      '[reporter] `url` is a required argument. Pass the URL where the image is currently hosted so it can be downloaded by Cloudinary.',
+      '[reporter] `url` is a required argument. Pass the URL where the image is currently hosted so it can be downloaded by Cloudinary.'
     );
   });
 
@@ -42,7 +42,7 @@ describe('createRemoteImageNode', () => {
     delete args.parentNode;
 
     await expect(createRemoteImageNode(args)).rejects.toThrow(
-      "[reporter] `parentNode` is a required argument. This parameter is used to link a newly created node representing the image to a parent node in Gatsby's GraphQL layer.",
+      "[reporter] `parentNode` is a required argument. This parameter is used to link a newly created node representing the image to a parent node in Gatsby's GraphQL layer."
     );
   });
 
@@ -51,7 +51,7 @@ describe('createRemoteImageNode', () => {
     delete args.relationshipName;
 
     await expect(createRemoteImageNode(args)).rejects.toThrow(
-      "[reporter] `relationshipName` is a required argument. This parameter sets the name of the relationship between the parent node and the newly created node for this image in Gatsby's GraphQL layer.",
+      "[reporter] `relationshipName` is a required argument. This parameter sets the name of the relationship between the parent node and the newly created node for this image in Gatsby's GraphQL layer."
     );
   });
 
@@ -60,7 +60,7 @@ describe('createRemoteImageNode', () => {
     delete args.createContentDigest;
 
     await expect(createRemoteImageNode(args)).rejects.toThrow(
-      "[reporter] `createContentDigest` is a required argument. It's available at `CreateNodeArgs.createContentDigest`.",
+      "[reporter] `createContentDigest` is a required argument. It's available at `CreateNodeArgs.createContentDigest`."
     );
   });
 
@@ -69,7 +69,7 @@ describe('createRemoteImageNode', () => {
     delete args.createNode;
 
     await expect(createRemoteImageNode(args)).rejects.toThrow(
-      "[reporter] `createNode` is a required argument. It's available at `CreateNodeArgs.actions.createNode`.",
+      "[reporter] `createNode` is a required argument. It's available at `CreateNodeArgs.actions.createNode`."
     );
   });
 
@@ -78,7 +78,7 @@ describe('createRemoteImageNode', () => {
     delete args.createNodeId;
 
     await expect(createRemoteImageNode(args)).rejects.toThrow(
-      "[reporter] `createNodeId` is a required argument. It's available at `CreateNodeArgs.createNodeId`.",
+      "[reporter] `createNodeId` is a required argument. It's available at `CreateNodeArgs.createNodeId`."
     );
   });
 
@@ -87,7 +87,7 @@ describe('createRemoteImageNode', () => {
     delete args.reporter;
 
     await expect(createRemoteImageNode(args)).rejects.toThrow(
-      "`reporter` is a required argument. It's available at `CreateNodeArgs.reporter`.",
+      "`reporter` is a required argument. It's available at `CreateNodeArgs.reporter`."
     );
   });
 
@@ -103,7 +103,7 @@ describe('createRemoteImageNode', () => {
 
     const expectedArgs = { overwrite: optionOverwrite };
     expect(uploadImageToCloudinary).toHaveBeenCalledWith(
-      expect.objectContaining(expectedArgs),
+      expect.objectContaining(expectedArgs)
     );
   });
 
@@ -119,7 +119,7 @@ describe('createRemoteImageNode', () => {
 
     const expectedArgs = { overwrite: argsOverwrite };
     expect(uploadImageToCloudinary).toHaveBeenCalledWith(
-      expect.objectContaining(expectedArgs),
+      expect.objectContaining(expectedArgs)
     );
   });
 
@@ -135,7 +135,7 @@ describe('createRemoteImageNode', () => {
       reporter,
     };
     expect(uploadImageToCloudinary).toHaveBeenCalledWith(
-      expect.objectContaining(expectedArgs),
+      expect.objectContaining(expectedArgs)
     );
   });
 
@@ -154,7 +154,7 @@ describe('createRemoteImageNode', () => {
       createNodeId: args.createNodeId,
     };
     expect(createImageNode).toHaveBeenCalledWith(
-      expect.objectContaining(expectedArgs),
+      expect.objectContaining(expectedArgs)
     );
   });
 
@@ -177,7 +177,7 @@ describe('createRemoteImageNode', () => {
     await createRemoteImageNode(args);
 
     expect(args.parentNode[`${args.relationshipName}___NODE`]).toEqual(
-      imageNodeId,
+      imageNodeId
     );
   });
 
