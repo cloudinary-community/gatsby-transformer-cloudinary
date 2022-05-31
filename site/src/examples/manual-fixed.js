@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'gatsby-image';
 import { getFixedImageObject } from 'gatsby-transformer-cloudinary/api';
 
-export default () => {
+const ManualFixed = () => {
   const [fixed, setFixed] = useState(false);
 
   useEffect(() => {
@@ -46,3 +46,5 @@ export default () => {
     </div>
   );
 };
+
+export default ManualFixed;

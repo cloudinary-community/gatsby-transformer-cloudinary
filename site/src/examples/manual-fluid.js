@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'gatsby-image';
 import { getFluidImageObject } from 'gatsby-transformer-cloudinary/api';
 
-export default () => {
+const ManualFluid = () => {
   const [fluid, setFluid] = useState(false);
 
   useEffect(() => {
@@ -52,3 +52,5 @@ export default () => {
     </div>
   );
 };
+
+export default ManualFluid;

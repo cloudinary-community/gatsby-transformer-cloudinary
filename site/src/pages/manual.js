@@ -3,7 +3,7 @@ import Layout from '../components/layout';
 import ManualFixed from '../examples/manual-fixed';
 import ManualFluid from '../examples/manual-fluid';
 
-export default () => (
+const ManualPage = () => (
   <Layout>
     <h1>Manually Create Cloudinary Data for Gatsby Image</h1>
     <p>Already have your images on Cloudinary? No problem!</p>
@@ -17,3 +17,5 @@ export default () => (
     </div>
   </Layout>
 );
+
+export default ManualPage;

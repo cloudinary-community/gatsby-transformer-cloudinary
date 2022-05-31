@@ -2,7 +2,7 @@ import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
 import Image from 'gatsby-image';
 
-export default () => {
+const FixedTransformed = () => {
   const data = useStaticQuery(graphql`
     query {
       image: file(name: { eq: "jason" }) {
@@ -21,7 +21,7 @@ export default () => {
       image: file(name: { eq: "jason" }) {
         cloudinary: childCloudinaryAsset {
           fixed(
-            width: 300, 
+            width: 300,
             transformations: ["e_grayscale"]
           ) {
             ...CloudinaryAssetFixed
@@ -44,3 +44,5 @@ export default () => {
     </div>
   );
 };
+
+export default FixedTransformed;

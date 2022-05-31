@@ -2,7 +2,7 @@ import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
 import Image from 'gatsby-image';
 
-export default () => {
+const GifTransformed = () => {
   const data = useStaticQuery(graphql`
     query {
       image: file(name: { eq: "victory" }) {
@@ -44,3 +44,5 @@ export default () => {
     </div>
   );
 };
+
+export default GifTransformed;
