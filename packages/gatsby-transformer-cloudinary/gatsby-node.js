@@ -1,28 +1,15 @@
-const fs = require('fs-extra');
 const { setPluginOptions, getPluginOptions } = require('./options');
 const {
   createAssetNodesFromData,
   createAssetNodeFromFile,
 } = require('./node-creation');
-const { createGatsbyImageResolvers } = require('./gatsby-image');
+const { createGatsbyImageResolvers, addFragments } = require('./gatsby-image');
 
 //import plugin options, used to check for API key before uploading assets to Cloudinary
 const pluginOptions = getPluginOptions();
 
-exports.onPreExtractQueries = async ({ store, getNodesByType }) => {
-  const program = store.getState().program;
-
-  // Check if there are any ImageSharp nodes. If so add fragments for ImageSharp.
-  // The fragment will cause an error if there are no ImageSharp nodes.
-  if (getNodesByType(`CloudinaryAsset`).length == 0) {
-    return;
-  }
-
-  // We have CloudinaryAsset nodes so let’s add our fragments to .cache/fragments.
-  await fs.copy(
-    require.resolve(`./fragments.js`),
-    `${program.directory}/.cache/fragments/cloudinary-asset-fragments.js`
-  );
+exports.onPreExtractQueries = async (gatsbyUtils) => {
+  await addFragments(gatsbyUtils);
 };
 
 exports.createSchemaCustomization = ({ actions }) => {
