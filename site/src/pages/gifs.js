@@ -3,7 +3,7 @@ import Layout from '../components/layout';
 import GifDefault from '../examples/gif-default';
 import GifTransformed from '../examples/gif-transformed';
 
-const IndexPage = () => (
+const GifPage = () => (
   <Layout>
     <h1>Animated GIFs and gatsby-image?!</h1>
     <p>
@@ -17,4 +17,4 @@ const IndexPage = () => (
   </Layout>
 );
 
-export default IndexPage;
+export default GifPage;

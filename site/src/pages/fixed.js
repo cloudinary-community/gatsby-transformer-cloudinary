@@ -5,7 +5,7 @@ import FixedTransformed from '../examples/fixed-transformed';
 import FixedChaining from '../examples/fixed-chaining';
 import FixedThumb from '../examples/fixed-thumb';
 
-const Fixed = () => (
+const FixedPage = () => (
   <Layout>
     <h1>Fixed-Width Images</h1>
     <p>
@@ -21,4 +21,4 @@ const Fixed = () => (
   </Layout>
 );
 
-export default Fixed;
+export default FixedPage;
