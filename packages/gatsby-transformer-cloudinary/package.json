@@ -31,5 +31,8 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch"
+  },
+  "peerDependencies": {
+    "gatsby-plugin-image": "^1.14.0"
   }
 }
