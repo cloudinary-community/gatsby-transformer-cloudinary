@@ -1,7 +1,7 @@
 const { createAssetNodesFromData } = require('./create-asset-nodes-from-data');
 
-jest.mock('../create-image-node');
-const { createImageNode } = require('../create-image-node');
+jest.mock('./create-image-node');
+const { createImageNode } = require('./create-image-node');
 
 describe('createAssetNodesFromData', () => {
   beforeEach(() => {

@@ -1,18 +1,13 @@
 const fs = require('fs-extra');
-const { uploadImageNodeToCloudinary } = require('./upload');
-const { setPluginOptions } = require('./options');
-const { createImageNode } = require('./create-image-node');
+const { setPluginOptions, getPluginOptions } = require('./options');
 const {
   createAssetNodesFromData,
-} = require('./gatsby-node/create-asset-nodes-from-data');
-
-//import plugin options, used to check for API key before uploading assets to Cloudinary
-const { getPluginOptions } = require('./options');
-const pluginOptions = getPluginOptions();
-
+  createAssetNodeFromFile,
+} = require('./node-creation');
 const { createGatsbyImageResolvers } = require('./gatsby-image');
 
-const ALLOWED_MEDIA_TYPES = ['image/png', 'image/jpeg', 'image/gif'];
+//import plugin options, used to check for API key before uploading assets to Cloudinary
+const pluginOptions = getPluginOptions();
 
 exports.onPreExtractQueries = async ({ store, getNodesByType }) => {
   const program = store.getState().program;
@@ -80,42 +75,6 @@ exports.createResolvers = (gatsbyUtils) => {
   // To be used with gatsby-image
   createGatsbyImageResolvers(gatsbyUtils);
 };
-
-async function createAssetNodeFromFile({
-  node,
-  actions: { createNode, createParentChildLink },
-  createNodeId,
-  createContentDigest,
-  reporter,
-}) {
-  if (!ALLOWED_MEDIA_TYPES.includes(node.internal.mediaType)) {
-    return;
-  }
-
-  const cloudinaryUploadResult = await uploadImageNodeToCloudinary({
-    node,
-    reporter,
-  });
-
-  const imageNode = createImageNode({
-    cloudinaryUploadResult,
-    parentNode: node,
-    createContentDigest,
-    createNode,
-    createNodeId,
-  });
-
-  // Add the new node to Gatsby’s data layer.
-  createNode(imageNode);
-
-  // Tell Gatsby to add `childCloudinaryAsset` to the parent `File` node.
-  createParentChildLink({
-    parent: node,
-    child: imageNode,
-  });
-
-  return imageNode;
-}
 
 exports.onCreateNode = async ({
   node,

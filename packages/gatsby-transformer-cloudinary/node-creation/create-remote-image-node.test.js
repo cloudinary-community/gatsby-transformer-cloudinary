@@ -2,11 +2,11 @@ const path = require('path');
 const { createRemoteImageNode } = require('./create-remote-image-node');
 
 jest.mock('./create-image-node');
-jest.mock('./options');
+jest.mock('../options');
 jest.mock('./upload');
 
 const { createImageNode } = require('./create-image-node');
-const { getPluginOptions } = require('./options');
+const { getPluginOptions } = require('../options');
 const { uploadImageToCloudinary } = require('./upload');
 
 function getDefaultArgs(args) {

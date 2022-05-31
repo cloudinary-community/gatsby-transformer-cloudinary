@@ -1,5 +1,5 @@
 const cloudinary = require('cloudinary').v2;
-const { getPluginOptions } = require('./options');
+const { getPluginOptions } = require('../options');
 
 let totalImages = 0;
 let uploadedImages = 0;

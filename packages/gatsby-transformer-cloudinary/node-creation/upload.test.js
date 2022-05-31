@@ -3,10 +3,10 @@ const {
   uploadImageNodeToCloudinary,
 } = require('./upload');
 
-jest.mock('./options');
+jest.mock('../options');
 jest.mock('cloudinary');
 
-const { getPluginOptions } = require('./options');
+const { getPluginOptions } = require('../options');
 const cloudinary = require('cloudinary').v2;
 
 const defaultPluginOptions = {
