@@ -1,12 +1,10 @@
-const { getPluginOptions } = require('./options');
+const { getPluginOptions } = require('../options');
 const {
   getAspectRatio,
   getBase64,
   getImageURL,
-} = require('./get-image-objects/get-shared-image-data');
-const {
-  getDisplayDimensions,
-} = require('./get-image-objects/get-display-dimensions');
+} = require('./get-shared-image-data');
+const { getDisplayDimensions } = require('./get-display-dimensions');
 // Define default width values for fluid, fixed and base64 images
 const DEFAULT_BASE64_WIDTH = 30;
 
