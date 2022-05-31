@@ -4,6 +4,7 @@ const {
   getFixedImageObject,
   getFluidImageObject,
 } = require('./get-image-objects');
+const { gatsbyImageTypes } = require('./types');
 
 exports.addFragments = async ({ store, getNodesByType }) => {
   const program = store.getState().program;
@@ -19,6 +20,10 @@ exports.addFragments = async ({ store, getNodesByType }) => {
     require.resolve(`./fragments.js`),
     `${program.directory}/.cache/fragments/cloudinary-asset-fragments.js`
   );
+};
+
+exports.createGatsbyImageTypes = ({ actions }) => {
+  actions.createTypes(gatsbyImageTypes);
 };
 
 exports.createGatsbyImageResolvers = ({ createResolvers, reporter }) => {

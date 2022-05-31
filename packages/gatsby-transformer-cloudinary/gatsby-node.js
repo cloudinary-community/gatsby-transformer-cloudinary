@@ -3,63 +3,31 @@ const {
   createAssetNodesFromData,
   createAssetNodeFromFile,
 } = require('./node-creation');
-const { createGatsbyImageResolvers, addFragments } = require('./gatsby-image');
+const {
+  createGatsbyImageResolvers,
+  addFragments,
+  createGatsbyImageTypes,
+} = require('./gatsby-image');
 
 //import plugin options, used to check for API key before uploading assets to Cloudinary
 const pluginOptions = getPluginOptions();
 
+exports.onPreInit = ({ reporter }, pluginOptions) => {
+  setPluginOptions({ pluginOptions, reporter });
+};
+
 exports.onPreExtractQueries = async (gatsbyUtils) => {
+  // Fragments to be used with gatsby-image
   await addFragments(gatsbyUtils);
 };
 
-exports.createSchemaCustomization = ({ actions }) => {
-  actions.createTypes(`
-    type CloudinaryAsset implements Node @dontInfer {
-      fixed(
-        base64Width: Int
-        base64Transformations: [String!]
-        chained: [String!]
-        height: Int
-        transformations: [String!]
-        width: Int
-        ignoreDefaultBase64: Boolean
-      ): CloudinaryAssetFixed!
-
-      fluid(
-        base64Width: Int
-        base64Transformations: [String!]
-        chained: [String!]
-        maxWidth: Int
-        transformations: [String!]
-        ignoreDefaultBase64: Boolean
-      ): CloudinaryAssetFluid!
-    }
-
-    type CloudinaryAssetFixed {
-      aspectRatio: Float
-      base64: String
-      height: Float
-      src: String
-      srcSet: String
-      tracedSVG: String
-      width: Float
-    }
-
-    type CloudinaryAssetFluid {
-      aspectRatio: Float!
-      base64: String
-      presentationHeight: Float
-      presentationWidth: Float
-      sizes: String!
-      src: String!
-      srcSet: String!
-      tracedSVG: String
-    }
-  `);
+exports.createSchemaCustomization = (gatsbyUtils) => {
+  // Types to be used with gatsby-image
+  createGatsbyImageTypes(gatsbyUtils);
 };
 
 exports.createResolvers = (gatsbyUtils) => {
-  // To be used with gatsby-image
+  // Resolvers to be used with gatsby-image
   createGatsbyImageResolvers(gatsbyUtils);
 };
 
@@ -70,7 +38,7 @@ exports.onCreateNode = async ({
   createContentDigest,
   reporter,
 }) => {
-  // Create nodes from existing data with CloudinaryAssetData node type
+  // Create nodes from existing cloudinary data
   createAssetNodesFromData({
     node,
     actions,
@@ -93,8 +61,4 @@ exports.onCreateNode = async ({
       reporter,
     });
   }
-};
-
-exports.onPreInit = ({ reporter }, pluginOptions) => {
-  setPluginOptions({ pluginOptions, reporter });
 };
