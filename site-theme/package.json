@@ -5,24 +5,19 @@
   "version": "0.2.0",
   "author": "Jason Lengstorf <jason@lengstorf.com>",
   "dependencies": {
-    "gatsby": "^3.0.0",
-    "gatsby-image": "^3.0.0",
-    "gatsby-source-filesystem": "^3.0.0",
     "gatsby-transformer-cloudinary": "*",
     "react": "^16.9.0",
     "react-dom": "^16.9.0"
+  },
+  "peerDependencies": {
+    "gatsby": "^3.0.0",
+    "gatsby-image": "^3.0.0",
+    "gatsby-source-filesystem": "^3.0.0"
   },
   "keywords": [
     "gatsby"
   ],
   "license": "MIT",
-  "scripts": {
-    "develop": "gatsby develop",
-    "clean": "gatsby clean",
-    "build": "gatsby build",
-    "serve": "gatsby serve",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing \""
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/cloudinary-devs/gatsby-transformer-cloudinary"

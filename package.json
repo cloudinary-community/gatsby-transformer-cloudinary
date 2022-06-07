@@ -2,11 +2,12 @@
   "private": true,
   "workspaces": [
     "packages/*",
-    "site"
+    "site",
+    "site-v3"
   ],
   "scripts": {
-    "develop": "yarn workspace site develop",
-    "clean": "yarn workspace site clean",
+    "develop": "yarn workspace site-v3 develop",
+    "clean": "yarn workspace site-v3 clean",
     "test": "yarn workspace gatsby-transformer-cloudinary test",
     "prettier": "prettier --write ."
   },
