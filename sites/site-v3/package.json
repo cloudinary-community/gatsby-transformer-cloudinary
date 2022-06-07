@@ -5,11 +5,12 @@
   "version": "0.2.0",
   "author": "Jason Lengstorf <jason@lengstorf.com>",
   "dependencies": {
-    "gatsby": "^3.0.0",
-    "gatsby-image": "^3.0.0",
-    "gatsby-source-filesystem": "^3.0.0",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "gatsby": "3.14.6",
+    "gatsby-image": "3.11.0",
+    "gatsby-source-filesystem": "3.14.0",
+    "react": "16.14.0",
+    "react-dom": "16.14.0",
+    "site-theme": "*"
   },
   "keywords": [
     "gatsby"

@@ -3,5 +3,5 @@ require('dotenv').config({
 });
 
 module.exports = {
-  plugins: [`site`],
+  plugins: [`site-theme`],
 };
