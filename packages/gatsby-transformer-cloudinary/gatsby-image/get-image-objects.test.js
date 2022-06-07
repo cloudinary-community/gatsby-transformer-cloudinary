@@ -8,8 +8,8 @@ const { get } = require('axios');
 const base64ImageData = ['1', '2', '3'];
 get.mockReturnValue({ data: base64ImageData });
 
-jest.mock('./options');
-const { getPluginOptions } = require('./options');
+jest.mock('../options');
+const { getPluginOptions } = require('../options');
 
 describe('getFluidImageObject', () => {
   function getDefaultArgs(args) {

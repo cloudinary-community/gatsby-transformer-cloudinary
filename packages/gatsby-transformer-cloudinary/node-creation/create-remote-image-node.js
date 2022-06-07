@@ -1,7 +1,7 @@
 const path = require('path');
 const { uploadImageToCloudinary } = require('./upload');
 const { createImageNode } = require('./create-image-node');
-const { getPluginOptions } = require('./options');
+const { getPluginOptions } = require('../options');
 
 exports.createRemoteImageNode = async ({
   url,

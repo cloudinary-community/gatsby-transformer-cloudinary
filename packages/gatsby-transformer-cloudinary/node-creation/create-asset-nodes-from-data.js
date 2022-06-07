@@ -1,8 +1,6 @@
-const flatMap = require('lodash/flatMap');
-const get = require('lodash/get');
-const set = require('lodash/set');
-const unset = require('lodash/unset');
-const { createImageNode } = require('../create-image-node');
+const { flatMap, get, set, unset } = require('lodash');
+
+const { createImageNode } = require('./create-image-node');
 
 exports.createAssetNodesFromData = ({
   node,

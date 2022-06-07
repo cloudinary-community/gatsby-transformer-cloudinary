@@ -1,5 +1,3 @@
-const { getAspectRatio } = require('./get-aspect-ratio');
-
 const DEFAULT_FIXED_WIDTH = 400;
 
 exports.getDisplayDimensions = ({
