@@ -1,16 +1,16 @@
 {
   "private": true,
-  "name": "site",
+  "name": "site-v4",
   "description": "A demo site to show off the Cloudinary transformer.",
   "version": "0.2.0",
   "author": "Jason Lengstorf <jason@lengstorf.com>",
   "dependencies": {
-    "gatsby": "^3.0.0",
+    "gatsby": "4.16.0",
     "gatsby-image": "^3.0.0",
-    "gatsby-source-filesystem": "^3.0.0",
-    "gatsby-transformer-cloudinary": "*",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "gatsby-source-filesystem": "4.16.0",
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
+    "site-theme": "*"
   },
   "keywords": [
     "gatsby"

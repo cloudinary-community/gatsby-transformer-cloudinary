@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "name": "site-theme",
+  "description": "A demo site to show off the Cloudinary transformer.",
+  "version": "0.2.0",
+  "author": "Jason Lengstorf <jason@lengstorf.com>",
+  "dependencies": {
+    "gatsby-transformer-cloudinary": "*",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
+  },
+  "peerDependencies": {
+    "gatsby": "^3.0.0 || ^4.0.0",
+    "gatsby-image": "^3.0.0",
+    "gatsby-source-filesystem": "^3.0.0 || ^4.0.0"
+  },
+  "keywords": [
+    "gatsby"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cloudinary-devs/gatsby-transformer-cloudinary"
+  }
+}
