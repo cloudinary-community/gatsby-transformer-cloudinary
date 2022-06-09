@@ -4,7 +4,7 @@ const { createImageNode } = require('./create-image-node');
 
 exports.createAssetNodesFromData = ({
   node,
-  actions: { createNode },
+  actions: { createNode, createNodeField },
   createNodeId,
   createContentDigest,
 }) => {
@@ -21,6 +21,7 @@ exports.createAssetNodesFromData = ({
         assetData,
         createContentDigest,
         createNode,
+        createNodeField,
         createNodeId,
         parentNode: node,
         relationshipName,
@@ -90,6 +91,7 @@ function createCloudinaryAssetNode({
   assetDataPath = null,
   createContentDigest,
   createNode,
+  createNodeField,
   createNodeId,
   parentNode,
   relationshipName,
@@ -115,7 +117,16 @@ function createCloudinaryAssetNode({
   // Add the new node to Gatsby’s data layer.
   createNode(imageNode, { name: 'gatsby-transformer-cloudinary' });
 
-  // Tell Gatsby to add `${relationshipName}` to the parent node.
-  const relationshipKey = `${assetDataPath || relationshipName}___NODE`;
+  //Use createNodeField to store the id of the CloudinaryAsset node the Gatsby-v4-Way
+  let relationshipKey = `${assetDataPath || relationshipName}`;
+
+  createNodeField({
+    node: parentNode,
+    name: relationshipKey,
+    value: imageNode.id,
+  });
+
+  // Add relationship by mutating, does not work in Gatsby-v4
+  relationshipKey = `${assetDataPath || relationshipName}___NODE`;
   set(parentNode, relationshipKey, imageNode.id);
 }

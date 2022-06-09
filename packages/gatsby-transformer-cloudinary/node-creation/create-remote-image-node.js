@@ -10,6 +10,7 @@ exports.createRemoteImageNode = async ({
   relationshipName,
   createContentDigest,
   createNode,
+  createNodeField,
   createNodeId,
   reporter,
 }) => {
@@ -73,8 +74,17 @@ exports.createRemoteImageNode = async ({
   // Add the new node to Gatsby’s data layer.
   createNode(imageNode, { name: 'gatsby-transformer-cloudinary' });
 
-  // Tell Gatsby to add `${relationshipName}` to the parent node.
-  const relationshipKey = `${relationshipName}___NODE`;
+  //Use createNodeField to store the id of the CloudinaryAsset node the Gatsby-v4-Way
+  let relationshipKey = `${relationshipName}`;
+
+  createNodeField({
+    node: parentNode,
+    name: relationshipKey,
+    value: imageNode.id,
+  });
+
+  // Add relationship by mutating, does not work in Gatsby-v4
+  relationshipKey = `${relationshipName}___NODE`;
   parentNode[relationshipKey] = imageNode.id;
   return imageNode;
 };
