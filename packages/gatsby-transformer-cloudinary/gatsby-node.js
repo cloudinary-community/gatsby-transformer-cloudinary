@@ -10,11 +10,37 @@ const {
 } = require('./gatsby-image');
 
 //import plugin options, used to check for API key before uploading assets to Cloudinary
+
+let coreSupportsOnPluginInit = undefined;
+
+try {
+  const { isGatsbyNodeLifecycleSupported } = require(`gatsby-plugin-utils`);
+  if (isGatsbyNodeLifecycleSupported(`onPluginInit`)) {
+    coreSupportsOnPluginInit = 'stable';
+  } else if (isGatsbyNodeLifecycleSupported(`unstable_onPluginInit`)) {
+    coreSupportsOnPluginInit = 'unstable';
+  }
+} catch (error) {
+  console.error(
+    `Cannot check if Gatsby supports onPluginInit lifecycle: 💜 🐸 on🔌👸 life🚴‍♀️ `
+  );
+}
+
 const pluginOptions = getPluginOptions();
 
-exports.onPreInit = ({ reporter }, pluginOptions) => {
+const initializaGlobalState = (_, pluginOptions, { reporter }) => {
   setPluginOptions({ pluginOptions, reporter });
 };
+
+if (coreSupportsOnPluginInit === 'stable') {
+  console.log(`on🔌👸 = stable`);
+  exports.onPluginInit = initializaGlobalState;
+} else if (coreSupportsOnPluginInit === 'unstable') {
+  console.log(`on🔌👸 = unstable`);
+  exports.unstable_onPluginInit = initializaGlobalState;
+} else {
+  exports.onPreInit = initializaGlobalState;
+}
 
 exports.onPreExtractQueries = async (gatsbyUtils) => {
   // Fragments to be used with gatsby-image
