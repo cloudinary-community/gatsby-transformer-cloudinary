@@ -1,7 +1,9 @@
 const { createRemoteImageNode } = require('gatsby-transformer-cloudinary');
+const { createRemoteFileNode } = require(`gatsby-source-filesystem`);
 
 exports.sourceNodes = (gatsbyUtils) => {
-  const { actions, reporter, createNodeId, createContentDigest } = gatsbyUtils;
+  const { actions, reporter, createNodeId, createContentDigest, getCache } =
+    gatsbyUtils;
   const { createNode } = actions;
 
   const cloudinaryData1 = {
@@ -79,9 +81,14 @@ exports.sourceNodes = (gatsbyUtils) => {
   });
 
   reporter.info(`[site] Create RemoteExample node # 2`);
-};
 
-// gatsby-node.js
+  createRemoteFileNode({
+    url: `https://images.unsplash.com/photo-1638913658179-18c9a9c943f7`,
+    getCache,
+    createNode,
+    createNodeId,
+  });
+};
 
 exports.onCreateNode = async (gatsbyUtils) => {
   const {

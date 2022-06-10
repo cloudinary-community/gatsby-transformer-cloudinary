@@ -3,14 +3,25 @@ const { createImageNode } = require('./create-image-node');
 
 const ALLOWED_MEDIA_TYPES = ['image/png', 'image/jpeg', 'image/gif'];
 
-exports.createAssetNodeFromFile = async ({
-  node,
-  actions: { createNode, createParentChildLink },
-  createNodeId,
-  createContentDigest,
-  reporter,
-}) => {
+exports.createAssetNodeFromFile = async (gatsbyUtils, pluginOptions) => {
+  const {
+    node,
+    actions: { createNode, createParentChildLink },
+    createNodeId,
+    createContentDigest,
+    reporter,
+  } = gatsbyUtils;
+
+  const { uploadSourceInstanceNames } = pluginOptions || {};
+
   if (!ALLOWED_MEDIA_TYPES.includes(node.internal.mediaType)) {
+    return;
+  }
+
+  if (
+    uploadSourceInstanceNames &&
+    !uploadSourceInstanceNames.includes(node.sourceInstanceName)
+  ) {
     return;
   }
 

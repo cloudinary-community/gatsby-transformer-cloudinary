@@ -31,21 +31,9 @@ exports.createResolvers = (gatsbyUtils) => {
   createGatsbyImageResolvers(gatsbyUtils);
 };
 
-exports.onCreateNode = async ({
-  node,
-  actions,
-  createNodeId,
-  createContentDigest,
-  reporter,
-}) => {
+exports.onCreateNode = async (gatsbyUtils) => {
   // Create nodes from existing cloudinary data
-  createAssetNodesFromData({
-    node,
-    actions,
-    createNodeId,
-    createContentDigest,
-    reporter,
-  });
+  createAssetNodesFromData(gatsbyUtils);
 
   // Create nodes for files to be uploaded to cloudinary
   if (
@@ -53,12 +41,6 @@ exports.onCreateNode = async ({
     pluginOptions.apiSecret &&
     pluginOptions.cloudName
   ) {
-    await createAssetNodeFromFile({
-      node,
-      actions,
-      createNodeId,
-      createContentDigest,
-      reporter,
-    });
+    await createAssetNodeFromFile(gatsbyUtils, pluginOptions);
   }
 };
