@@ -1,2 +1,2 @@
 exports.createRemoteImageNode =
-  require('./create-remote-image-node').createRemoteImageNode;
+  require('./node-creation/create-remote-image-node').createRemoteImageNode;
