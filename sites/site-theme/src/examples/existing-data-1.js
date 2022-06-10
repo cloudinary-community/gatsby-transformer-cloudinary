@@ -6,9 +6,11 @@ const ExistingData1 = () => {
   const data = useStaticQuery(graphql`
     query {
       existingData(name: { eq: "Existing data 1" }) {
-        cloudinary: exampleImage {
-          fixed(height: 300, width: 300, transformations: ["c_fill"]) {
-            ...CloudinaryAssetFixed
+        nested {
+          cloudinary: exampleImage {
+            fixed(height: 300, width: 300, transformations: ["c_fill"]) {
+              ...CloudinaryAssetFixed
+            }
           }
         }
       }
@@ -19,9 +21,11 @@ const ExistingData1 = () => {
   const query = `
     query {
       existingData(name: { eq: "Existing data 1" }) {
-        cloudinary: exampleImage {
-          fixed(height: 300, width: 300, transformations: ["c_fill"]) {
-            ...CloudinaryAssetFixed
+        nested {
+          cloudinary: exampleImage {
+            fixed(height: 300, width: 300, transformations: ["c_fill"]) {
+              ...CloudinaryAssetFixed
+            }
           }
         }
       }
@@ -32,12 +36,14 @@ const ExistingData1 = () => {
 
   const nodeData = JSON.stringify(
     {
-      exampleImage: {
-        cloudinaryAssetData: true,
-        cloudName: 'lilly-labs-consulting',
-        publicId: 'sample',
-        originalHeight: 576,
-        originalWidth: 864,
+      nested: {
+        exampleImage: {
+          cloudinaryAssetData: true,
+          cloudName: 'lilly-labs-consulting',
+          publicId: 'sample',
+          originalHeight: 576,
+          originalWidth: 864,
+        },
       },
     },
     null,
@@ -48,7 +54,7 @@ const ExistingData1 = () => {
     <div className="image-example">
       <h2>Example 1</h2>
       <Image
-        fixed={data.existingData.cloudinary.fixed}
+        fixed={data.existingData.nested.cloudinary.fixed}
         alt="Jason giving finger guns toward the camera."
       />
       <h3>Query</h3>

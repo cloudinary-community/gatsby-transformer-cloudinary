@@ -16,6 +16,9 @@ exports.sourceNodes = (gatsbyUtils) => {
     id: createNodeId(`ExistingData >>> 1`),
     name: 'Existing data 1',
     exampleImage: cloudinaryData1,
+    nested: {
+      exampleImage: cloudinaryData1,
+    },
     internal: {
       type: 'ExistingData',
       contentDigest: createContentDigest(cloudinaryData1),
@@ -36,6 +39,9 @@ exports.sourceNodes = (gatsbyUtils) => {
     id: createNodeId(`ExistingData >>> 2`),
     name: 'Existing data 2',
     exampleImage: cloudinaryData2,
+    nested: {
+      exampleImage: cloudinaryData2,
+    },
     internal: {
       type: 'ExistingData',
       contentDigest: createContentDigest(cloudinaryData2),
