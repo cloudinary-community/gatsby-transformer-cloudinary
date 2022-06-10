@@ -28,6 +28,9 @@ const Header = ({ siteTitle }) => (
       <Link to="/existing/" activeClassName="active">
         Existing
       </Link>
+      <Link to="/remote/" activeClassName="active">
+        Remote
+      </Link>
       <a href="https://www.npmjs.com/package/gatsby-transformer-cloudinary#install">
         Install
       </a>
