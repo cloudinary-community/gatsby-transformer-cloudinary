@@ -28,15 +28,13 @@ try {
 
 const pluginOptions = getPluginOptions();
 
-const initializaGlobalState = (_, pluginOptions, { reporter }) => {
-  setPluginOptions({ pluginOptions, reporter });
+const initializaGlobalState = ({ reporter }, _, pluginOptions) => {
+  setPluginOptions({ reporter, pluginOptions });
 };
 
 if (coreSupportsOnPluginInit === 'stable') {
-  console.log(`on🔌👸 = stable`);
   exports.onPluginInit = initializaGlobalState;
 } else if (coreSupportsOnPluginInit === 'unstable') {
-  console.log(`on🔌👸 = unstable`);
   exports.unstable_onPluginInit = initializaGlobalState;
 } else {
   exports.onPreInit = initializaGlobalState;
