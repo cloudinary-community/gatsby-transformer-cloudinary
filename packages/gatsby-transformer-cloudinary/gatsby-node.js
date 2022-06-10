@@ -28,7 +28,7 @@ try {
 
 const pluginOptions = getPluginOptions();
 
-const initializaGlobalState = ({ reporter }, _, pluginOptions) => {
+const initializaGlobalState = ({ reporter }, pluginOptions) => {
   setPluginOptions({ reporter, pluginOptions });
 };
 
