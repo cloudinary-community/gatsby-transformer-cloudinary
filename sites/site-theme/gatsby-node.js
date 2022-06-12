@@ -100,6 +100,8 @@ exports.onCreateNode = async (gatsbyUtils) => {
   } = gatsbyUtils;
 
   if (node.internal.type === 'RemoteExample') {
+    // Should NOT be uploaded to Cloudinary
+    // since uploadSourceImageNames is set to ["images"]
     await createRemoteImageNode({
       url: node.remoteImageUrl,
       parentNode: node,
