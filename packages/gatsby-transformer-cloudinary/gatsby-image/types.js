@@ -1,5 +1,9 @@
 exports.gatsbyImageTypes = `
-    type CloudinaryAsset implements Node @dontInfer {
+    type CloudinaryAsset implements Node @dontInfer  {
+      publicId: String!
+      cloudName: String!
+      version: String
+
       fixed(
         base64Width: Int
         base64Transformations: [String!]

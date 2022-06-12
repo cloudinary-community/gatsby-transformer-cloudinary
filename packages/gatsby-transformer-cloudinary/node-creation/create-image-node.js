@@ -60,7 +60,7 @@ exports.createImageNode = ({
     // These helper fields are only here so the resolvers have access to them.
     // They will *not* be available via Gatsby’s data layer.
     cloudName: cloudName || getPluginOptions().cloudName,
-    public_id: public_id,
+    publicId: public_id,
     version: version,
     originalHeight: height,
     originalWidth: width,
