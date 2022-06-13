@@ -64,6 +64,9 @@ const GifTransformed = () => {
 
       <h3>Query</h3>
       <pre>{query}</pre>
+
+      <h3>Query</h3>
+      <pre>{query}</pre>
     </div>
   );
 };
