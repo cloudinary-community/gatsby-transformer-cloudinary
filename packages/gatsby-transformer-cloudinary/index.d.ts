@@ -17,7 +17,7 @@ export interface CreateRemoteImageNodeArgs {
 
 export interface CloudinaryAssetNode {
   cloudName: string;
-  public_id: string;
+  publicId: string;
   version: number;
   originalHeight: number;
   originalWidth: number;

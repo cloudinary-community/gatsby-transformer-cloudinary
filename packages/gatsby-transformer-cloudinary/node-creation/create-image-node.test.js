@@ -101,11 +101,11 @@ describe('createImageNode', () => {
     getPluginOptions.mockReturnValue(options);
 
     const args = getDefaultArgs({
-      cloudinaryUploadResult: { public_id: 'public_id' },
+      cloudinaryUploadResult: { public_id: 'public-id' },
     });
     const actual = createImageNode(args);
 
-    const expected = { public_id: 'public_id' };
+    const expected = { publicId: 'public-id' };
     expect(actual).toEqual(expect.objectContaining(expected));
   });
 
