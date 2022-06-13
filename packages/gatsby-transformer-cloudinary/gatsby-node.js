@@ -8,6 +8,7 @@ const {
   addFragments,
   createGatsbyImageTypes,
 } = require('./gatsby-image');
+const { createGatsbyImageDataResolver } = require('./gatsby-plugin-image');
 
 let coreSupportsOnPluginInit = undefined;
 
@@ -52,6 +53,9 @@ exports.createSchemaCustomization = (gatsbyUtils) => {
 exports.createResolvers = (gatsbyUtils) => {
   // Resolvers to be used with gatsby-image
   createGatsbyImageResolvers(gatsbyUtils);
+
+  // Resolvers to be used with gatsby-plugin-image
+  createGatsbyImageDataResolver(gatsbyUtils);
 };
 
 exports.onCreateNode = async (gatsbyUtils) => {
