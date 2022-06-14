@@ -8,7 +8,7 @@ const GifDefault = () => {
     query {
       image: file(name: { eq: "victory" }) {
         cloudinary: childCloudinaryAsset {
-          gatsbyImageData(layout: CONSTRAINED)
+          gatsbyImageData(layout: CONSTRAINED, placeholder: BLURRED)
           fluid {
             ...CloudinaryAssetFluid
           }
@@ -22,7 +22,7 @@ const GifDefault = () => {
     query {
       image: file(name: { eq: "victory" }) {
         cloudinary: childCloudinaryAsset {
-          gatsbyImageData(layout: CONSTRAINED)
+          gatsbyImageData(layout: CONSTRAINED, placeholder: BLURRED)
           fluid {
             ...CloudinaryAssetFluid
           }

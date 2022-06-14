@@ -74,7 +74,6 @@ const FluidSilly = () => {
         fluid={data.image.cloudinary.fluid}
         alt="Marisa Morby standing in a rose garden."
       />
-      <pre>{query}</pre>
 
       <h3>Query</h3>
       <pre>{query}</pre>

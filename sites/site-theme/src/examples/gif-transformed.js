@@ -10,6 +10,7 @@ const GifTransformed = () => {
         cloudinary: childCloudinaryAsset {
           gatsbyImageData(
             layout: CONSTRAINED
+            placeholder: TRACED_SVG
             transformations: ["e_gamma:100"]
             chained: ["e_grayscale", "t_lwj"]
           )
@@ -31,6 +32,7 @@ const GifTransformed = () => {
         cloudinary: childCloudinaryAsset {
           gatsbyImageData(
             layout: CONSTRAINED
+            placeholder: TRACED_SVG
             transformations: ["e_gamma:100"]
             chained: ["e_grayscale", "t_lwj"]
           )

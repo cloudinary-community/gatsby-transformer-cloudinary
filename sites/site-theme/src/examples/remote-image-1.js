@@ -1,12 +1,19 @@
 import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
 import Image from 'gatsby-image';
+import { GatsbyImage } from 'gatsby-plugin-image';
 
 const RemoteImage1 = () => {
   const data = useStaticQuery(graphql`
     query {
       remoteExample(name: { eq: "Remote Example 1" }) {
         cloudinary: remoteImage {
+          gatsbyImageData(
+            layout: FIXED
+            height: 600
+            placeholder: TRACED_SVG
+            chained: ["t_lwj"]
+          )
           fixed(height: 600, chained: ["t_lwj"]) {
             ...CloudinaryAssetFixed
           }
@@ -20,6 +27,12 @@ const RemoteImage1 = () => {
     query {
       remoteExample(name: {eq: "Remote Example 1"}) {
         cloudinary: remoteImage {
+          gatsbyImageData(
+            layout: FIXED
+            height: 600
+            placeholder: TRACED_SVG
+            chained: ["t_lwj"]
+          )
           fixed(height: 600, chained: ["t_lwj"]) {
             ...CloudinaryAssetFixed
           }
@@ -33,7 +46,17 @@ const RemoteImage1 = () => {
   return (
     <div className="image-example">
       <h2>Example 1</h2>
-      <Image fixed={data.remoteExample.cloudinary.fixed} alt="Remote image" />
+
+      <h3>gatsby-plugin-image</h3>
+      <GatsbyImage
+        image={data.remoteExample.cloudinary.gatsbyImageData}
+        alt="Jason, victorious."
+      />
+
+      <h3>gatsby-image</h3>
+      <Image fluid={data.remoteExample.cloudinary.fluid} alt="Remote image" />
+      <pre>{query}</pre>
+
       <h3>Query</h3>
       <pre>{query}</pre>
     </div>
