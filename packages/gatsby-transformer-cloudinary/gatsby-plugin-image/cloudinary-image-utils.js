@@ -1,4 +1,5 @@
 const cloudinary = require('cloudinary').v2;
+const axios = require('axios');
 const {
   getLowResolutionImageURL,
   generateImageData,
@@ -8,10 +9,13 @@ const { getBase64Image, getSvgImage } = require('./placeholders');
 // Create Cloudinary image URL with transformations.
 const generateCloudinaryUrl = ({
   publicId,
+  cloudName,
   width,
   height,
   format,
   options = {},
+  flags,
+  tracedSvg,
 }) => {
   console.log('FORMAT >>>> ', { format });
 
@@ -37,24 +41,26 @@ const generateCloudinaryUrl = ({
     }),
   ];
 
-  if (options.tracedSvg) {
-    const effectOptions = Object.keys(options.tracedSvgOptions).reduce(
-      (acc, key) => {
-        const value = options.tracedSvgOptions[key];
-        console.log({ key, value, acc });
-        return value ? acc + `:${key}:${value}` : acc;
-      },
-      'vectorize'
-    );
+  if (tracedSvg) {
+    const effectOptions = Object.keys(tracedSvg.options).reduce((acc, key) => {
+      const value = tracedSvg.options[key];
+      console.log({ key, value, acc });
+      return value ? acc + `:${key}:${value}` : acc;
+    }, 'vectorize');
 
     transformations.push({
       effect: effectOptions,
-      width: options.tracedSvgMaxWidth,
+      width: tracedSvg.width,
     });
   }
 
+  console.log('CLOUD NAME >>> ', cloudName);
+
+  cloudinary.config({ cloud_name: cloudName });
+
   const url = cloudinary.url(publicId, {
     transformation: transformations,
+    flags: flags,
   });
 
   console.log('URL >>>> ', url);
@@ -70,8 +76,10 @@ const generateCloudinaryImageSource = (
   fit,
   options
 ) => {
+  const [cloudName, publicId] = filename.split('>>>');
   const cloudinarySrcUrl = generateCloudinaryUrl({
-    publicId: filename,
+    cloudName: cloudName,
+    publicId: publicId,
     width,
     height,
     format,
@@ -89,16 +97,38 @@ const generateCloudinaryImageSource = (
 };
 
 exports.resolveCloudinaryAssetData = async (source, args) => {
+  let sourceMataData = {
+    width: source.originalWidth,
+    height: source.originalHeight,
+    format: source.originalFormat,
+  };
+
+  if (
+    !sourceMataData.width ||
+    !sourceMataData.height ||
+    !sourceMataData.format
+  ) {
+    // Lacking metadata, so lets fetch it
+    const metaDataUrl = generateCloudinaryUrl({
+      publicId: source.publicId,
+      cloudName: source.cloudName,
+      options: args,
+      flags: 'getinfo',
+    });
+
+    const {
+      data: { output = {} },
+    } = await axios.get(metaDataUrl);
+    console.log('OUTPUT >>>>', output);
+    sourceMataData = output;
+  }
+
   const imageDataArgs = {
     ...args,
-    filename: source.publicId,
+    filename: source.cloudName + '>>>' + source.publicId,
     // Passing the plugin name allows for better error messages
     pluginName: `gatsby-transformer-cloudinary`,
-    sourceMetadata: {
-      width: source.originalWidth,
-      height: source.originalHeight,
-      format: source.originalFormat,
-    },
+    sourceMetadata: sourceMataData,
     generateImageSource: generateCloudinaryImageSource,
     options: args,
   };
@@ -117,16 +147,16 @@ exports.resolveCloudinaryAssetData = async (source, args) => {
     } else {
       const vectorizedImageUrl = generateCloudinaryUrl({
         publicId: source.publicId,
+        cloudName: source.cloudName,
         format: 'svg',
-        options: {
-          ...args,
-          tracedSvg: true,
-          tracedSvgOptions: {
+        options: args,
+        tracedSvg: {
+          options: {
             colors: 2,
             detail: 0.3,
             despeckle: 0.1,
           },
-          tracedSvgMaxWidth: 300,
+          width: 300,
         },
       });
       imageDataArgs.placeholderURL = await getSvgImage(vectorizedImageUrl);

@@ -35,6 +35,7 @@ exports.sourceNodes = (gatsbyUtils) => {
     publicId: 'gatsby-cloudinary/jason',
     originalHeight: 3024,
     originalWidth: 4032,
+    originalFormat: 'jpg',
   };
 
   createNode({
