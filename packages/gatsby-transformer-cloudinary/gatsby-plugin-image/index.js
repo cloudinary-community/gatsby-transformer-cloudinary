@@ -1,4 +1,7 @@
-const { getGatsbyImageResolver } = require('gatsby-plugin-image/graphql-utils');
+const {
+  getGatsbyImageResolver,
+  ImagePlaceholderType,
+} = require('gatsby-plugin-image/graphql-utils');
 const { resolveCloudinaryAssetData } = require('./cloudinary-image-utils');
 
 exports.createGatsbyImageDataResolver = ({ createResolvers }) => {
@@ -17,6 +20,9 @@ exports.createGatsbyImageDataResolver = ({ createResolvers }) => {
         },
         transformations: '[String]',
         chained: '[String]',
+        placeholder: {
+          type: ImagePlaceholderType.name,
+        },
       }),
     },
   });

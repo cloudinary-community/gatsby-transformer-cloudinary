@@ -11,6 +11,7 @@ const FixedChaining = () => {
           gatsbyImageData(
             width: 300
             layout: FIXED
+            placeholder: BLURRED
             transformations: ["e_grayscale"]
             chained: ["t_lwj"]
           )
@@ -34,6 +35,7 @@ const FixedChaining = () => {
           gatsbyImageData(
             width: 300
             layout: FIXED
+            placeholder: BLURRED
             transformations: ["e_grayscale"]
             chained: ["t_lwj"]
           )

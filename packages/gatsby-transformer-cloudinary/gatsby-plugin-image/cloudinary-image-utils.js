@@ -1,5 +1,9 @@
 const cloudinary = require('cloudinary').v2;
-const { generateImageData } = require('gatsby-plugin-image');
+const {
+  getLowResolutionImageURL,
+  generateImageData,
+} = require('gatsby-plugin-image');
+const { getBase64Image } = require('./placeholders');
 
 const generateCloudinaryRawTransformation = (transformations = []) => {
   return transformations.map((transformations) => {
@@ -76,24 +80,30 @@ const generateCloudinaryImageSource = (
   return imageSource;
 };
 
-exports.resolveCloudinaryAssetData = async (asset, options, ...rest) => {
-  const { publicId, originalWidth, originalHeight, originalFormat } = asset;
-
-  const sourceMetadata = {
-    width: originalWidth,
-    height: originalHeight,
-    format: originalFormat,
-  };
-
-  const assetDataArgs = {
-    ...options,
-    filename: publicId,
+exports.resolveCloudinaryAssetData = async (source, args) => {
+  const imageDataArgs = {
+    ...args,
+    filename: source.publicId,
     // Passing the plugin name allows for better error messages
     pluginName: `gatsby-transformer-cloudinary`,
-    sourceMetadata,
+    sourceMetadata: {
+      width: source.originalWidth,
+      height: source.originalHeight,
+      format: source.originalFormat,
+    },
     generateImageSource: generateCloudinaryImageSource,
-    options,
+    options: args,
   };
 
-  return generateImageData(assetDataArgs);
+  // Generating placeholders is optional, but recommended
+  if (args.placeholder === 'blurred') {
+    if (source.defaultBase64) {
+      imageDataArgs.placeholderURL = source.defaultBase64;
+    } else {
+      const lowResImageUrl = getLowResolutionImageURL(imageDataArgs);
+      imageDataArgs.placeholderURL = await getBase64Image(lowResImageUrl);
+    }
+  }
+
+  return generateImageData(imageDataArgs);
 };
