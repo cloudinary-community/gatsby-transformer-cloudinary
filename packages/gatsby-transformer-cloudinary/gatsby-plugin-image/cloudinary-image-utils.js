@@ -3,42 +3,58 @@ const {
   getLowResolutionImageURL,
   generateImageData,
 } = require('gatsby-plugin-image');
-const { getBase64Image } = require('./placeholders');
+const { getBase64Image, getSvgImage } = require('./placeholders');
 
 // Create Cloudinary image URL with transformations.
-const generateCloudinaryUrl = (
-  filename,
+const generateCloudinaryUrl = ({
+  publicId,
   width,
   height,
   format,
-  fit,
-  options = {}
-) => {
-  console.log('FIT >>>> ', { fit });
+  options = {},
+}) => {
   console.log('FORMAT >>>> ', { format });
 
-  const url = cloudinary.url(filename, {
-    transformation: [
-      {
-        fetch_format: format,
-        width: width,
-        height: height,
-        // Default Gatsby Image Options
-        aspect_ratio: options.aspectRatio,
-        dpr: options.outputPixelDensities,
-        // Cloudinary Specific Options
-        gravity: options.gravity,
-        crop: options.crop,
-        x: options.x,
-        y: options.y,
-        zoom: options.zoom,
-        quality: options.quality,
-        raw_transformation: (options.transformations || []).join(','),
+  const transformations = [
+    {
+      fetch_format: format,
+      width: width,
+      height: height,
+      // Default Gatsby Image Options
+      aspect_ratio: options.aspectRatio, // Might not need this since its calculated...
+      dpr: options.outputPixelDensities,
+      // Cloudinary Specific Options
+      gravity: options.gravity,
+      crop: options.crop,
+      x: options.x,
+      y: options.y,
+      zoom: options.zoom,
+      quality: options.quality,
+      raw_transformation: (options.transformations || []).join(','),
+    },
+    ...(options.chained || []).map((transformations) => {
+      return { raw_transformation: transformations };
+    }),
+  ];
+
+  if (options.tracedSvg) {
+    const effectOptions = Object.keys(options.tracedSvgOptions).reduce(
+      (acc, key) => {
+        const value = options.tracedSvgOptions[key];
+        console.log({ key, value, acc });
+        return value ? acc + `:${key}:${value}` : acc;
       },
-      ...(options.chained || []).map((transformations) => {
-        return { raw_transformation: transformations };
-      }),
-    ],
+      'vectorize'
+    );
+
+    transformations.push({
+      effect: effectOptions,
+      width: options.tracedSvgMaxWidth,
+    });
+  }
+
+  const url = cloudinary.url(publicId, {
+    transformation: transformations,
   });
 
   console.log('URL >>>> ', url);
@@ -54,14 +70,13 @@ const generateCloudinaryImageSource = (
   fit,
   options
 ) => {
-  const cloudinarySrcUrl = generateCloudinaryUrl(
-    filename,
+  const cloudinarySrcUrl = generateCloudinaryUrl({
+    publicId: filename,
     width,
     height,
     format,
-    fit,
-    options
-  );
+    options,
+  });
 
   const imageSource = {
     src: cloudinarySrcUrl,
@@ -95,6 +110,26 @@ exports.resolveCloudinaryAssetData = async (source, args) => {
     } else {
       const lowResImageUrl = getLowResolutionImageURL(imageDataArgs);
       imageDataArgs.placeholderURL = await getBase64Image(lowResImageUrl);
+    }
+  } else if (args.placeholder === 'tracedSVG') {
+    if (source.defaultTracedSVG) {
+      imageDataArgs.placeholderURL = source.defaultTracedSVG;
+    } else {
+      const vectorizedImageUrl = generateCloudinaryUrl({
+        publicId: source.publicId,
+        format: 'svg',
+        options: {
+          ...args,
+          tracedSvg: true,
+          tracedSvgOptions: {
+            colors: 2,
+            detail: 0.3,
+            despeckle: 0.1,
+          },
+          tracedSvgMaxWidth: 300,
+        },
+      });
+      imageDataArgs.placeholderURL = await getSvgImage(vectorizedImageUrl);
     }
   }
 

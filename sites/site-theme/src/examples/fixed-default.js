@@ -8,7 +8,7 @@ const FixedDefault = () => {
     query {
       image: file(name: { eq: "jason" }) {
         cloudinary: childCloudinaryAsset {
-          gatsbyImageData(width: 300, layout: FIXED, placeholder: BLURRED)
+          gatsbyImageData(width: 300, layout: FIXED, placeholder: TRACED_SVG)
           fixed(width: 300) {
             ...CloudinaryAssetFixed
           }
@@ -22,7 +22,7 @@ const FixedDefault = () => {
     query {
       image: file(name: { eq: "jason" }) {
         cloudinary: childCloudinaryAsset {
-          gatsbyImageData(width: 300, layout: FIXED, placeholder: BLURRED)
+          gatsbyImageData(width: 300, layout: FIXED, placeholder: TRACED_SVG)
           fixed(width: 300) {
             ...CloudinaryAssetFixed
           }

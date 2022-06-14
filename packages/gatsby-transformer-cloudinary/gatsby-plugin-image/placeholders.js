@@ -1,10 +1,10 @@
 const axios = require('axios');
 
-const base64Cache = {};
+const placeholderCache = {};
 
 exports.getBase64Image = async (url) => {
-  if (!base64Cache[url]) {
-    base64Cache[url] = axios
+  if (!placeholderCache[url]) {
+    placeholderCache[url] = axios
       .get(url, { responseType: 'arraybuffer' })
       .then(({ data }) => {
         const base64 = Buffer.from(data, 'binary').toString('base64');
@@ -12,5 +12,15 @@ exports.getBase64Image = async (url) => {
         return `data:image/jpeg;base64,${base64}`;
       });
   }
-  return base64Cache[url];
+  return placeholderCache[url];
+};
+
+exports.getSvgImage = async (url) => {
+  if (!placeholderCache[url]) {
+    placeholderCache[url] = axios.get(url).then(({ data }) => {
+      console.log('>>>> svg', url);
+      return `data:image/svg+xml,${encodeURIComponent(data)}`;
+    });
+  }
+  return placeholderCache[url];
 };
