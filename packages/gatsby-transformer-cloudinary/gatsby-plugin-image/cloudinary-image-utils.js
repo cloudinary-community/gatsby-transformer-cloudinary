@@ -5,12 +5,6 @@ const {
 } = require('gatsby-plugin-image');
 const { getBase64Image } = require('./placeholders');
 
-const generateCloudinaryRawTransformation = (transformations = []) => {
-  return transformations.map((transformations) => {
-    return { raw_transformation: transformations };
-  });
-};
-
 // Create Cloudinary image URL with transformations.
 const generateCloudinaryUrl = (
   filename,
@@ -25,7 +19,6 @@ const generateCloudinaryUrl = (
 
   const url = cloudinary.url(filename, {
     transformation: [
-      ...generateCloudinaryRawTransformation(options.preSizingTransformations),
       {
         fetch_format: format,
         width: width,
