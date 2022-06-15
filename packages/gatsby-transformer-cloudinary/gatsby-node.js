@@ -1,7 +1,7 @@
 const { setPluginOptions, getPluginOptions } = require('./options');
 const {
-  createAssetNodesFromData,
-  createAssetNodeFromFile,
+  createCloudinaryAssetType,
+  createCloudinaryAssetNodes,
 } = require('./node-creation');
 const {
   createGatsbyImageResolvers,
@@ -46,25 +46,20 @@ exports.onPreExtractQueries = async (gatsbyUtils) => {
 };
 
 exports.createSchemaCustomization = (gatsbyUtils) => {
+  // Type to be used for node creation
+  createCloudinaryAssetType(gatsbyUtils);
+
   // Types to be used with gatsby-image
   createGatsbyImageTypes(gatsbyUtils);
 };
 
 exports.createResolvers = (gatsbyUtils) => {
+  const { reporter } = gatsbyUtils;
   // Resolvers to be used with gatsby-image
   createGatsbyImageResolvers(gatsbyUtils);
 };
 
 exports.onCreateNode = async (gatsbyUtils) => {
-  // Create nodes from existing cloudinary data
-  createAssetNodesFromData(gatsbyUtils);
-
-  // Create nodes for files to be uploaded to cloudinary
-  if (
-    pluginOptions.apiKey &&
-    pluginOptions.apiSecret &&
-    pluginOptions.cloudName
-  ) {
-    await createAssetNodeFromFile(gatsbyUtils, pluginOptions);
-  }
+  // Create Cloudinary Asset nodes if applicable
+  await createCloudinaryAssetNodes(gatsbyUtils, pluginOptions);
 };

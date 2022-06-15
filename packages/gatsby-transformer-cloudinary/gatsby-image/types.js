@@ -1,29 +1,4 @@
 exports.gatsbyImageTypes = `
-    type CloudinaryAsset implements Node @dontInfer  {
-      publicId: String!
-      cloudName: String!
-      version: String
-
-      fixed(
-        base64Width: Int
-        base64Transformations: [String!]
-        chained: [String!]
-        height: Int
-        transformations: [String!]
-        width: Int
-        ignoreDefaultBase64: Boolean
-      ): CloudinaryAssetFixed!
-
-      fluid(
-        base64Width: Int
-        base64Transformations: [String!]
-        chained: [String!]
-        maxWidth: Int
-        transformations: [String!]
-        ignoreDefaultBase64: Boolean
-      ): CloudinaryAssetFluid!
-    }
-
     type CloudinaryAssetFixed {
       aspectRatio: Float
       base64: String

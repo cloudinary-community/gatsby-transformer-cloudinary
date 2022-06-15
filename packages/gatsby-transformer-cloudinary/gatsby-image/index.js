@@ -31,6 +31,15 @@ exports.createGatsbyImageResolvers = ({ createResolvers, reporter }) => {
     CloudinaryAsset: {
       fixed: {
         type: 'CloudinaryAssetFixed!',
+        args: {
+          base64Width: 'Int',
+          base64Transformations: '[String!]',
+          chained: '[String!]',
+          height: 'Int',
+          transformations: '[String!]',
+          width: 'Int',
+          ignoreDefaultBase64: 'Boolean',
+        },
         resolve: (source, args, _context, info) => {
           const fieldsToSelect = info.fieldNodes[0].selectionSet.selections.map(
             (item) => item.name.value
@@ -46,6 +55,14 @@ exports.createGatsbyImageResolvers = ({ createResolvers, reporter }) => {
       },
       fluid: {
         type: 'CloudinaryAssetFluid!',
+        args: {
+          base64Width: 'Int',
+          base64Transformations: '[String!]',
+          chained: '[String!]',
+          maxWidth: 'Int',
+          transformations: '[String!]',
+          ignoreDefaultBase64: 'Boolean',
+        },
         resolve: (source, args, _context, info) => {
           const fieldsToSelect = info.fieldNodes[0].selectionSet.selections.map(
             (item) => item.name.value
