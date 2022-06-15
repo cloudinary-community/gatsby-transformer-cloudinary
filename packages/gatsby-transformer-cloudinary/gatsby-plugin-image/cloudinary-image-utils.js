@@ -17,8 +17,6 @@ const generateCloudinaryUrl = ({
   flags,
   tracedSvg,
 }) => {
-  console.log('FORMAT >>>> ', { format });
-
   const transformations = [
     {
       fetch_format: format,
@@ -44,7 +42,6 @@ const generateCloudinaryUrl = ({
   if (tracedSvg) {
     const effectOptions = Object.keys(tracedSvg.options).reduce((acc, key) => {
       const value = tracedSvg.options[key];
-      console.log({ key, value, acc });
       return value ? acc + `:${key}:${value}` : acc;
     }, 'vectorize');
 
@@ -54,16 +51,12 @@ const generateCloudinaryUrl = ({
     });
   }
 
-  console.log('CLOUD NAME >>> ', cloudName);
-
   cloudinary.config({ cloud_name: cloudName });
 
   const url = cloudinary.url(publicId, {
     transformation: transformations,
     flags: flags,
   });
-
-  console.log('URL >>>> ', url);
 
   return url;
 };
@@ -119,7 +112,6 @@ exports.resolveCloudinaryAssetData = async (source, args) => {
     const {
       data: { output = {} },
     } = await axios.get(metaDataUrl);
-    console.log('OUTPUT >>>>', output);
     sourceMataData = output;
   }
 
