@@ -65,7 +65,6 @@ const RemoteImage2 = () => {
 
       <h3>gatsby-image</h3>
       <Image fluid={data.remoteExample.cloudinary.fluid} alt="Remote image" />
-      <pre>{query}</pre>
 
       <h3>Query</h3>
       <pre>{query}</pre>

@@ -45,7 +45,6 @@ const GifDefault = () => {
 
       <h3>gatsby-image</h3>
       <Image fluid={data.image.cloudinary.fluid} alt="Jason, victorious." />
-      <pre>{query}</pre>
 
       <h3>Query</h3>
       <pre>{query}</pre>
