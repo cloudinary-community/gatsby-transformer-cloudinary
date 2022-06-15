@@ -2,6 +2,7 @@ const axios = require('axios');
 const { getPluginOptions } = require('../options');
 
 const base64Cache = {};
+const getInfoCache = {};
 
 // Create Cloudinary image URL with transformations.
 exports.getImageURL = ({
@@ -10,6 +11,7 @@ exports.getImageURL = ({
   transformations = [],
   chained = [],
   version = false,
+  getInfo = false,
 }) => {
   const baseURL = 'https://res.cloudinary.com/';
 
@@ -25,8 +27,9 @@ exports.getImageURL = ({
     cloudName,
     '/image/upload/',
     allTransformations,
-    version ? `/v${version}/` : '/',
-    public_id,
+    getInfo ? `/fl_getinfo` : '',
+    version ? `/v${version}` : '',
+    `/${public_id}`,
   ]
     .join('')
     .replace('//', '/');
@@ -132,3 +135,19 @@ function logBase64Retrieval(url, reporter) {
     }
   }
 }
+
+exports.getSizingInfo = async ({ public_id, cloudName, version = false }) => {
+  const getInfoUrl = this.getImageURL({
+    public_id,
+    cloudName,
+    version,
+    getInfo: true,
+  });
+
+  if (!getInfoCache[getInfoUrl]) {
+    getInfoCache[getInfoUrl] = axios.get(getInfoUrl);
+  }
+
+  const { data } = await getInfoCache[getInfoUrl];
+  return data.output;
+};

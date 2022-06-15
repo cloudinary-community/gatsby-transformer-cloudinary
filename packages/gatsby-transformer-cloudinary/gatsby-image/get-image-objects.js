@@ -3,6 +3,7 @@ const {
   getAspectRatio,
   getBase64,
   getImageURL,
+  getSizingInfo,
 } = require('./get-shared-image-data');
 const { getDisplayDimensions } = require('./get-display-dimensions');
 // Define default width values for fluid, fixed and base64 images
@@ -33,6 +34,12 @@ exports.getFixedImageObject = async ({
     transformations,
     chained,
   });
+
+  if (!originalHeight || !originalWidth) {
+    const info = await getSizingInfo({ public_id, cloudName, version });
+    originalHeight = info.height;
+    originalWidth = info.width;
+  }
 
   const aspectRatio = getAspectRatio(
     transformations,

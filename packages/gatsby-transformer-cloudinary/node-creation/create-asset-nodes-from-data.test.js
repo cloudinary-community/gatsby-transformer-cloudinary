@@ -147,20 +147,6 @@ describe('createAssetNodesFromData', () => {
     expect(createImageNode).not.toHaveBeenCalled();
   });
 
-  it('does not call createImageNode if originalHeight is missing', () => {
-    const args = getDefaultArgs();
-    args.node.authorPhoto.originalHeight = null;
-    createAssetNodesFromData(args);
-    expect(createImageNode).not.toHaveBeenCalled();
-  });
-
-  it('does not call createImageNode if originalWidth is missing', () => {
-    const args = getDefaultArgs();
-    args.node.authorPhoto.originalWidth = null;
-    createAssetNodesFromData(args);
-    expect(createImageNode).not.toHaveBeenCalled();
-  });
-
   it('deletes nodes with .cloudinaryAssetData === true', () => {
     const args = getDefaultArgs({
       node: { authorPhoto: { cloudinaryAssetData: true } },
