@@ -15,21 +15,31 @@ const defaultOptions = {
 Object.assign(options, defaultOptions);
 
 exports.setPluginOptions = ({ pluginOptions, reporter }) => {
-  if (
-    pluginOptions.breakpointsMaxImages &&
-    pluginOptions.breakpointsMaxImages < 1
-  ) {
+  Object.assign(options, pluginOptions);
+
+  if (options.breakpointsMaxImages && options.breakpointsMaxImages < 1) {
     reporter.panic(
       `[gatsby-transformer-cloudinary] "breakpointsMaxImages" must be at least 1. You can modify it in your gatsby-config file.`
     );
   }
 
-  // options = {
-  //   ...defaultOptions,
-  //   ...pluginOptions,
-  // };
+  if (options.apiKey && options.apiSecret && options.cloudName) {
+    const sourceInstanceNamesInfo = options.uploadSourceInstanceNames
+      ? `(with source instance names: ${options.uploadSourceInstanceNames})`
+      : '';
 
-  Object.assign(options, pluginOptions);
+    const locationInfo = options.uploadFolder
+      ? `folder ${options.uploadFolder} in ${options.cloudName}`
+      : options.cloudName;
+
+    reporter.info(
+      `[gatsby-transformer-cloudinary] Local files ${sourceInstanceNamesInfo} will be uploaded to ${locationInfo} `
+    );
+  } else {
+    reporter.info(
+      `[gatsby-transformer-cloudinary] Local files will not be uploaded`
+    );
+  }
 };
 
 exports.getPluginOptions = () => {

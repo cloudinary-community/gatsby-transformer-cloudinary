@@ -9,8 +9,6 @@ const {
   createGatsbyImageTypes,
 } = require('./gatsby-image');
 
-//import plugin options, used to check for API key before uploading assets to Cloudinary
-
 let coreSupportsOnPluginInit = undefined;
 
 try {
@@ -22,11 +20,9 @@ try {
   }
 } catch (error) {
   console.error(
-    `Cannot check if Gatsby supports onPluginInit lifecycle: 💜 🐸 on🔌👸 life🚴‍♀️ `
+    `[gatsby-transformer-cloudinary] Cannot check if Gatsby supports onPluginInit`
   );
 }
-
-const pluginOptions = getPluginOptions();
 
 const initializaGlobalState = ({ reporter }, pluginOptions) => {
   setPluginOptions({ reporter, pluginOptions });
@@ -54,12 +50,11 @@ exports.createSchemaCustomization = (gatsbyUtils) => {
 };
 
 exports.createResolvers = (gatsbyUtils) => {
-  const { reporter } = gatsbyUtils;
   // Resolvers to be used with gatsby-image
   createGatsbyImageResolvers(gatsbyUtils);
 };
 
 exports.onCreateNode = async (gatsbyUtils) => {
   // Create Cloudinary Asset nodes if applicable
-  await createCloudinaryAssetNodes(gatsbyUtils, pluginOptions);
+  await createCloudinaryAssetNodes(gatsbyUtils, getPluginOptions());
 };
