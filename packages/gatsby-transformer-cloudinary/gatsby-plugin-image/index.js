@@ -4,7 +4,7 @@ exports.createGatsbyImageDataResolver = (gatsbyUtils) => {
     const {
       getGatsbyImageResolver,
     } = require('gatsby-plugin-image/graphql-utils');
-    const { resolveCloudinaryAssetData } = require('./cloudinary-image-utils');
+    const { resolveCloudinaryAssetData } = require('./resolve-asset');
     const { CloudinaryPlaceholderType } = require('./types');
 
     createResolvers({
