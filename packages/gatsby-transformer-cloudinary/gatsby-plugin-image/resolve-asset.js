@@ -52,8 +52,14 @@ exports.createResolveCloudinaryAssetData =
     const hasSizingAndFormatMetadata = hasSizingMetadata && metadata.format;
 
     if (!hasSizingAndFormatMetadata) {
-      // Lacking metadata, so lets request and override it from Cloudinary
+      // Lacking metadata, so lets request it from Cloudinary
       try {
+        reporter.verbose(
+          `[gatsby-transformer-cloudinary] Missing metadata on ${source.cloudName} > ${source.publicId}`
+        );
+        reporter.verbose(
+          `[gatsby-transformer-cloudinary] >>> To save on network requests add originalWidth, originalHeight and originalFormat to the asset data`
+        );
         metadata = await getAssetMetadata({ source, args });
       } catch (error) {
         reporter.panic(
