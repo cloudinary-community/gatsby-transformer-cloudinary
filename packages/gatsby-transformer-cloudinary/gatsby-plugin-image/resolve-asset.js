@@ -38,48 +38,64 @@ exports._generateCloudinaryAssetSource = (
   return imageSource;
 };
 
-exports.resolveCloudinaryAssetData = async (source, args) => {
-  let metadata = {
-    width: source.originalWidth,
-    height: source.originalHeight,
-    format: source.originalFormat,
-  };
+exports.createResolveCloudinaryAssetData =
+  (gatsbyUtils) => async (source, args) => {
+    const { reporter } = gatsbyUtils;
 
-  const hasSizingMetadata = metadata.width && metadata.height;
-  const hasSizingAndFormatMetadata = hasSizingMetadata && metadata.format;
+    let metadata = {
+      width: source.originalWidth,
+      height: source.originalHeight,
+      format: source.originalFormat,
+    };
 
-  if (!hasSizingAndFormatMetadata) {
-    // Lacking metadata, so lets request and override it from Cloudinary
-    metadata = await getAssetMetadata({ source, args });
-  }
+    const hasSizingMetadata = metadata.width && metadata.height;
+    const hasSizingAndFormatMetadata = hasSizingMetadata && metadata.format;
 
-  const assetDataArgs = {
-    ...args,
-    filename: source.cloudName + '>>>' + source.publicId,
-    // Passing the plugin name allows for better error messages
-    pluginName: `gatsby-transformer-cloudinary`,
-    sourceMetadata: metadata,
-    generateImageSource: this._generateCloudinaryAssetSource,
-    options: args,
-  };
-
-  // Generating placeholders is optional, but recommended
-  if (args.placeholder === 'blurred') {
-    if (source.defaultBase64) {
-      assetDataArgs.placeholderURL = source.defaultBase64;
-    } else {
-      const lowResolutionUrl = getLowResolutionImageURL(assetDataArgs);
-      const base64 = await getUrlAsBase64Image(lowResolutionUrl);
-      assetDataArgs.placeholderURL = base64;
+    if (!hasSizingAndFormatMetadata) {
+      // Lacking metadata, so lets request and override it from Cloudinary
+      try {
+        metadata = await getAssetMetadata({ source, args });
+      } catch (error) {
+        reporter.panic(
+          `[gatsby-transformer-cloudinary] Could not get metadata for ${source.cloudName} > ${source.publicId}:`,
+          error
+        );
+      }
     }
-  } else if (args.placeholder === 'tracedSVG') {
-    if (source.defaultTracedSVG) {
-      assetDataArgs.placeholderURL = source.defaultTracedSVG;
-    } else {
-      const tracedSvg = await getAssetAsTracedSvg({ source, args });
-      assetDataArgs.placeholderURL = tracedSvg;
-    }
-  }
 
-  return generateImageData(assetDataArgs);
-};
+    const assetDataArgs = {
+      ...args,
+      filename: source.cloudName + '>>>' + source.publicId,
+      // Passing the plugin name allows for better error messages
+      pluginName: `gatsby-transformer-cloudinary`,
+      sourceMetadata: metadata,
+      generateImageSource: this._generateCloudinaryAssetSource,
+      options: args,
+    };
+
+    try {
+      if (args.placeholder === 'blurred') {
+        if (source.defaultBase64) {
+          assetDataArgs.placeholderURL = source.defaultBase64;
+        } else {
+          const lowResolutionUrl = getLowResolutionImageURL(assetDataArgs);
+          const base64 = await getUrlAsBase64Image(lowResolutionUrl);
+          assetDataArgs.placeholderURL = base64;
+        }
+      } else if (args.placeholder === 'tracedSVG') {
+        if (source.defaultTracedSVG) {
+          assetDataArgs.placeholderURL = source.defaultTracedSVG;
+        } else {
+          const tracedSvg = await getAssetAsTracedSvg({ source, args });
+          assetDataArgs.placeholderURL = tracedSvg;
+        }
+      }
+    } catch (error) {
+      reporter.error(
+        `[gatsby-transformer-cloudinary] Could not generate placeholder (${args.placeholder}) for ${source.cloudName} > ${source.publicId}:`,
+        error
+      );
+    }
+
+    return generateImageData(assetDataArgs);
+  };
