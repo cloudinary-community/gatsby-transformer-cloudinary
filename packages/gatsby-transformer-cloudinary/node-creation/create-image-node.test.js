@@ -20,71 +20,6 @@ describe('createImageNode', () => {
     };
   }
 
-  it('calculates breakpoints when they are not provided', async () => {
-    const options = getDefaultOptions({
-      breakpointsMaxImages: 6,
-      fluidMinWidth: 300,
-      fluidMaxWidth: 1280,
-    });
-    getPluginOptions.mockReturnValue(options);
-
-    const args = getDefaultArgs({ cloudinaryUploadResult: { width: 1920 } });
-    delete args.cloudinaryUploadResult.responsive_breakpoints;
-    const actual = createImageNode(args);
-
-    const expected = { breakpoints: [1280, 1084, 888, 692, 496, 300] };
-    expect(actual).toEqual(expect.objectContaining(expected));
-  });
-
-  it('calculates breakpoints when they are not provided and the image is small', async () => {
-    const options = getDefaultOptions({
-      breakpointsMaxImages: 6,
-      fluidMinWidth: 300,
-      fluidMaxWidth: 10000,
-    });
-    getPluginOptions.mockReturnValue(options);
-
-    const args = getDefaultArgs({ cloudinaryUploadResult: { width: 1920 } });
-    delete args.cloudinaryUploadResult.responsive_breakpoints;
-    const actual = createImageNode(args);
-
-    const expected = { breakpoints: [1920, 1596, 1272, 948, 624, 300] };
-    expect(actual).toEqual(expect.objectContaining(expected));
-  });
-
-  it('calculates breakpoints when they are not provided and the image is really small', async () => {
-    const options = getDefaultOptions({
-      breakpointsMaxImages: 6,
-      fluidMinWidth: 300,
-      fluidMaxWidth: 10000,
-    });
-    getPluginOptions.mockReturnValue(options);
-
-    const args = getDefaultArgs({ cloudinaryUploadResult: { width: 200 } });
-    delete args.cloudinaryUploadResult.responsive_breakpoints;
-    const actual = createImageNode(args);
-
-    const expected = { breakpoints: [200] };
-    expect(actual).toEqual(expect.objectContaining(expected));
-  });
-
-  it('uses breakpoints when they are provided', async () => {
-    const options = getDefaultOptions();
-    getPluginOptions.mockReturnValue(options);
-
-    const args = getDefaultArgs({
-      cloudinaryUploadResult: {
-        responsive_breakpoints: [
-          { breakpoints: [{ width: 300 }, { width: 200 }, { width: 100 }] },
-        ],
-      },
-    });
-    const actual = createImageNode(args);
-
-    const expected = { breakpoints: [300, 200, 100] };
-    expect(actual).toEqual(expect.objectContaining(expected));
-  });
-
   it('sets the cloud name', async () => {
     const options = getDefaultOptions({ cloudName: 'cloudName' });
     getPluginOptions.mockReturnValue(options);
@@ -180,7 +115,7 @@ describe('createImageNode', () => {
 
     const createNodeId = jest.fn((createNodeIdArg) => {
       expect(createNodeIdArg).toEqual(
-        'CloudinaryAsset-{"breakpoints":[20,35],"cloudName":"cloudName","height":100,"public_id":"public_id","version":7,"width":200}'
+        'CloudinaryAsset-{"cloudName":"cloudName","height":100,"public_id":"public_id","version":7,"width":200}'
       );
       return 'createNodeIdResult';
     });
@@ -189,9 +124,6 @@ describe('createImageNode', () => {
       cloudinaryUploadResult: {
         height: 100,
         public_id: 'public_id',
-        responsive_breakpoints: [
-          { breakpoints: [{ width: 20 }, { width: 35 }] },
-        ],
         version: 7,
         width: 200,
       },
@@ -220,23 +152,20 @@ describe('createImageNode', () => {
     const options = getDefaultOptions();
     getPluginOptions.mockReturnValue(options);
 
+    const cloudinaryUploadResult = {
+      height: 100,
+      public_id: 'public_id',
+      version: 7,
+      width: 200,
+    };
+
     const createContentDigest = jest.fn((createContentDigestArg) => {
-      expect(createContentDigestArg).toEqual(
-        '{"breakpoints":[20,35],"cloudName":"cloudName","height":100,"public_id":"public_id","version":7,"width":200}'
-      );
+      expect(createContentDigestArg).toEqual(cloudinaryUploadResult);
       return 'createContentDigestResult';
     });
     const args = getDefaultArgs({
       createContentDigest,
-      cloudinaryUploadResult: {
-        height: 100,
-        public_id: 'public_id',
-        responsive_breakpoints: [
-          { breakpoints: [{ width: 20 }, { width: 35 }] },
-        ],
-        version: 7,
-        width: 200,
-      },
+      cloudinaryUploadResult,
       cloudName: 'cloudName',
     });
     const actual = createImageNode(args);

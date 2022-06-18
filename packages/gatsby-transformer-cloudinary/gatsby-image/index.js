@@ -4,6 +4,7 @@ const {
   getFixedImageObject,
   getFluidImageObject,
 } = require('./get-image-objects');
+const { getBreakpoints } = require('./get-shared-image-data');
 const { gatsbyImageTypes } = require('./types');
 
 exports.addFragments = async ({ store, getNodesByType }) => {
@@ -26,7 +27,8 @@ exports.createGatsbyImageTypes = ({ actions }) => {
   actions.createTypes(gatsbyImageTypes);
 };
 
-exports.createGatsbyImageResolvers = ({ createResolvers, reporter }) => {
+exports.createGatsbyImageResolvers = (gatsbyUtils, pluginOptions) => {
+  const { createResolvers, reporter } = gatsbyUtils;
   const resolvers = {
     CloudinaryAsset: {
       fixed: {
@@ -71,6 +73,7 @@ exports.createGatsbyImageResolvers = ({ createResolvers, reporter }) => {
             ...source,
             ...args,
             public_id: source.publicId,
+            breakpoints: getBreakpoints(source, pluginOptions),
             fieldsToSelect,
             reporter,
           });

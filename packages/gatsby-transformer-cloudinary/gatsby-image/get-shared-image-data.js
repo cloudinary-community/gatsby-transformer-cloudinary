@@ -54,6 +54,41 @@ exports.getAspectRatio = (transformations, originalAspectRatio) => {
   return w / h;
 };
 
+const getDefaultBreakpoints = (source, pluginOptions) => {
+  const { breakpointsMaxImages, fluidMinWidth, fluidMaxWidth } = pluginOptions;
+  const { originalWidth } = source;
+
+  const max = Math.min(originalWidth, fluidMaxWidth);
+  const min = fluidMinWidth;
+
+  if (max <= min) {
+    return [max];
+  }
+
+  const breakpoints = [max];
+  for (let i = 1; i < breakpointsMaxImages; i++) {
+    const breakpoint = max - (i * (max - min)) / (breakpointsMaxImages - 1);
+    breakpoints.push(Math.round(breakpoint));
+  }
+  return breakpoints;
+};
+
+exports.getBreakpoints = (source, pluginOptions) => {
+  const { rawCloudinaryData = {} } = source;
+  const responsiveBreakpoints = rawCloudinaryData.responsive_breakpoints;
+
+  if (
+    responsiveBreakpoints &&
+    responsiveBreakpoints[0] &&
+    responsiveBreakpoints[0].breakpoints &&
+    responsiveBreakpoints[0].breakpoints.length > 0
+  ) {
+    return responsiveBreakpoints[0].breakpoints.map(({ width }) => width);
+  } else {
+    return getDefaultBreakpoints(source, pluginOptions);
+  }
+};
+
 exports.getBase64 = async ({
   base64Transformations,
   base64Width,

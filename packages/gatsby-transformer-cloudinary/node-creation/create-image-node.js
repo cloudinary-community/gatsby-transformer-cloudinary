@@ -1,34 +1,8 @@
 const stringify = require('fast-json-stable-stringify');
 const { getPluginOptions } = require('../options');
 
-function getDefaultBreakpoints(imageWidth) {
-  const { breakpointsMaxImages, fluidMinWidth, fluidMaxWidth } =
-    getPluginOptions();
-
-  const max = Math.min(imageWidth, fluidMaxWidth);
-  const min = fluidMinWidth;
-
-  if (max <= min) {
-    return [max];
-  }
-
-  const breakpoints = [max];
-  for (let i = 1; i < breakpointsMaxImages; i++) {
-    const breakpoint = max - (i * (max - min)) / (breakpointsMaxImages - 1);
-    breakpoints.push(Math.round(breakpoint));
-  }
-  return breakpoints;
-}
-
 exports.createImageNode = ({
-  cloudinaryUploadResult: {
-    responsive_breakpoints,
-    public_id,
-    version,
-    height,
-    width,
-    format,
-  },
+  cloudinaryUploadResult,
   parentNode,
   createContentDigest,
   createNodeId,
@@ -36,23 +10,12 @@ exports.createImageNode = ({
   defaultBase64,
   defaultTracedSVG,
 }) => {
-  let breakpoints = getDefaultBreakpoints(width);
-  if (
-    responsive_breakpoints &&
-    responsive_breakpoints[0] &&
-    responsive_breakpoints[0].breakpoints &&
-    responsive_breakpoints[0].breakpoints.length > 0
-  ) {
-    breakpoints = responsive_breakpoints[0].breakpoints.map(
-      ({ width }) => width
-    );
-  }
+  const { public_id, height, width, version, format } = cloudinaryUploadResult;
 
   const fingerprint = stringify({
     cloudName,
     height,
     public_id,
-    breakpoints,
     version,
     width,
   });
@@ -66,7 +29,7 @@ exports.createImageNode = ({
     originalHeight: height,
     originalWidth: width,
     originalFormat: format,
-    breakpoints,
+    rawCloudinaryData: cloudinaryUploadResult,
     defaultBase64,
     defaultTracedSVG,
 
@@ -77,7 +40,7 @@ exports.createImageNode = ({
       type: 'CloudinaryAsset',
       // Gatsby uses the content digest to decide when to reprocess a given
       // node. We can use the Cloudinary URL to avoid doing extra work.
-      contentDigest: createContentDigest(fingerprint),
+      contentDigest: createContentDigest(cloudinaryUploadResult),
     },
   };
 
