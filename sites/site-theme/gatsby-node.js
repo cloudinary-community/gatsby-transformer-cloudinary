@@ -7,7 +7,6 @@ exports.sourceNodes = (gatsbyUtils) => {
   const { createNode } = actions;
 
   const cloudinaryData1 = {
-    cloudinaryAssetData: true,
     cloudName: 'lilly-labs-consulting',
     publicId: 'sample',
   };
@@ -28,7 +27,6 @@ exports.sourceNodes = (gatsbyUtils) => {
   reporter.info(`[site] Create ExistingData node # 1`);
 
   const cloudinaryData2 = {
-    cloudinaryAssetData: true,
     cloudName: 'jlengstorf',
     publicId: 'gatsby-cloudinary/jason',
     originalHeight: 3024,

@@ -1,11 +1,11 @@
 const { setPluginOptions, getPluginOptions } = require('./options');
 const {
   createCloudinaryAssetType,
-  createCloudinaryAssetNodes,
+  createCloudinaryAssetNodeFromLocalFile,
 } = require('./node-creation');
 const {
   createGatsbyImageResolvers,
-  addFragments,
+  addGatsbyImageFragments,
   createGatsbyImageTypes,
 } = require('./gatsby-image');
 const { createGatsbyImageDataResolver } = require('./gatsby-plugin-image');
@@ -39,7 +39,7 @@ if (coreSupportsOnPluginInit === 'stable') {
 
 exports.onPreExtractQueries = async (gatsbyUtils) => {
   // Fragments to be used with gatsby-image
-  await addFragments(gatsbyUtils);
+  await addGatsbyImageFragments(gatsbyUtils);
 };
 
 exports.createSchemaCustomization = (gatsbyUtils) => {
@@ -47,7 +47,7 @@ exports.createSchemaCustomization = (gatsbyUtils) => {
   createCloudinaryAssetType(gatsbyUtils);
 
   // Types to be used with gatsby-image
-  createGatsbyImageTypes(gatsbyUtils);
+  createGatsbyImageTypes(gatsbyUtils, getPluginOptions());
 };
 
 exports.createResolvers = (gatsbyUtils) => {
@@ -59,6 +59,6 @@ exports.createResolvers = (gatsbyUtils) => {
 };
 
 exports.onCreateNode = async (gatsbyUtils) => {
-  // Create Cloudinary Asset nodes if applicable
-  await createCloudinaryAssetNodes(gatsbyUtils, getPluginOptions());
+  // Upload and create Cloudinary Asset nodes
+  await createCloudinaryAssetNodeFromLocalFile(gatsbyUtils, getPluginOptions());
 };

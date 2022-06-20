@@ -1,13 +1,11 @@
 const fs = require('fs-extra');
-
 const {
-  getFixedImageObject,
-  getFluidImageObject,
-} = require('./get-image-objects');
-const { getBreakpoints } = require('./get-shared-image-data');
-const { gatsbyImageTypes } = require('./types');
+  CloudinaryAssetFluidType,
+  CloudinaryAssetFixedType,
+} = require('./types');
+const { createFixedResolver, createFluidResolver } = require('./resolvers');
 
-exports.addFragments = async ({ store, getNodesByType }) => {
+exports.addGatsbyImageFragments = async ({ store, getNodesByType }) => {
   const program = store.getState().program;
 
   // Check if there are any CloudinaryAsset nodes. If so add fragments for CloudinaryAsset.
@@ -23,64 +21,25 @@ exports.addFragments = async ({ store, getNodesByType }) => {
   );
 };
 
-exports.createGatsbyImageTypes = ({ actions }) => {
-  actions.createTypes(gatsbyImageTypes);
+exports.createGatsbyImageTypes = (gatsbyUtils) => {
+  const { actions } = gatsbyUtils;
+
+  actions.createTypes([CloudinaryAssetFluidType, CloudinaryAssetFixedType]);
 };
 
 exports.createGatsbyImageResolvers = (gatsbyUtils, pluginOptions) => {
-  const { createResolvers, reporter } = gatsbyUtils;
-  const resolvers = {
-    CloudinaryAsset: {
-      fixed: {
-        type: 'CloudinaryAssetFixed!',
-        args: {
-          base64Width: 'Int',
-          base64Transformations: '[String!]',
-          chained: '[String!]',
-          height: 'Int',
-          transformations: '[String!]',
-          width: 'Int',
-          ignoreDefaultBase64: 'Boolean',
-        },
-        resolve: (source, args, _context, info) => {
-          const fieldsToSelect = info.fieldNodes[0].selectionSet.selections.map(
-            (item) => item.name.value
-          );
-          return getFixedImageObject({
-            ...source,
-            ...args,
-            public_id: source.publicId,
-            fieldsToSelect,
-            reporter,
-          });
-        },
-      },
-      fluid: {
-        type: 'CloudinaryAssetFluid!',
-        args: {
-          base64Width: 'Int',
-          base64Transformations: '[String!]',
-          chained: '[String!]',
-          maxWidth: 'Int',
-          transformations: '[String!]',
-          ignoreDefaultBase64: 'Boolean',
-        },
-        resolve: (source, args, _context, info) => {
-          const fieldsToSelect = info.fieldNodes[0].selectionSet.selections.map(
-            (item) => item.name.value
-          );
-          return getFluidImageObject({
-            ...source,
-            ...args,
-            public_id: source.publicId,
-            breakpoints: getBreakpoints(source, pluginOptions),
-            fieldsToSelect,
-            reporter,
-          });
-        },
-      },
-    },
-  };
+  const { createResolvers } = gatsbyUtils;
+  const { transformTypes } = pluginOptions;
+  const resolvers = {};
+
+  transformTypes.forEach((type) => {
+    // Add fixed and fluid resolvers
+    // to all types that should be transformed
+    resolvers[type] = {
+      fixed: createFixedResolver(gatsbyUtils, pluginOptions),
+      fluid: createFluidResolver(gatsbyUtils, pluginOptions),
+    };
+  });
 
   createResolvers(resolvers);
 };

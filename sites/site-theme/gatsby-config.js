@@ -27,6 +27,11 @@ module.exports = {
         apiSecret: process.env.CLOUDINARY_API_SECRET,
         uploadFolder: 'gatsby-cloudinary',
         uploadSourceInstanceNames: ['images'],
+        transformTypes: [
+          'CloudinaryAsset',
+          'ExistingDataExampleImage',
+          'ExistingDataNestedExampleImage',
+        ],
       },
     },
   ],
