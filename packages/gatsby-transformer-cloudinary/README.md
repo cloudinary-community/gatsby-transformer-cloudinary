@@ -1,8 +1,10 @@
 # gatsby-transformer-cloudinary
 
-Provides three ways to use [Cloudinary](https://cloudinary.com) with Gatsby: 1) Upload images in `File` nodes to Cloudinary. 2) Upload remote images by their URL to Cloudinary. 3) Create nodes for images that have already been uploaded to Cloudinary.
+Provides three ways to use [Cloudinary](https://cloudinary.com) with Gatsby: 1) Upload images in `File` nodes to Cloudinary. 2) Upload remote images by their URL to Cloudinary. 3) Add resolvers to images that have already been uploaded to Cloudinary.
 
-Each of the three methods above create `CloudinaryAsset` nodes compatible with [`gatsby-image`](https://www.gatsbyjs.org/packages/gatsby-image/) and [`gatsby-plugin-image`](https://www.gatsbyjs.org/packages/gatsby-plugin-image/) .
+When uploading images a `CloudinaryAsset` node is created for each image.
+
+The gatsby-image resolvers: fluid and fixed, as well as the gatsby-plugin-image resolver: gatsbyImageData are added to the configured GraphQL Types. By default it is set to `[CloudinaryAsset]`, but you may add any type describing a Cloudinary image.
 
 You’ll need a [Cloudinary account](https://cloudinary.com) to use this plugin. They have a generous free tier, so for most of us this will stay free for quite a while.
 
@@ -159,25 +161,38 @@ export async function onCreateNode({
 
 ### Use images already on Cloudinary
 
-To create GraphQL nodes for images that are already uploaded to Cloudinary, you need to create nodes containing data that describe the images on Cloudinary. For example, you might have a `post` node that has a cover photo stored on Cloudinary. The data in the post node should look something like...
+To create GraphQL nodes for images that are already uploaded to Cloudinary, you need to create nodes containing data that describe the images on Cloudinary. For example, you might have a `Post` node that has a cover photo stored on Cloudinary. The data in the post node should look something like...
 
 ```js
 {
   title: "How to beat the pandemic blues",
   publishedAt: "2020-07-26T21:55:13.358Z",
   coverPhoto: {
-    cloudinaryAssetData: true,
     cloudName: "my-amazing-blog",
     publicId: "blue-blue-blue",
     originalHeight: 360,
     originalWidth: 820,
+    originalFormate: "jpg"
     defaultBase64: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMXG/8HwAEwAI0Bj1bnwAAAABJRU5ErkJggg==",
     defaultTracedSVG: "data:image/svg+xml,%3Csvg%20height%3D%229999%22%20viewBox%3D%220%200%209999%209999%22%20width%3D%229999%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22m0%200h9999v9999h-9999z%22%20fill%3D%22%23f9fafb%22%2F%3E%3C%2Fsvg%3E",
   }
 }
 ```
 
-The `coverPhoto` property in the node above will be deleted and replaced by `gatsby-transformer-cloudinary` with a `CloudinaryAsset` node that can be used with [`gatsby-image`](https://www.gatsbyjs.org/packages/gatsby-image/). This transformation will be done for any top-level properties of nodes that have `cloudinaryAssetData: true`, and values `cloudName`, `publicId`, `originalHeight`, and `originalWidth` properties. The top-level property name, `coverPhoto` in the example above, will be the name of the relationship between the parent node and the `CloudinaryAsset` node that will be created.
+In addition you'll need to add the `coverPhoto` GraphQL Type to the `transformTypes` plugin option array. This will add the gatsby-image resolvers: fluid and fixed, as well as the gatsby-plugin-image resolver: gatsbyImageData to the configured GraphQL Type. To find the GraphQL type here you hover over `coverPhoto` in the GraphiQL explorer.
+
+```js
+module.exports = {
+  plugins: [
+    {
+      resolve: 'gatsby-transformer-cloudinary',
+      options: {
+        transformTypes: [`PostCoverPhoto`],
+      },
+    },
+  ],
+};
+```
 
 The property `defaultBase64` in the node above can be used by your CMS/backend API to provide precomputed or cached base64 URIs for your images. The provided string must comply with [RFC 2397](https://tools.ietf.org/html/rfc2397). This base64 image will be used unless `ignoreDefaultBase64: true` is set in your GraphQL query. In cases where you prefer to have an accurate base64 image with the same transformations applied as you full-size image, you should use `ignoreDefaultBase64: true` in your GraphQL query. When a defaultBase64 property is not supplied or `ignoreDefaultBase64` is true, an API call to Cloudinary will be made when resolving your GraphQL queries to fetch the base64 image.
 
@@ -221,8 +236,8 @@ import React from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
 // Both gatsby-image and gatsby-plugin-image image is supported
 // gatsby-image is deprecated, use gatsby-plugin-image for new projects
+import { GatsbyImage } from 'gatsby-plugin-image';
 import Image from 'gatsby-image';
-import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 
 const Avatar = () => {
   const data = useStaticQuery(graphql`
