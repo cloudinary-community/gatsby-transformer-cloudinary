@@ -1,6 +1,19 @@
 const { createRemoteImageNode } = require('gatsby-transformer-cloudinary');
 const { createRemoteFileNode } = require(`gatsby-source-filesystem`);
 
+exports.createSchemaCustomization = (gatsbyUtils) => {
+  const { actions } = gatsbyUtils;
+
+  const RemoteExampleType = `
+      type RemoteExample implements Node  {
+        remoteImageUrl: String!
+        remoteImage: CloudinaryAsset @link(from: "fields.remoteImage" by: "id")
+      }
+    `;
+
+  actions.createTypes([RemoteExampleType]);
+};
+
 exports.sourceNodes = (gatsbyUtils) => {
   const { actions, reporter, createNodeId, createContentDigest, getCache } =
     gatsbyUtils;
@@ -99,15 +112,15 @@ exports.onCreateNode = async (gatsbyUtils) => {
   if (node.internal.type === 'RemoteExample') {
     // Should NOT be uploaded to Cloudinary
     // since uploadSourceImageNames is set to ["images"]
-    await createRemoteImageNode({
+    const imageNode = await createRemoteImageNode({
       url: node.remoteImageUrl,
       parentNode: node,
-      relationshipName: 'remoteImage',
       createNode,
       createNodeId,
       createContentDigest,
-      createNodeField,
       reporter,
     });
+
+    createNodeField({ node: node, name: 'remoteImage', value: imageNode.id });
   }
 };

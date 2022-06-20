@@ -7,10 +7,8 @@ exports.createRemoteImageNode = async ({
   url,
   overwriteExisting,
   parentNode,
-  relationshipName,
   createContentDigest,
   createNode,
-  createNodeField,
   createNodeId,
   reporter,
 }) => {
@@ -27,11 +25,6 @@ exports.createRemoteImageNode = async ({
   if (!parentNode) {
     reporter.panic(
       "`parentNode` is a required argument. This parameter is used to link a newly created node representing the image to a parent node in Gatsby's GraphQL layer."
-    );
-  }
-  if (!relationshipName) {
-    reporter.panic(
-      "`relationshipName` is a required argument. This parameter sets the name of the relationship between the parent node and the newly created node for this image in Gatsby's GraphQL layer."
     );
   }
   if (!createContentDigest) {
@@ -74,17 +67,5 @@ exports.createRemoteImageNode = async ({
   // Add the new node to Gatsby’s data layer.
   createNode(imageNode, { name: 'gatsby-transformer-cloudinary' });
 
-  //Use createNodeField to store the id of the CloudinaryAsset node the Gatsby-v4-Way
-  let relationshipKey = `${relationshipName}`;
-
-  createNodeField({
-    node: parentNode,
-    name: relationshipKey,
-    value: imageNode.id,
-  });
-
-  // Add relationship by mutating, does not work in Gatsby-v4
-  relationshipKey = `${relationshipName}___NODE`;
-  parentNode[relationshipKey] = imageNode.id;
   return imageNode;
 };
