@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "author": "Jason Lengstorf <jason@lengstorf.com>",
   "dependencies": {
-    "gatsby-transformer-cloudinary": "3.0.0-beta",
+    "gatsby-transformer-cloudinary": "3.0.0-beta.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0"
   },
