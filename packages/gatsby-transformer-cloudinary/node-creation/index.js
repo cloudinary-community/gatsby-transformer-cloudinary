@@ -16,5 +16,3 @@ exports.createCloudinaryAssetNodes = async (gatsbyUtils, pluginOptions) => {
     await createAssetNodeFromFile(gatsbyUtils, pluginOptions);
   }
 };
-
-exports.createCloudinaryAssetNodeFromLocalFile = createAssetNodeFromFile;

@@ -1,7 +1,7 @@
 const { setPluginOptions, getPluginOptions } = require('./options');
 const {
   createCloudinaryAssetType,
-  createCloudinaryAssetNodeFromLocalFile,
+  createCloudinaryAssetNodes,
 } = require('./node-creation');
 const {
   createGatsbyImageResolvers,
@@ -60,5 +60,5 @@ exports.createResolvers = (gatsbyUtils) => {
 
 exports.onCreateNode = async (gatsbyUtils) => {
   // Upload and create Cloudinary Asset nodes
-  await createCloudinaryAssetNodeFromLocalFile(gatsbyUtils, getPluginOptions());
+  await createCloudinaryAssetNodes(gatsbyUtils, getPluginOptions());
 };
