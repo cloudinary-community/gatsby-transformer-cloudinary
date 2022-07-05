@@ -2,7 +2,7 @@
 
 Provides three ways to use [Cloudinary](https://cloudinary.com) with Gatsby: 1) Upload images in `File` nodes to Cloudinary. 2) Upload remote images by their URL to Cloudinary. 3) Create nodes for images that have already been uploaded to Cloudinary.
 
-Each of the three methods above create `CloudinaryAsset` nodes compatible with [`gatsby-image`](https://www.gatsbyjs.org/packages/gatsby-image/).
+Each of the three methods above create `CloudinaryAsset` nodes compatible with [`gatsby-image`](https://www.gatsbyjs.org/packages/gatsby-image/) and [`gatsby-plugin-image`](https://www.gatsbyjs.org/packages/gatsby-plugin-image/) .
 
 You’ll need a [Cloudinary account](https://cloudinary.com) to use this plugin. They have a generous free tier, so for most of us this will stay free for quite a while.
 
@@ -16,6 +16,7 @@ You’ll need a [Cloudinary account](https://cloudinary.com) to use this plugin.
 - Upload remote media assets to a secure remote CDN
 - Utilize media assets on Cloudinary in gatsby-image
 - Use gatsby-image `fluid` and `fixed` formats on Cloudinary assets
+- Use gatsby-plugin-image `gatsbyImageData` on Cloudinary assets
 - Retrieve media files in optimized formats with responsive breakpoints
 - Utilize all Cloudinary transformations including chained transformations in gatsby's data layer
 
@@ -23,31 +24,39 @@ You’ll need a [Cloudinary account](https://cloudinary.com) to use this plugin.
 
 Here's the plugin in action to fetch a fixed asset using the `useStaticQuery` API of gatsby:
 
-```jsx harmony
+```jsx
 import React from 'react';
-import { graphql, useStaticQuery } from 'gatsby';
+import { useStaticQuery, graphql } from 'gatsby';
+// Both gatsby-image and gatsby-plugin-image image is supported
+// gatsby-image is deprecated, use gatsby-plugin-image for new projects
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import Image from 'gatsby-image';
 
-export default () => {
+const SingleImage = () => {
   const data = useStaticQuery(graphql`
-    query {
+    query LocalFileCloudinary {
       file(name: { eq: "marketplace-banner" }) {
         childCloudinaryAsset {
-          fixed {
+          fixed(width: 300) {
             ...CloudinaryAssetFixed
           }
+          gatsbyImageData(width: 300, layout: FIXED)
         }
       }
     }
   `);
 
+  const image = getImage(data.file.childCloudinaryAsset);
+
   return (
-    <div>
-      <h2>Here goes something</h2>
+    <>
+      <GatsbyImage image={image} alt="banner" />
       <Image fixed={data.file.childCloudinaryAsset.fixed} alt="banner" />
-    </div>
+    </>
   );
 };
+
+export default SingleImage;
 ```
 
 ## Installation
@@ -205,16 +214,20 @@ The options `cloudName`, `apiKey`, and `apiSecret` are required if any images wi
 
 Assuming you have an image called “avatar.jpg” in your `src/images/` directory, you can use it in a component like this:
 
-```jsx harmony
+```jsx
 import React from 'react';
-import { graphql, useStaticQuery } from 'gatsby';
+import { useStaticQuery, graphql } from 'gatsby';
+// Both gatsby-image and gatsby-plugin-image image is supported
+// gatsby-image is deprecated, use gatsby-plugin-image for new projects
 import Image from 'gatsby-image';
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 
-export default () => {
+const Avatar = () => {
   const data = useStaticQuery(graphql`
-    query {
+    query Avatar {
       file(name: { eq: "avatar" }) {
         childCloudinaryAsset {
+          gatsbyImageData(layout: CONSTRAINED)
           fluid {
             ...CloudinaryAssetFluid
           }
@@ -223,11 +236,20 @@ export default () => {
     }
   `);
 
-  return <Image fluid={data.file.childCloudinaryAsset.fluid} alt="avatar" />;
+  const image = getImage(data.file.childCloudinaryAsset);
+
+  return (
+    <>
+      <GatsbyImage image={image} alt="banner" />
+      <Image fluid={data.file.childCloudinaryAsset.fluid} alt="banner" />
+    </>
+  );
 };
+
+export default Avatar;
 ```
 
-### Fragments
+### Gatsby Image Fragments
 
 The fragments below can be used when querying your Cloudinary assets:
 
@@ -314,7 +336,72 @@ export default () => {
 };
 ```
 
-## API
+## Gatsby Plugin Image API
+
+The plugin supports [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/) by adding a `gatsbyImageData` resolver to the configured GraphQL types.
+
+### Arguments for `gatsbyImageData`
+
+#### `transformations`
+
+An array of "raw" cloudinary transformations added to the initial transformation together with the width and height.
+
+**Note**: Changing the sizing with transformations will mess with the Gatsby Image Component
+
+**Type:** `[String]`  
+**Default:**`["c_fill", "g_auto", "q_auto"]` or the configured `defaultTransformations`  
+**Example:** `["c_crop", "x_300"]`
+
+#### `chained`
+
+An array of "raw" cloudinary transformations added after the initial transformations above.
+
+**Note**: Changing the sizing with transformations will mess with the Gatsby Image Component
+
+**Type:** `[String]`  
+**Default:** `[]`  
+**Example:** `["e_grayscale","e_pixelate_faces,e_tint:100:663399:0p:white:100p"]`
+
+#### `placeholder`
+
+The style of the temporary image shown while the larger image is loaded.
+
+_Note:_ `DOMINANT_COLOR` is not supported
+
+**Type:** `NONE`, `BLURRED` or `TRACED_SVG`  
+**Default:** `NONE`  
+**Example:** `BLURRED`  
+[Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#placeholder)
+
+#### `height` / `width`
+
+[Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#widthheight)
+
+#### `aspectRatio`
+
+[Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#aspectratio)
+
+#### `layout`
+
+[Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#layout)
+
+#### `backgroundColor`
+
+[Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image#all-options)
+
+#### `breakpoints`
+
+[Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image#all-options)
+
+### `outputPixelDensities`
+
+[Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image#all-options)
+
+### `sizes`
+
+[Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#all-options)
+
+## Gatsby Image API
 
 This plugin can support both the `fixed` and `fluid` formats for `gatsby-image`.
 
