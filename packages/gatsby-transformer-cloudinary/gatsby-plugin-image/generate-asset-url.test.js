@@ -40,35 +40,6 @@ describe('generateCloudinaryAssetUrl', () => {
     );
   });
 
-  it('generates correct Cloudinary url with sizing options', () => {
-    const url = generateCloudinaryAssetUrl({
-      ...asset,
-      options: {
-        x: 10,
-        y: 15,
-        crop: 'fill',
-        zoom: 5,
-        outputPixelDensities: 1.5,
-        gravity: 'west',
-      },
-    });
-    expect(url).toBe(
-      'http://res.cloudinary.com/cloud-name/image/upload/c_fill,dpr_1.5,f_jpg,g_west,h_600,w_400,x_10,y_15,z_5/public-id'
-    );
-  });
-
-  it('generates correct Cloudinary url with quality options', () => {
-    const url = generateCloudinaryAssetUrl({
-      ...asset,
-      options: {
-        quality: 'auto',
-      },
-    });
-    expect(url).toBe(
-      'http://res.cloudinary.com/cloud-name/image/upload/f_jpg,h_600,q_auto,w_400/public-id'
-    );
-  });
-
   it('generates correct Cloudinary url in traced SVG mode', () => {
     const url = generateCloudinaryAssetUrl({
       ...asset,

@@ -12,8 +12,7 @@ const FixedThumb = () => {
             width: 225
             aspectRatio: 1
             layout: FIXED
-            crop: "thumb"
-            gravity: "face"
+            transformations: ["c_thumb", "g_face"]
           )
           fixed(width: 225, transformations: ["ar_1:1", "c_thumb", "g_face"]) {
             ...CloudinaryAssetFixed
@@ -32,8 +31,7 @@ const FixedThumb = () => {
             width: 225
             aspectRatio: 1
             layout: FIXED
-            crop: "thumb"
-            gravity: "face"
+            transformations: ["c_thumb", "g_face"]
           )
           fixed(
             width: 225,

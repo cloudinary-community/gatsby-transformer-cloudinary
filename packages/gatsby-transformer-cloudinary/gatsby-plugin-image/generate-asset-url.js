@@ -6,16 +6,6 @@ const generateTransformations = ({ width, height, format, options = {} }) => {
       fetch_format: format,
       width: width,
       height: height,
-      // Default Gatsby Image Options
-      aspect_ratio: options.aspectRatio, // Might not need this since its calculated...
-      dpr: options.outputPixelDensities,
-      // Cloudinary Specific Options
-      gravity: options.gravity,
-      crop: options.crop,
-      x: options.x,
-      y: options.y,
-      zoom: options.zoom,
-      quality: options.quality,
       raw_transformation: (options.transformations || []).join(','),
     },
     ...(options.chained || []).map((transformations) => {

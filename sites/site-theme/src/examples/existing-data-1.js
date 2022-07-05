@@ -13,7 +13,7 @@ const ExistingData1 = () => {
               width: 300
               height: 300
               layout: FIXED
-              crop: "fill"
+              transformations: ["c_fill"]
               placeholder: TRACED_SVG
             )
             fixed(height: 300, width: 300, transformations: ["c_fill"]) {
@@ -35,7 +35,7 @@ const ExistingData1 = () => {
               width: 300
               height: 300
               layout: FIXED
-              crop: "fill"
+              transformations: ["c_fill"]
               placeholder: TRACED_SVG
             )
             fixed(height: 300, width: 300, transformations: ["c_fill"]) {

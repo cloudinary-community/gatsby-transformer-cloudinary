@@ -13,8 +13,7 @@ const RemoteImage2 = () => {
             width: 600
             aspectRatio: 1
             placeholder: BLURRED
-            crop: "fill"
-            transformations: ["e_pixelate_faces"]
+            transformations: ["c_fill", "e_pixelate_faces"]
           )
           fluid(
             maxWidth: 600
@@ -37,8 +36,7 @@ const RemoteImage2 = () => {
             width: 600
             aspectRatio: 1
             placeholder: BLURRED
-            crop: "fill"
-            transformations: ["e_pixelate_faces"]
+            transformations: ["c_fill", "e_pixelate_faces"]
           )
           fluid(
             maxWidth: 600

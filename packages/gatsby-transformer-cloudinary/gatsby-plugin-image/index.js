@@ -1,4 +1,4 @@
-exports.createGatsbyImageDataResolver = (gatsbyUtils) => {
+exports.createGatsbyImageDataResolver = (gatsbyUtils, pluginOptions) => {
   const { createResolvers, reporter } = gatsbyUtils;
   try {
     const {
@@ -12,16 +12,10 @@ exports.createGatsbyImageDataResolver = (gatsbyUtils) => {
         gatsbyImageData: getGatsbyImageResolver(
           createResolveCloudinaryAssetData(gatsbyUtils),
           {
-            gravity: 'String',
-            x: 'Float',
-            y: 'Float',
-            zoom: 'Float',
-            crop: 'String',
-            quality: {
-              type: 'String',
-              defaultValue: 'auto',
+            transformations: {
+              type: '[String]',
+              defaultValue: pluginOptions.defaultTransformations,
             },
-            transformations: '[String]',
             chained: '[String]',
             placeholder: {
               type: CloudinaryPlaceholderType,
