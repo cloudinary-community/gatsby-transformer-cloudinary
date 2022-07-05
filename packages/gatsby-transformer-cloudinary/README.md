@@ -4,7 +4,7 @@ Provides three ways to use [Cloudinary](https://cloudinary.com) with Gatsby: 1) 
 
 When uploading images a `CloudinaryAsset` node is created for each image.
 
-The gatsby-image resolvers: fluid and fixed, as well as the gatsby-plugin-image resolver: gatsbyImageData are added to the configured GraphQL Types. By default it is set to `[CloudinaryAsset]`, but you may add any type describing a Cloudinary image.
+The plugin adds the gatsby-image resolvers (`fluid` and `fixed`), as well as the gatsby-plugin-image resolver (`gatsbyImageData`) to the configured GraphQL Types. By default `transformTypes` is set to `[CloudinaryAsset]`, but you may add any type describing a Cloudinary image you have sourced from a CMS/Database etc.
 
 You’ll need a [Cloudinary account](https://cloudinary.com) to use this plugin. They have a generous free tier, so for most of us this will stay free for quite a while.
 
@@ -161,7 +161,7 @@ export async function onCreateNode({
 
 ### Use images already on Cloudinary
 
-To create GraphQL nodes for images that are already uploaded to Cloudinary, you need to create nodes containing data that describe the images on Cloudinary. For example, you might have a `Post` node that has a cover photo stored on Cloudinary. The data in the post node should look something like...
+To create GraphQL nodes for images that are already uploaded to Cloudinary, you need to create nodes containing data that describe the asset on Cloudinary. For example, you might have a `Post` node that has a cover photo stored on Cloudinary. The data in the post node should look something like...
 
 ```js
 {
@@ -172,14 +172,22 @@ To create GraphQL nodes for images that are already uploaded to Cloudinary, you 
     publicId: "blue-blue-blue",
     originalHeight: 360,
     originalWidth: 820,
-    originalFormate: "jpg"
+    originalFormat: "jpg"
     defaultBase64: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMXG/8HwAEwAI0Bj1bnwAAAABJRU5ErkJggg==",
     defaultTracedSVG: "data:image/svg+xml,%3Csvg%20height%3D%229999%22%20viewBox%3D%220%200%209999%209999%22%20width%3D%229999%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22m0%200h9999v9999h-9999z%22%20fill%3D%22%23f9fafb%22%2F%3E%3C%2Fsvg%3E",
   }
 }
 ```
 
-In addition you'll need to add the `coverPhoto` GraphQL Type to the `transformTypes` plugin option array. This will add the gatsby-image resolvers: fluid and fixed, as well as the gatsby-plugin-image resolver: gatsbyImageData to the configured GraphQL Type. To find the GraphQL type here you hover over `coverPhoto` in the GraphiQL explorer.
+In addition you'll need to add the `coverPhoto` GraphQL Type to the `transformTypes` plugin option array.
+
+The plugin will then add the gatsby-image resolvers (`fluid` and `fixed`), as well as the gatsby-plugin-image resolver (`gatsbyImageData`) to the added GraphQL Type.
+
+To find the GraphQL type of the data describing the assets on Cloudinary use the GraphiQL explorer and hover over the asset key, in this case `coverPhoto`.
+
+In the case of [gatsby-source-cloudinary](https://www.gatsbyjs.com/plugins/gatsby-source-cloudinary) the GraphQL type is a the same as the type of the sourced nodes, aka. `CloudinaryMedia`.
+
+If you have used the upload functionality of this plugin, the GraphQL type of the nodes describing the uploaded files is `CloudinaryAsset`.
 
 ```js
 module.exports = {
@@ -187,7 +195,11 @@ module.exports = {
     {
       resolve: 'gatsby-transformer-cloudinary',
       options: {
-        transformTypes: [`PostCoverPhoto`],
+        transformTypes: [
+          `CloudinaryAsset`,
+          `PostCoverPhoto`,
+          `CloudinaryMedia`,
+        ],
       },
     },
   ],
