@@ -55,7 +55,7 @@ exports.createResolvers = (gatsbyUtils) => {
   createGatsbyImageResolvers(gatsbyUtils, getPluginOptions());
 
   // Resolvers to be used with gatsby-plugin-image
-  createGatsbyImageDataResolver(gatsbyUtils);
+  createGatsbyImageDataResolver(gatsbyUtils, getPluginOptions());
 };
 
 exports.onCreateNode = async (gatsbyUtils) => {
