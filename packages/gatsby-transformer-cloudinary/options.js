@@ -1,3 +1,5 @@
+const { isArray } = require('lodash');
+
 let options = {};
 
 const defaultOptions = {
@@ -9,6 +11,7 @@ const defaultOptions = {
   overwriteExisting: false,
   enableDefaultTransformations: false,
   alwaysUseDefaultBase64: false,
+  defaultTransformations: ['c_fill', 'g_auto', 'q_auto'],
 };
 
 // Assign defaultOptions to options for run time operations
@@ -16,6 +19,12 @@ Object.assign(options, defaultOptions);
 
 exports.setPluginOptions = ({ pluginOptions, reporter }) => {
   Object.assign(options, pluginOptions);
+
+  if (!isArray(options.defaultTransformations)) {
+    reporter.panic(
+      `[gatsby-transformer-cloudinary] "defaultTransformations" must be an array. You can modify it in your gatsby-config file.`
+    );
+  }
 
   if (options.breakpointsMaxImages && options.breakpointsMaxImages < 1) {
     reporter.panic(

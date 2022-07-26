@@ -17,6 +17,9 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-plugin-image`,
+    },
+    {
       resolve: 'gatsby-transformer-cloudinary',
       options: {
         cloudName: process.env.CLOUDINARY_CLOUD_NAME,

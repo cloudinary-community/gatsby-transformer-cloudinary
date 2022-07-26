@@ -1,6 +1,7 @@
 import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
 import Image from 'gatsby-image';
+import { GatsbyImage } from 'gatsby-plugin-image';
 
 const ExistingData1 = () => {
   const data = useStaticQuery(graphql`
@@ -8,6 +9,13 @@ const ExistingData1 = () => {
       existingData(name: { eq: "Existing data 1" }) {
         nested {
           cloudinary: exampleImage {
+            gatsbyImageData(
+              width: 300
+              height: 300
+              layout: FIXED
+              transformations: ["c_fill"]
+              placeholder: TRACED_SVG
+            )
             fixed(height: 300, width: 300, transformations: ["c_fill"]) {
               ...CloudinaryAssetFixed
             }
@@ -23,6 +31,13 @@ const ExistingData1 = () => {
       existingData(name: { eq: "Existing data 1" }) {
         nested {
           cloudinary: exampleImage {
+            gatsbyImageData(
+              width: 300
+              height: 300
+              layout: FIXED
+              transformations: ["c_fill"]
+              placeholder: TRACED_SVG
+            )
             fixed(height: 300, width: 300, transformations: ["c_fill"]) {
               ...CloudinaryAssetFixed
             }
@@ -41,8 +56,6 @@ const ExistingData1 = () => {
           cloudinaryAssetData: true,
           cloudName: 'lilly-labs-consulting',
           publicId: 'sample',
-          originalHeight: 576,
-          originalWidth: 864,
         },
       },
     },
@@ -53,9 +66,15 @@ const ExistingData1 = () => {
   return (
     <div className="image-example">
       <h2>Example 1</h2>
+      <h3>gatsby-plugin-image</h3>
+      <GatsbyImage
+        image={data.existingData.nested.cloudinary.gatsbyImageData}
+        alt="sample image"
+      />
+      <h3>gatsby-image</h3>
       <Image
         fixed={data.existingData.nested.cloudinary.fixed}
-        alt="Jason giving finger guns toward the camera."
+        alt="sample image"
       />
       <h3>Query</h3>
       <pre>{query}</pre>

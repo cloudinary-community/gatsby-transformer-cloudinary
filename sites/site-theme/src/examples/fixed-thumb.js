@@ -1,12 +1,19 @@
 import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
 import Image from 'gatsby-image';
+import { GatsbyImage } from 'gatsby-plugin-image';
 
 const FixedThumb = () => {
   const data = useStaticQuery(graphql`
     query {
       image: file(name: { eq: "jason" }) {
         cloudinary: childCloudinaryAsset {
+          gatsbyImageData(
+            width: 225
+            aspectRatio: 1
+            layout: FIXED
+            transformations: ["c_thumb", "g_face"]
+          )
           fixed(width: 225, transformations: ["ar_1:1", "c_thumb", "g_face"]) {
             ...CloudinaryAssetFixed
           }
@@ -20,6 +27,12 @@ const FixedThumb = () => {
     query {
       image: file(name: { eq: "jason" }) {
         cloudinary: childCloudinaryAsset {
+          gatsbyImageData(
+            width: 225
+            aspectRatio: 1
+            layout: FIXED
+            transformations: ["c_thumb", "g_face"]
+          )
           fixed(
             width: 225,
             transformations: ["ar_1:1", "c_thumb", "g_face"]
@@ -36,10 +49,20 @@ const FixedThumb = () => {
   return (
     <div className="image-example">
       <h2>Create avatars from any image!</h2>
+
+      <h3>gatsby-plugin-image</h3>
+      <GatsbyImage
+        image={data.image.cloudinary.gatsbyImageData}
+        alt="Jason giving finger guns toward the camera."
+      />
+
+      <h3>gatsby-image</h3>
       <Image
         fixed={data.image.cloudinary.fixed}
         alt="Jason giving finger guns toward the camera."
       />
+
+      <h3>Query</h3>
       <pre>{query}</pre>
     </div>
   );

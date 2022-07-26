@@ -10,8 +10,6 @@ exports.sourceNodes = (gatsbyUtils) => {
     cloudinaryAssetData: true,
     cloudName: 'lilly-labs-consulting',
     publicId: 'sample',
-    originalHeight: 576,
-    originalWidth: 864,
   };
 
   createNode({
@@ -35,6 +33,7 @@ exports.sourceNodes = (gatsbyUtils) => {
     publicId: 'gatsby-cloudinary/jason',
     originalHeight: 3024,
     originalWidth: 4032,
+    originalFormat: 'jpg',
   };
 
   createNode({

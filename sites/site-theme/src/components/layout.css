@@ -23,12 +23,6 @@ body {
   }
 }
 
-/* Fix margins for Gatsby components with lots of nesting. */
-#___gatsby,
-.gatsby-image-wrapper * {
-  margin-top: 0;
-}
-
 header {
   background: #22b;
   padding: 0.25rem 5vw;
@@ -125,12 +119,6 @@ h1 {
 
 h2 {
   font-size: 1.25rem;
-}
-
-.gatsby-image-wrapper {
-  display: block !important; /* haaaaaaack */
-  margin-left: auto;
-  margin-right: auto;
 }
 
 pre {

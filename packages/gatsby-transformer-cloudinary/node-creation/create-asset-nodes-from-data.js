@@ -35,9 +35,7 @@ function verifyAssetData(assetData) {
     assetData &&
     assetData.cloudinaryAssetData === true &&
     assetData.cloudName &&
-    assetData.publicId &&
-    assetData.originalHeight &&
-    assetData.originalWidth
+    assetData.publicId
   );
 }
 
@@ -85,6 +83,7 @@ function createCloudinaryAssetNode({
     defaultTracedSVG,
     originalHeight,
     originalWidth,
+    originalFormat,
     publicId,
     version,
   },
@@ -99,6 +98,7 @@ function createCloudinaryAssetNode({
     public_id: publicId,
     height: originalHeight,
     width: originalWidth,
+    format: originalFormat,
     version,
   };
 

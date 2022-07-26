@@ -2,6 +2,7 @@ const axios = require('axios');
 const { getPluginOptions } = require('../options');
 
 const base64Cache = {};
+const getInfoCache = {};
 
 // Create Cloudinary image URL with transformations.
 exports.getImageURL = ({
@@ -10,6 +11,7 @@ exports.getImageURL = ({
   transformations = [],
   chained = [],
   version = false,
+  getInfo = false,
 }) => {
   const baseURL = 'https://res.cloudinary.com/';
 
@@ -25,8 +27,9 @@ exports.getImageURL = ({
     cloudName,
     '/image/upload/',
     allTransformations,
-    version ? `/v${version}/` : '/',
-    public_id,
+    getInfo ? `/fl_getinfo` : '',
+    version ? `/v${version}` : '',
+    `/${public_id}`,
   ]
     .join('')
     .replace('//', '/');
@@ -49,6 +52,41 @@ exports.getAspectRatio = (transformations, originalAspectRatio) => {
   const [w, h] = newAspectRatio.split(':').map(Number);
 
   return w / h;
+};
+
+const getDefaultBreakpoints = (source, pluginOptions) => {
+  const { breakpointsMaxImages, fluidMinWidth, fluidMaxWidth } = pluginOptions;
+  const { originalWidth } = source;
+
+  const max = Math.min(originalWidth, fluidMaxWidth);
+  const min = fluidMinWidth;
+
+  if (max <= min) {
+    return [max];
+  }
+
+  const breakpoints = [max];
+  for (let i = 1; i < breakpointsMaxImages; i++) {
+    const breakpoint = max - (i * (max - min)) / (breakpointsMaxImages - 1);
+    breakpoints.push(Math.round(breakpoint));
+  }
+  return breakpoints;
+};
+
+exports.getBreakpoints = (source, pluginOptions) => {
+  const { rawCloudinaryData = {} } = source;
+  const responsiveBreakpoints = rawCloudinaryData.responsive_breakpoints;
+
+  if (
+    responsiveBreakpoints &&
+    responsiveBreakpoints[0] &&
+    responsiveBreakpoints[0].breakpoints &&
+    responsiveBreakpoints[0].breakpoints.length > 0
+  ) {
+    return responsiveBreakpoints[0].breakpoints.map(({ width }) => width);
+  } else {
+    return getDefaultBreakpoints(source, pluginOptions);
+  }
 };
 
 exports.getBase64 = async ({
@@ -132,3 +170,19 @@ function logBase64Retrieval(url, reporter) {
     }
   }
 }
+
+exports.getSizingInfo = async ({ public_id, cloudName, version = false }) => {
+  const getInfoUrl = this.getImageURL({
+    public_id,
+    cloudName,
+    version,
+    getInfo: true,
+  });
+
+  if (!getInfoCache[getInfoUrl]) {
+    getInfoCache[getInfoUrl] = axios.get(getInfoUrl);
+  }
+
+  const { data } = await getInfoCache[getInfoUrl];
+  return data.output;
+};
