@@ -16,6 +16,7 @@ You’ll need a [Cloudinary account](https://cloudinary.com) to use this plugin.
 - Upload remote media assets to a secure remote CDN
 - Utilize media assets on Cloudinary in gatsby-image
 - Use gatsby-image `fluid` and `fixed` formats on Cloudinary assets
+  - Deprecated as `gatsby-image` is deprecated
 - Use gatsby-plugin-image `gatsbyImageData` on Cloudinary assets
 - Retrieve media files in optimized formats with responsive breakpoints
 - Utilize all Cloudinary transformations including chained transformations in gatsby's data layer
@@ -27,7 +28,7 @@ Here's the plugin in action to fetch a fixed asset using the `useStaticQuery` AP
 ```jsx
 import React from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
-// Both gatsby-image and gatsby-plugin-image image is supported
+// Both gatsby-image and gatsby-plugin-image is supported
 // gatsby-image is deprecated, use gatsby-plugin-image for new projects
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import Image from 'gatsby-image';
@@ -190,22 +191,22 @@ The property `defaultTracedSVG` in the node above can be used by your CMS/backen
 
 In `gatsby-config.js` the plugin accepts the following options:
 
-| option                                             | type       | required | default value                     | description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| -------------------------------------------------- | ---------- | -------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `cloudName`                                        | `String`   | false    | n/a                               | Cloud name of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable.                                                                                                                                                                                                                                                                                                     |
-| `apiKey`                                           | `String`   | false    | n/a                               | API Key of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable.                                                                                                                                                                                                                                                                                                        |
-| `apiSecret`                                        | `String`   | false    | n/a                               | API Secret of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable.                                                                                                                                                                                                                                                                                                     |
-| `uploadFolder`                                     | `String`   | false    | n/a                               | An optional folder name where the uploaded assets will be stored on Cloudinary.                                                                                                                                                                                                                                                                                                                                                                                                             |
-| `uploadSourceInstanceNames`                        | `[String]` | false    | n/a                               | An optional array limiting uploads to file nodes with a matching sourceInstanceName.                                                                                                                                                                                                                                                                                                                                                                                                        |
-| `defaultTransformations`                           | `[String]` | false    | ` ['c_fill', 'g_auto', 'q_auto']` | The default value for the `gatsbyImageData` resolver argument `transformations`.                                                                                                                                                                                                                                                                                                                                                                                                            |
-| `fluidMaxWidth`                                    | `Int`      | false    | 1000                              | The maximum width needed for an image. If specifying a width bigger than the original image, the width of the original image is used instead. Used when calculating breakpoints.                                                                                                                                                                                                                                                                                                            |
-| `fluidMinWidth`                                    | `Int`      | false    | 200                               | The minimum width needed for an image. Used when calculating breakpoints.                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `createDerived`                                    | `Boolean`  | false    | true                              | If `true`, create and keep the derived images of the selected breakpoints during the API call. If false, images generated during the analysis process are thrown away. This option is ignored if `useCloudinaryBreakpoints` is `false`. It's recommended that you enable `createDerived` if `useCloudinaryBreakpoints` is true to store the breakpoint images and prevent them from being recalculated on every build.                                                                      |
-| `breakpointsMaxImages`                             | `Integer`  | false    | 5                                 | Set maximum number of responsive breakpoint images generated and returned on image upload. If `useCloudinaryBreakpoints` is false, then exactly `breakpointsMaxImages` breakpoints will be created.                                                                                                                                                                                                                                                                                         |
-| `useCloudinaryBreakpoints`                         | `Boolean`  | false    | false                             | If `true`, then Cloudinary will be requested to automatically find the best breakpoints for each image. It's recommended that this option be set to `false` in development because this option uses one Cloudinary transformation for every image uploaded to Cloudinary plus one transformation for every derived image created while calculating breakpoints.                                                                                                                             |
-| `overwriteExisting`                                | `Boolean`  | false    | false                             | Whether to overwrite existing assets with the same public ID. When set to false, return immediately if an asset with the same Public ID was found. It's recommended that this is set to false in development as each image overwrite costs one Cloudinary transformation.                                                                                                                                                                                                                   |
-| `enableDefaultTransformations` (gatsby-image only) | `Boolean`  | false    | false                             | `true` will add the `q_auto` and `f_auto` transformations to images for quality and format optimizations.                                                                                                                                                                                                                                                                                                                                                                                   |
-| `alwaysUseDefaultBase64` (gatsby-image only)       | `Boolean`  | false    | false                             | When `alwaysUseDefaultBase64` is true, `gatsby-transformer-cloudinary` will always use `defaultBase64` images when they are provided to the GraphQL layer. It's recommended that you set `alwaysUseDefaultBase64` to true in your development environment and provide `defaultBase64` properties for any images already uploaded to Cloudinary. Doing so will result in faster and cheaper builds because no Cloudinary API calls will need to be made when resolving your GraphQL queries. |
+| option                                              | type       | required | default value                     | description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| --------------------------------------------------- | ---------- | -------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `cloudName`                                         | `String`   | false    | n/a                               | Cloud name of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable.                                                                                                                                                                                                                                                                                                     |
+| `apiKey`                                            | `String`   | false    | n/a                               | API Key of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable.                                                                                                                                                                                                                                                                                                        |
+| `apiSecret`                                         | `String`   | false    | n/a                               | API Secret of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable.                                                                                                                                                                                                                                                                                                     |
+| `uploadFolder`                                      | `String`   | false    | n/a                               | An optional folder name where the uploaded assets will be stored on Cloudinary.                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `uploadSourceInstanceNames`                         | `[String]` | false    | n/a                               | An optional array limiting uploads to file nodes with a matching sourceInstanceName.                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `overwriteExisting`                                 | `Boolean`  | false    | false                             | Whether to overwrite existing assets with the same public ID. When set to false, return immediately if an asset with the same Public ID was found. It's recommended that this is set to false in development as each image overwrite costs one Cloudinary transformation.                                                                                                                                                                                                                   |
+| `defaultTransformations` (gatsby-plugin-image only) | `[String]` | false    | ` ['c_fill', 'g_auto', 'q_auto']` | The default value for the `gatsbyImageData` resolver argument `transformations`.                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `fluidMaxWidth` (gatsby-image only)                 | `Int`      | false    | 1000                              | The maximum width needed for an image. If specifying a width bigger than the original image, the width of the original image is used instead. Used when calculating breakpoints.                                                                                                                                                                                                                                                                                                            |
+| `fluidMinWidth` (gatsby-image only)                 | `Int`      | false    | 200                               | The minimum width needed for an image. Used when calculating breakpoints.                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `createDerived` (gatsby-image only)                 | `Boolean`  | false    | true                              | If `true`, create and keep the derived images of the selected breakpoints during the API call. If false, images generated during the analysis process are thrown away. This option is ignored if `useCloudinaryBreakpoints` is `false`. It's recommended that you enable `createDerived` if `useCloudinaryBreakpoints` is true to store the breakpoint images and prevent them from being recalculated on every build.                                                                      |
+| `breakpointsMaxImages` (gatsby-image only)          | `Integer`  | false    | 5                                 | Set maximum number of responsive breakpoint images generated and returned on image upload. If `useCloudinaryBreakpoints` is false, then exactly `breakpointsMaxImages` breakpoints will be created.                                                                                                                                                                                                                                                                                         |
+| `useCloudinaryBreakpoints` (gatsby-image only)      | `Boolean`  | false    | false                             | If `true`, then Cloudinary will be requested to automatically find the best breakpoints for each image. It's recommended that this option be set to `false` in development because this option uses one Cloudinary transformation for every image uploaded to Cloudinary plus one transformation for every derived image created while calculating breakpoints.                                                                                                                             |
+| `enableDefaultTransformations` (gatsby-image only)  | `Boolean`  | false    | false                             | `true` will add the `q_auto` and `f_auto` transformations to images for quality and format optimizations.                                                                                                                                                                                                                                                                                                                                                                                   |
+| `alwaysUseDefaultBase64` (gatsby-image only)        | `Boolean`  | false    | false                             | When `alwaysUseDefaultBase64` is true, `gatsby-transformer-cloudinary` will always use `defaultBase64` images when they are provided to the GraphQL layer. It's recommended that you set `alwaysUseDefaultBase64` to true in your development environment and provide `defaultBase64` properties for any images already uploaded to Cloudinary. Doing so will result in faster and cheaper builds because no Cloudinary API calls will need to be made when resolving your GraphQL queries. |
 
 The options `cloudName`, `apiKey`, and `apiSecret` are required if any images will be uploaded to Cloudinary during the build process. If you're solely using images already uploaded to Cloudinary, then these options can be safely omitted.
 
@@ -250,6 +251,114 @@ const Avatar = () => {
 export default Avatar;
 ```
 
+## Gatsby Plugin Image API
+
+The plugin supports [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/) by adding a `gatsbyImageData` resolver to the configured GraphQL types.
+
+### Arguments for `gatsbyImageData`
+
+#### `transformations`
+
+An array of "raw" cloudinary transformations added to the initial transformation together with the width and height.
+
+**Type:** `[String]`  
+**Default:**`["c_fill", "g_auto", "q_auto"]` or the configured `defaultTransformations`  
+**Example:** `["c_crop", "x_300"]`
+
+> **WARNING:** Changing the sizing using transformations will mess with the Gatsby Image Component
+
+#### `chained`
+
+An array of "raw" cloudinary transformations added after the initial transformations above.
+
+**Type:** `[String]`  
+**Default:** `[]`  
+**Example:** `["e_grayscale","e_pixelate_faces,e_tint:100:663399:0p:white:100p"]`
+
+> **WARNING:** Changing the sizing using chained transformations will mess with the Gatsby Image Component
+
+#### `placeholder`
+
+The style of the temporary image shown while the larger image is loaded.
+
+**Type:** `NONE`, `BLURRED` or `TRACED_SVG`  
+**Default:** `NONE`  
+**Example:** `BLURRED`
+
+> **NOTE:** `DOMINANT_COLOR` is not supported
+
+Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#placeholder) for more information.
+
+#### `height` / `width`
+
+Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#widthheight) for information on `height` / `width`.
+
+#### `aspectRatio`
+
+Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#aspectratio) for information on `aspectRatio`.
+
+#### `layout`
+
+Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#layout) for information on `layout`.
+
+#### `backgroundColor`
+
+Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image#all-options) for information on `backgroundColor`.
+
+#### `breakpoints`
+
+Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image#all-options) for information on `breakpoints`.
+
+#### `outputPixelDensities`
+
+Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image#all-options) for information on `outputPixelDensities`.
+
+#### `sizes`
+
+Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#all-options) for information on `sizes`.
+
+## Gatsby Image API (Deprecated)
+
+This plugin can support both the `fixed` and `fluid` formats for `gatsby-image`.
+
+Both `fixed` and `fluid` accept arguments. All arguments are optional.
+
+> **WARNING:** Support for `gatsby-image` will be removed in the near future, please upgrade to `gatsby-plugin-image`.
+
+### Arguments for both `fixed` and `fluid`
+
+| argument              | type        | required | default                | description                                                                                                                                                                                                                                                                                                                                                                      |
+| --------------------- | ----------- | -------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `cloudName`           | `String`    | true     | `n/a`                  | Cloud name of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable.                                                                                                                                                                                          |
+| `public_id`           | `String`    | true     | `n/a`                  | Public ID of the image to retrieve from Cloudinary. This can be obtained from your Cloudinary account.                                                                                                                                                                                                                                                                           |
+| `transformations`     | `[String!]` | false    | `[]`                   | Array of transformations to be applied to the image.                                                                                                                                                                                                                                                                                                                             |
+| `chained`             | `[String!]` | false    | `[]`                   | An array of chained transformations to be applied to the image.                                                                                                                                                                                                                                                                                                                  |
+| `defaults`            | `[String!]` | false    | `["f_auto", "q_auto"]` | Default transformation applied to the image                                                                                                                                                                                                                                                                                                                                      |
+| `originalHeight`      | `Int`       | true     | `n/a`                  | Height of the image fetched. This is required in gatsby-image to calculate the aspect ratio of the image.                                                                                                                                                                                                                                                                        |
+| `originalWidth`       | `Int`       | true     | `n/a`                  | Desired width of the image. This is required in gatsby-image to calculate the aspect ratio.                                                                                                                                                                                                                                                                                      |
+| `base64Width`         | `String`    | false    | `30`                   | Base64 width of the image.                                                                                                                                                                                                                                                                                                                                                       |
+| `version`             | `Boolean`   | false    | `false`                | Version number of image if applicable, eg. 300124291, 1241983.                                                                                                                                                                                                                                                                                                                   |
+| `ignoreDefaultBase64` | `Boolean`   | false    | false                  | If this parameter is set to true, then an API call will be made to Cloudinary when resolving your GraphQL queries to fetch a base64 image regardless of whether a `defaultBase64` image was provided for the image. This parameter can be overridden by the `alwaysUseDefaultBase64` plugin option in environments where build speed and economy of Cloudinary usage is desired. |
+
+### Arguments for `fixed`
+
+| argument | type  | default | description                                  |
+| -------- | ----- | ------- | -------------------------------------------- |
+| `height` | `Int` | `n/a`   | The height that the image should display at. |
+| `width`  | `Int` | `400`   | The width that the image should display at.  |
+
+### Arguments for `fluid`
+
+| argument   | type  | default                     | description                         |
+| ---------- | ----- | --------------------------- | ----------------------------------- |
+| `maxWidth` | `Int` | Original width of the image | The maximum width for fluid images. |
+
+### A note about aspect ratios
+
+You’re able to change the aspect ratio of images by supplying the [aspect ratio parameter](https://cloudinary.com/documentation/image_transformation_reference#aspect_ratio_parameter) in the `transformations` argument.
+
+> **NOTE:** The aspect ratio _must_ be supplied in the `transformations` array. It **will not** be picked up from the `chained` argument.
+
 ### Gatsby Image Fragments
 
 The fragments below can be used when querying your Cloudinary assets:
@@ -261,7 +370,7 @@ The fragments below can be used when querying your Cloudinary assets:
 - `CloudinaryAssetFixed_noBase64`
 - `CloudinaryAssetFixed_tracedSVG`
 
-### Avoiding stretched images using the fluid type
+## Avoiding stretched images using the fluid type
 
 As mentioned previously, images using the fluid type are stretched to match the container’s width and height. In the case where the image’s width or height is smaller than the available viewport, the image will stretch to match the container, potentially leading to unwanted problems and worsened image quality.
 
@@ -280,7 +389,7 @@ query {
 }
 ```
 
-## Manual Usage
+## Manual Usage (gatsby-image only)
 
 It’s also possible to manually create `gatsby-image`-friendly `fixed` and `fluid` objects by importing helper functions from the transformer.
 
@@ -336,112 +445,6 @@ export default () => {
   return fixed ? <Image fixed={fixed} alt="Jason" /> : <p>loading...</p>;
 };
 ```
-
-## Gatsby Plugin Image API
-
-The plugin supports [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/) by adding a `gatsbyImageData` resolver to the configured GraphQL types.
-
-### Arguments for `gatsbyImageData`
-
-#### `transformations`
-
-An array of "raw" cloudinary transformations added to the initial transformation together with the width and height.
-
-**Note**: Changing the sizing with transformations will mess with the Gatsby Image Component
-
-**Type:** `[String]`  
-**Default:**`["c_fill", "g_auto", "q_auto"]` or the configured `defaultTransformations`  
-**Example:** `["c_crop", "x_300"]`
-
-#### `chained`
-
-An array of "raw" cloudinary transformations added after the initial transformations above.
-
-**Note**: Changing the sizing with transformations will mess with the Gatsby Image Component
-
-**Type:** `[String]`  
-**Default:** `[]`  
-**Example:** `["e_grayscale","e_pixelate_faces,e_tint:100:663399:0p:white:100p"]`
-
-#### `placeholder`
-
-The style of the temporary image shown while the larger image is loaded.
-
-_Note:_ `DOMINANT_COLOR` is not supported
-
-**Type:** `NONE`, `BLURRED` or `TRACED_SVG`  
-**Default:** `NONE`  
-**Example:** `BLURRED`
-
-Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#placeholder) for more information.
-
-#### `height` / `width`
-
-Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#widthheight) for information on `height` / `width`.
-
-#### `aspectRatio`
-
-Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#aspectratio) for information on `aspectRatio`.
-
-#### `layout`
-
-Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#layout) for information on `layout`.
-
-#### `backgroundColor`
-
-Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image#all-options) for information on `backgroundColor`.
-
-#### `breakpoints`
-
-Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image#all-options) for information on `breakpoints`.
-
-### `outputPixelDensities`
-
-Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image#all-options) for information on `outputPixelDensities`.
-
-### `sizes`
-
-Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#all-options) for information on `sizes`.
-
-## Gatsby Image API
-
-This plugin can support both the `fixed` and `fluid` formats for `gatsby-image`.
-
-Both `fixed` and `fluid` accept arguments. All arguments are optional.
-
-### Arguments for both `fixed` and `fluid`
-
-| argument              | type        | required | default                | description                                                                                                                                                                                                                                                                                                                                                                      |
-| --------------------- | ----------- | -------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `cloudName`           | `String`    | true     | `n/a`                  | Cloud name of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable.                                                                                                                                                                                          |
-| `public_id`           | `String`    | true     | `n/a`                  | Public ID of the image to retrieve from Cloudinary. This can be obtained from your Cloudinary account.                                                                                                                                                                                                                                                                           |
-| `transformations`     | `[String!]` | false    | `[]`                   | Array of transformations to be applied to the image.                                                                                                                                                                                                                                                                                                                             |
-| `chained`             | `[String!]` | false    | `[]`                   | An array of chained transformations to be applied to the image.                                                                                                                                                                                                                                                                                                                  |
-| `defaults`            | `[String!]` | false    | `["f_auto", "q_auto"]` | Default transformation applied to the image                                                                                                                                                                                                                                                                                                                                      |
-| `originalHeight`      | `Int`       | true     | `n/a`                  | Height of the image fetched. This is required in gatsby-image to calculate the aspect ratio of the image.                                                                                                                                                                                                                                                                        |
-| `originalWidth`       | `Int`       | true     | `n/a`                  | Desired width of the image. This is required in gatsby-image to calculate the aspect ratio.                                                                                                                                                                                                                                                                                      |
-| `base64Width`         | `String`    | false    | `30`                   | Base64 width of the image.                                                                                                                                                                                                                                                                                                                                                       |
-| `version`             | `Boolean`   | false    | `false`                | Version number of image if applicable, eg. 300124291, 1241983.                                                                                                                                                                                                                                                                                                                   |
-| `ignoreDefaultBase64` | `Boolean`   | false    | false                  | If this parameter is set to true, then an API call will be made to Cloudinary when resolving your GraphQL queries to fetch a base64 image regardless of whether a `defaultBase64` image was provided for the image. This parameter can be overridden by the `alwaysUseDefaultBase64` plugin option in environments where build speed and economy of Cloudinary usage is desired. |
-
-### Arguments for `fixed`
-
-| argument | type  | default | description                                  |
-| -------- | ----- | ------- | -------------------------------------------- |
-| `height` | `Int` | `n/a`   | The height that the image should display at. |
-| `width`  | `Int` | `400`   | The width that the image should display at.  |
-
-### Arguments for `fluid`
-
-| argument   | type  | default                     | description                         |
-| ---------- | ----- | --------------------------- | ----------------------------------- |
-| `maxWidth` | `Int` | Original width of the image | The maximum width for fluid images. |
-
-### A note about aspect ratios
-
-You’re able to change the aspect ratio of images by supplying the [aspect ratio parameter](https://cloudinary.com/documentation/image_transformation_reference#aspect_ratio_parameter) in the `transformations` argument.
-
-> **NOTE:** The aspect ratio _must_ be supplied in the `transformations` array. It **will not** be picked up from the `chained` argument.
 
 ## Running Tests
 
