@@ -1,3 +1,14 @@
+# Version 2.3.0
+
+Additions:
+
+- Support for `gatsby-plugin-image` (adds the `gatsbyImageData` resolver)[#90](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/90)
+
+Improvements:
+
+- `publicId`, `cloudName` and `version` available on CloudinaryAsset nodes [#89](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/89)
+- Limit files to upload by utilizing the added `uploadSourceInstanceNames` plugin option [#71](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/71) and [#103](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/103)
+
 # Version 2.2.4
 
 Fixes:
