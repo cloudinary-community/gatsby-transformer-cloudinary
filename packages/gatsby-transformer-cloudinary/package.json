@@ -1,6 +1,6 @@
 {
   "name": "gatsby-transformer-cloudinary",
-  "version": "2.3.0-beta.2",
+  "version": "2.3.0",
   "description": "Transform local files into Cloudinary-managed assets for Gatsby sites.",
   "main": "index.js",
   "types": "index.d.ts",
@@ -33,6 +33,7 @@
     "test:watch": "jest --watch"
   },
   "peerDependencies": {
+    "gatsby": "^2.0.0 || ^3.0.0",
     "gatsby-plugin-image": "^1.14.0"
   }
 }
