@@ -1,3 +1,15 @@
+# Version 3.0.0
+
+Fixes:
+
+- Remove direct mutation of nodes [#156](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/156)
+
+BREAKING CHANGES:
+
+- `CloudinaryAsset` nodes are not added for existing assets described by a content node
+- When uploading remote images the relationship between parent and child node must must be handled manually
+- `gatsbyImageData`, `fluid` and `fixed` resolvers are only added to GraphQL Types configured using the `transformTypes`
+
 # Version 2.3.0
 
 Additions:
