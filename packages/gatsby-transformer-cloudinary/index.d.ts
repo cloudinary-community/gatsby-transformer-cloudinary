@@ -15,20 +15,12 @@ export interface CreateRemoteImageNodeArgs {
   reporter: Reporter;
 }
 
-export interface CloudinaryAssetNode {
+export interface CloudinaryAssetNode extends Node {
   cloudName: string;
   publicId: string;
-  version: number;
-  originalHeight: number;
-  originalWidth: number;
-  breakpoints: number[];
-  id: string;
-  parent: string;
-  internal: {
-    type: string;
-    contentDigest: string;
-    counter: number;
-    owner: string;
-  };
-  children: string[];
+  version?: number;
+  originalHeight?: number;
+  originalWidth?: number;
+  originalFormat?: string;
+  rawCloudinaryData: Object;
 }
