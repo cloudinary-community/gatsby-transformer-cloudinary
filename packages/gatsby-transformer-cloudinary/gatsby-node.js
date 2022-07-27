@@ -47,7 +47,7 @@ exports.createSchemaCustomization = (gatsbyUtils) => {
   createCloudinaryAssetType(gatsbyUtils);
 
   // Types to be used with gatsby-image
-  createGatsbyImageTypes(gatsbyUtils, getPluginOptions());
+  createGatsbyImageTypes(gatsbyUtils);
 };
 
 exports.createResolvers = (gatsbyUtils) => {
@@ -59,6 +59,6 @@ exports.createResolvers = (gatsbyUtils) => {
 };
 
 exports.onCreateNode = async (gatsbyUtils) => {
-  // Upload and create Cloudinary Asset nodes
+  // Create Cloudinary Asset nodes if applicable
   await createCloudinaryAssetNodes(gatsbyUtils, getPluginOptions());
 };
