@@ -92,6 +92,9 @@ exports.sourceNodes = (gatsbyUtils) => {
 
   reporter.info(`[site] Create RemoteExample node # 2`);
 
+  // Should NOT be uploaded to Cloudinary
+  // since uploadSourceImageNames is set to ["images"]
+  // and this will have uploadSourceImageNames = "__PROGRAMMATIC__"
   createRemoteFileNode({
     url: `https://images.unsplash.com/photo-1638913658179-18c9a9c943f7`,
     getCache,
@@ -110,8 +113,6 @@ exports.onCreateNode = async (gatsbyUtils) => {
   } = gatsbyUtils;
 
   if (node.internal.type === 'RemoteExample') {
-    // Should NOT be uploaded to Cloudinary
-    // since uploadSourceImageNames is set to ["images"]
     const imageNode = await createRemoteImageNode({
       url: node.remoteImageUrl,
       parentNode: node,
