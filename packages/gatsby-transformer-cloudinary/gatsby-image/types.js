@@ -1,4 +1,4 @@
-exports.gatsbyImageTypes = `
+exports.CloudinaryAssetFixedType = `
     type CloudinaryAssetFixed {
       aspectRatio: Float
       base64: String
@@ -8,7 +8,9 @@ exports.gatsbyImageTypes = `
       tracedSVG: String
       width: Float
     }
+  `;
 
+exports.CloudinaryAssetFluidType = `
     type CloudinaryAssetFluid {
       aspectRatio: Float!
       base64: String
