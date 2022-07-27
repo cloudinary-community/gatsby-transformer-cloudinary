@@ -12,7 +12,6 @@ const { uploadImageToCloudinary } = require('./upload');
 function getDefaultArgs(args) {
   return {
     url: 'https://www.google.com/images/puppy.jpg#anchor?abc=def',
-    relationshipName: 'coverPhoto',
     createNode: jest.fn(() => 'createNode'),
     createNodeId: jest.fn(() => 'createNodeId'),
     createContentDigest: jest.fn(() => 'createContentDigest'),
@@ -43,15 +42,6 @@ describe('createRemoteImageNode', () => {
 
     await expect(createRemoteImageNode(args)).rejects.toThrow(
       "[reporter] `parentNode` is a required argument. This parameter is used to link a newly created node representing the image to a parent node in Gatsby's GraphQL layer."
-    );
-  });
-
-  test('requires relationshipName', async () => {
-    const args = getDefaultArgs();
-    delete args.relationshipName;
-
-    await expect(createRemoteImageNode(args)).rejects.toThrow(
-      "[reporter] `relationshipName` is a required argument. This parameter sets the name of the relationship between the parent node and the newly created node for this image in Gatsby's GraphQL layer."
     );
   });
 
@@ -153,6 +143,7 @@ describe('createRemoteImageNode', () => {
       createContentDigest: args.createContentDigest,
       createNodeId: args.createNodeId,
     };
+
     expect(createImageNode).toHaveBeenCalledWith(
       expect.objectContaining(expectedArgs)
     );
@@ -168,17 +159,6 @@ describe('createRemoteImageNode', () => {
     expect(createNode).toHaveBeenCalledWith(createImageNodeResult, {
       name: 'gatsby-transformer-cloudinary',
     });
-  });
-
-  test('links the newly created node to the provided parent node in GraphQL', async () => {
-    const args = getDefaultArgs();
-    const imageNodeId = 'image-node-id';
-    createImageNode.mockReturnValue({ id: imageNodeId });
-    await createRemoteImageNode(args);
-
-    expect(args.parentNode[`${args.relationshipName}___NODE`]).toEqual(
-      imageNodeId
-    );
   });
 
   test('returns the image node that it created', async () => {

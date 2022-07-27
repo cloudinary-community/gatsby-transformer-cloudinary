@@ -1,13 +1,25 @@
 const { createRemoteImageNode } = require('gatsby-transformer-cloudinary');
 const { createRemoteFileNode } = require(`gatsby-source-filesystem`);
 
+exports.createSchemaCustomization = (gatsbyUtils) => {
+  const { actions } = gatsbyUtils;
+
+  const RemoteExampleType = `
+      type RemoteExample implements Node  {
+        remoteImageUrl: String!
+        remoteImage: CloudinaryAsset @link(from: "fields.remoteImage" by: "id")
+      }
+    `;
+
+  actions.createTypes([RemoteExampleType]);
+};
+
 exports.sourceNodes = (gatsbyUtils) => {
   const { actions, reporter, createNodeId, createContentDigest, getCache } =
     gatsbyUtils;
   const { createNode } = actions;
 
   const cloudinaryData1 = {
-    cloudinaryAssetData: true,
     cloudName: 'lilly-labs-consulting',
     publicId: 'sample',
   };
@@ -28,7 +40,6 @@ exports.sourceNodes = (gatsbyUtils) => {
   reporter.info(`[site] Create ExistingData node # 1`);
 
   const cloudinaryData2 = {
-    cloudinaryAssetData: true,
     cloudName: 'jlengstorf',
     publicId: 'gatsby-cloudinary/jason',
     originalHeight: 3024,
@@ -102,15 +113,15 @@ exports.onCreateNode = async (gatsbyUtils) => {
   } = gatsbyUtils;
 
   if (node.internal.type === 'RemoteExample') {
-    await createRemoteImageNode({
+    const imageNode = await createRemoteImageNode({
       url: node.remoteImageUrl,
       parentNode: node,
-      relationshipName: 'remoteImage',
       createNode,
       createNodeId,
       createContentDigest,
-      createNodeField,
       reporter,
     });
+
+    createNodeField({ node: node, name: 'remoteImage', value: imageNode.id });
   }
 };

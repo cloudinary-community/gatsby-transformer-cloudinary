@@ -29,11 +29,17 @@ exports.createGatsbyImageTypes = (gatsbyUtils) => {
 
 exports.createGatsbyImageResolvers = (gatsbyUtils, pluginOptions) => {
   const { createResolvers } = gatsbyUtils;
+  const { transformTypes } = pluginOptions;
+  const resolvers = {};
 
-  createResolvers({
-    CloudinaryAsset: {
+  transformTypes.forEach((type) => {
+    // Add fixed and fluid resolvers
+    // to all types that should be transformed
+    resolvers[type] = {
       fixed: createFixedResolver(gatsbyUtils, pluginOptions),
       fluid: createFluidResolver(gatsbyUtils, pluginOptions),
-    },
+    };
   });
+
+  createResolvers(resolvers);
 };

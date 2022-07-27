@@ -12,6 +12,7 @@ const defaultOptions = {
   enableDefaultTransformations: false,
   alwaysUseDefaultBase64: false,
   defaultTransformations: ['c_fill', 'g_auto', 'q_auto'],
+  transformTypes: ['CloudinaryAsset'],
 };
 
 // Assign defaultOptions to options for run time operations
