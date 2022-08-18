@@ -1,7 +1,7 @@
 # example netlify.toml
 [build]
-  command = "yarn build:v3"
-  publish = "sites/site-v3/public"
+  command = "yarn build"
+  publish = "site/public"
 
   ## Uncomment to use this redirect for Single Page Applications like create-react-app.
   ## Not needed for static site generators.
