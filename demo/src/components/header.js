@@ -22,9 +22,6 @@ const Header = ({ siteTitle }) => (
       <Link to="/gifs/" activeClassName="active">
         GIFs
       </Link>
-      <Link to="/manual/" activeClassName="active">
-        Manual
-      </Link>
       <Link to="/existing/" activeClassName="active">
         Existing
       </Link>

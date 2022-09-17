@@ -1,6 +1,5 @@
 import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
-import Image from 'gatsby-image';
 import { GatsbyImage } from 'gatsby-plugin-image';
 
 const FixedChaining = () => {
@@ -15,13 +14,6 @@ const FixedChaining = () => {
             transformations: ["e_grayscale"]
             chained: ["t_lwj"]
           )
-          fixed(
-            width: 300
-            transformations: ["e_grayscale"]
-            chained: ["t_lwj"]
-          ) {
-            ...CloudinaryAssetFixed
-          }
         }
       }
     }
@@ -39,13 +31,6 @@ const FixedChaining = () => {
             transformations: ["e_grayscale"]
             chained: ["t_lwj"]
           )
-          fixed(
-            width: 300
-            transformations: ["e_grayscale"]
-            chained: ["t_lwj"]
-          ) {
-            ...CloudinaryAssetFixed
-          }
         }
       }
       }
@@ -58,16 +43,11 @@ const FixedChaining = () => {
     <div className="image-example">
       <h2>For complex effects, use chaining</h2>
 
-      <h3>gatsby-plugin-image</h3>
       <GatsbyImage
         image={data.image.cloudinary.gatsbyImageData}
         alt="Jason giving finger guns toward the camera."
       />
-      <h3>gatsby-image</h3>
-      <Image
-        fixed={data.image.cloudinary.fixed}
-        alt="Jason giving finger guns toward the camera."
-      />
+
       <h3>Query</h3>
       <pre>{query}</pre>
     </div>
