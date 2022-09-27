@@ -33,8 +33,29 @@ if (coreSupportsOnPluginInit === 'stable') {
   exports.onPreInit = initializaGlobalState;
 }
 
-// should we delete onPreExtractQueries?
-exports.onPreExtractQueries = async (gatsbyUtils) => {};
+// gatsby-node.js
+// 1.1 🤯. 🔌 ☑️ s🎶  = ({ 🥳 }) => {
+exports.pluginOptionsSchema = ({ Joi }) => {
+  // 1.2 return 🥳.📖({
+  return Joi.object({
+    // 1.3  🥳.🧶().®️().default(1000),
+    cloudName: Joi.string(),
+    apiKey: Joi.string(),
+    apiSecret: Joi.string(),
+    uploadFolder: Joi.string(),
+    uploadSourceInstanceNames: Joi.array().items(Joi.string()),
+    transformTypes: Joi.array().items(Joi.string()).default('CloudinaryAsset'),
+    overwriteExisting: Joi.boolean().default(false),
+    defaultTransformations: Joi.array()
+      .items(Joi.string())
+      .default(['c_fill', 'g_auto', 'q_auto']),
+  });
+};
+
+exports.onPreExtractQueries = async (gatsbyUtils) => {
+  // Fragments to be used with gatsby-image
+  await addGatsbyImageFragments(gatsbyUtils);
+};
 
 exports.createSchemaCustomization = (gatsbyUtils) => {
   // Type to be used for node creation
