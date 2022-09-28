@@ -5,6 +5,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# dotenv environment variable files
+.env*
+!.env.EXAMPLE
+
 # Runtime data
 pids
 *.pid
@@ -51,9 +55,6 @@ typings/
 # Output of 'npm pack'
 *.tgz
 
-# dotenv environment variables file
-.env
-
 # gatsby files
 .cache/
 public
@@ -67,8 +68,3 @@ yarn-error.log
 .pnp.js
 # Yarn Integrity file
 .yarn-integrity
-.env.*
-!.env.EXAMPLE
-.netlify
-
-.idea
