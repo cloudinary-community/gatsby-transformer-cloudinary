@@ -1,18 +1,28 @@
 {
   "private": true,
   "workspaces": [
-    "packages/*",
+    "plugin",
     "demo"
   ],
   "scripts": {
+    "test": "jest",
+    "watch": "jest --watch",
     "develop": "yarn workspace demo develop",
-    "clean": "yarn workspace demo clean",
     "build": "yarn workspace demo build",
     "serve": "yarn workspace demo serve",
-    "test": "yarn workspace gatsby-transformer-cloudinary test",
-    "prettier": "prettier --write ."
+    "clean": "yarn workspace demo clean",
+    "format": "prettier --write \".\"",
+    "semantic-release": "semantic-release"
   },
-  "dependencies": {
-    "prettier": "2.6.2"
+  "devDependencies": {
+    "@semantic-release/changelog": "6.0.1",
+    "@semantic-release/git": "10.0.1",
+    "babel-jest": "29.0.3",
+    "babel-preset-gatsby": "2.23.0",
+    "gatsby-plugin-utils": "3.17.1",
+    "identity-obj-proxy": "3.0.0",
+    "jest": "29.0.3",
+    "prettier": "^2.6.2",
+    "semantic-release": "19.0.5"
   }
 }
