@@ -1,8 +1,7 @@
 {
-  "name": "site",
-  "description": "A demo site to show off the Cloudinary transformer.",
+  "name": "demo",
+  "description": "A simpe demo for the gatsby-transformer-cloudinary plugin",
   "version": "0.2.0",
-  "author": "Jason Lengstorf <jason@lengstorf.com>",
   "private": true,
   "dependencies": {
     "gatsby": "4.16.0",
