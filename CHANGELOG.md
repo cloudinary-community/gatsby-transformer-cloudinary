@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v4.0.0...v4.0.1) (2022-10-10)
+
+
+### Performance Improvements
+
+* remove upload code only needed by gatsby-image ([#197](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/197)) ([576f30f](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/576f30f7f04545e8fc614cfeeb50784045d3037b)), closes [#188](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/188)
+
 # [4.0.0](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v3.0.0...v4.0.0) (2022-10-10)
 
 
