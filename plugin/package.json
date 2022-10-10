@@ -29,6 +29,6 @@
   },
   "peerDependencies": {
     "gatsby": "^3.0.0 || ^4.0.0",
-    "gatsby-plugin-image": "^1.14.0"
+    "gatsby-plugin-image": "^1.14.0 || ^2.0.0"
   }
 }
