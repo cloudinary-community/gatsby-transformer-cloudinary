@@ -1,6 +1,5 @@
 import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
-import Image from 'gatsby-image';
 import { GatsbyImage } from 'gatsby-plugin-image';
 
 const GifTransformed = () => {
@@ -14,12 +13,6 @@ const GifTransformed = () => {
             transformations: ["e_gamma:100"]
             chained: ["e_grayscale", "t_lwj"]
           )
-          fluid(
-            transformations: ["e_gamma:100"]
-            chained: ["e_grayscale", "t_lwj"]
-          ) {
-            ...CloudinaryAssetFluid
-          }
         }
       }
     }
@@ -36,12 +29,6 @@ const GifTransformed = () => {
             transformations: ["e_gamma:100"]
             chained: ["e_grayscale", "t_lwj"]
           )
-          fluid(
-            transformations: ["e_gamma:100"]
-            chained: ["e_grayscale", "t_lwj"]
-          ) {
-            ...CloudinaryAssetFluid
-          }
         }
       }
     }
@@ -53,14 +40,10 @@ const GifTransformed = () => {
     <div className="image-example">
       <h2>GIFs with transformations!</h2>
 
-      <h3>gatsby-plugin-image</h3>
       <GatsbyImage
         image={data.image.cloudinary.gatsbyImageData}
         alt="Jason, victorious."
       />
-
-      <h3>gatsby-image</h3>
-      <Image fluid={data.image.cloudinary.fluid} alt="Jason, victorious." />
 
       <h3>Query</h3>
       <pre>{query}</pre>

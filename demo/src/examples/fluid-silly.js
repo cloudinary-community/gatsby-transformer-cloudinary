@@ -1,6 +1,5 @@
 import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
-import Image from 'gatsby-image';
 import { GatsbyImage } from 'gatsby-plugin-image';
 
 const FluidSilly = () => {
@@ -16,15 +15,6 @@ const FluidSilly = () => {
               "l_beard_png,w_0.77,fl_relative,g_face,a_-5,y_0.06"
             ]
           )
-          fluid(
-            transformations: ["e_blackwhite"]
-            chained: [
-              "e_vectorize:colors:2:despeckle:20,e_tint:100:tomato:0p:white:100p"
-              "l_beard_png,w_0.77,fl_relative,g_face,a_-5,y_0.06"
-            ]
-          ) {
-            ...CloudinaryAssetFluid
-          }
         }
       }
     }
@@ -43,15 +33,6 @@ const FluidSilly = () => {
               "l_beard_png,w_0.77,fl_relative,g_face,a_-5,y_0.06"
             ]
           )
-          fluid(
-            transformations: ["e_blackwhite"]
-            chained: [
-              "e_vectorize:colors:2:despeckle:20,e_tint:100:tomato:0p:white:100p",
-              "l_beard_png,w_0.77,fl_relative,g_face,a_-5,y_0.06"
-            ]
-          ) {
-            ...CloudinaryAssetFluid
-          }
         }
       }
     }
@@ -63,15 +44,8 @@ const FluidSilly = () => {
     <div className="image-example">
       <h2>Or you can get plain silly</h2>
 
-      <h3>gatsby-plugin-image</h3>
       <GatsbyImage
         image={data.image.cloudinary.gatsbyImageData}
-        alt="Marisa Morby standing in a rose garden."
-      />
-
-      <h3>gatsby-image</h3>
-      <Image
-        fluid={data.image.cloudinary.fluid}
         alt="Marisa Morby standing in a rose garden."
       />
 

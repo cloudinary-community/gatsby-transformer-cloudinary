@@ -12,13 +12,13 @@ const IndexPage = () => (
       <a href="https://cloudinary.com">Cloudinary</a> is really good at managing
       assets. <a href="https://gatsbyjs.org">Gatsby</a> is really good at
       delivering high-performance web pages using (among other things){' '}
-      <a href="https://www.gatsbyjs.org/packages/gatsby-image/">
-        <code>gatsby-image</code>
+      <a href="https://www.gatsbyjs.com/plugins/gatsby-plugin-image/">
+        <code>gatsby-plugin-image</code>
       </a>
       .
     </p>
     <p>
-      Put ’em together and they’re like peanut butter and jelly. Peas and
+      Put’em together and they’re like peanut butter and jelly. Peas and
       carrots. Chocolate and everything.
     </p>
     <p>

@@ -5,9 +5,9 @@ import GifTransformed from '../examples/gif-transformed';
 
 const GifPage = () => (
   <Layout>
-    <h1>Animated GIFs and gatsby-image?!</h1>
+    <h1>Animated GIFs and gatsby-plugin-image?!</h1>
     <p>
-      Cloudinary can handle GIFs, so we can use ’em with this transformer. No
+      Cloudinary can handle GIFs, so we can use’em with this transformer. No
       special rules apply; just add a GIF like you would any other image.
     </p>
     <div className="examples">

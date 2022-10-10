@@ -3,11 +3,7 @@ const {
   createCloudinaryAssetType,
   createCloudinaryAssetNodes,
 } = require('./node-creation');
-const {
-  createGatsbyImageResolvers,
-  addGatsbyImageFragments,
-  createGatsbyImageTypes,
-} = require('./gatsby-image');
+
 const { createGatsbyImageDataResolver } = require('./gatsby-plugin-image');
 
 let coreSupportsOnPluginInit = undefined;
@@ -37,23 +33,15 @@ if (coreSupportsOnPluginInit === 'stable') {
   exports.onPreInit = initializaGlobalState;
 }
 
-exports.onPreExtractQueries = async (gatsbyUtils) => {
-  // Fragments to be used with gatsby-image
-  await addGatsbyImageFragments(gatsbyUtils);
-};
+// should we delete onPreExtractQueries?
+exports.onPreExtractQueries = async (gatsbyUtils) => {};
 
 exports.createSchemaCustomization = (gatsbyUtils) => {
   // Type to be used for node creation
   createCloudinaryAssetType(gatsbyUtils);
-
-  // Types to be used with gatsby-image
-  createGatsbyImageTypes(gatsbyUtils);
 };
 
 exports.createResolvers = (gatsbyUtils) => {
-  // Resolvers to be used with gatsby-image
-  createGatsbyImageResolvers(gatsbyUtils, getPluginOptions());
-
   // Resolvers to be used with gatsby-plugin-image
   createGatsbyImageDataResolver(gatsbyUtils, getPluginOptions());
 };
