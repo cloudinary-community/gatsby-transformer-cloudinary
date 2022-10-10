@@ -1,3 +1,15 @@
+# [4.0.0](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v3.0.0...v4.0.0) (2022-10-10)
+
+
+### Features
+
+* remove support for gatsby-image - deprecated Gatsby plugin ([#195](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/195)) ([d451b8e](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/d451b8e17d4bf271bc1f602fadab75d1d67adb87))
+
+
+### BREAKING CHANGES
+
+* Removed support for gatsby-image (ie. `fixed` and `fluid`), use gatsby-plugin-image (ie. `gatsbyImageData` instead.
+
 # Version 3.0.0
 
 Fixes:
