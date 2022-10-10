@@ -3,14 +3,8 @@ const { isArray } = require('lodash');
 let options = {};
 
 const defaultOptions = {
-  fluidMaxWidth: 1000,
-  fluidMinWidth: 50,
   breakpointsMaxImages: 20,
-  createDerived: false,
-  useCloudinaryBreakpoints: false,
   overwriteExisting: false,
-  enableDefaultTransformations: false,
-  alwaysUseDefaultBase64: false,
   defaultTransformations: ['c_fill', 'g_auto', 'q_auto'],
   transformTypes: ['CloudinaryAsset'],
 };
