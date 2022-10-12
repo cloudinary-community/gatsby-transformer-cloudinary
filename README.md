@@ -6,20 +6,7 @@
 
 🦄 Automagically serves the most modern image format your user's browser can support on her device. Like AVIF or WebP!
 
-
-## Upload Images to Cloudinary 🏗️
-
-Upload images to Cloudinary in two ways:
-
-1. Upload images in `File` nodes to Cloudinary
-2. Upload remote images by their URL to Cloudinary
-
-A `CloudinaryAsset` node is created for each image.
-
-
 ## 1. Install plugin 🦄
-
-Our plugin automagically creates childCloudinaryAsset nodes for `File` nodes created by [`gatsby-source-filesystem`](https://www.gatsbyjs.org/packages/gatsby-source-filesystem/).
 
 ```bash
 npm install --save gatsby-transformer-cloudinary gatsby-source-filesystem
@@ -115,6 +102,18 @@ module.exports = {
 ```
 
 ## 7. How to use 💅
+
+Our plugin automagically creates childCloudinaryAsset nodes for `File` nodes created by [`gatsby-source-filesystem`](https://www.gatsbyjs.org/packages/gatsby-source-filesystem/).
+
+## Upload Images to Cloudinary 🏗️
+
+Upload images to Cloudinary in two ways:
+
+1. Upload remote images by their URL to Cloudinary
+2. Upload images in `File` nodes to Cloudinary
+
+A `CloudinaryAsset` node is created for each image.
+
 
 ### Upload remote images 🏗️
 
@@ -373,7 +372,6 @@ yarn workspace gatsby-transformer-cloudinary test:watch
 - Use gatsby-plugin-image `gatsbyImageData` on Cloudinary assets
 - Retrieve media files in optimized formats with responsive breakpoints
 - Utilize all Cloudinary transformations including chained transformations in gatsby's data layer
-
 
 ## Other Resources 🧐
 
