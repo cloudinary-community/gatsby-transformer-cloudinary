@@ -1,4 +1,7 @@
-const { setPluginOptions } = require('./options');
+const {
+  initializaGlobalState,
+  getCoreSupportsOnPluginInit,
+} = require('./options');
 const {
   createCloudinaryAssetType,
   createCloudinaryAssetNodes,
@@ -6,24 +9,7 @@ const {
 
 const { createGatsbyImageDataResolver } = require('./gatsby-plugin-image');
 
-let coreSupportsOnPluginInit = undefined;
-
-try {
-  const { isGatsbyNodeLifecycleSupported } = require(`gatsby-plugin-utils`);
-  if (isGatsbyNodeLifecycleSupported(`onPluginInit`)) {
-    coreSupportsOnPluginInit = 'stable';
-  } else if (isGatsbyNodeLifecycleSupported(`unstable_onPluginInit`)) {
-    coreSupportsOnPluginInit = 'unstable';
-  }
-} catch (error) {
-  console.error(
-    `[gatsby-transformer-cloudinary] Cannot check if Gatsby supports onPluginInit`
-  );
-}
-
-const initializaGlobalState = ({ reporter }, pluginOptions) => {
-  setPluginOptions({ reporter, pluginOptions });
-};
+let coreSupportsOnPluginInit = getCoreSupportsOnPluginInit();
 
 if (coreSupportsOnPluginInit === 'stable') {
   exports.onPluginInit = initializaGlobalState;

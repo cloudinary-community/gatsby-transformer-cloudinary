@@ -1,11 +1,26 @@
 let options = {};
 
-exports.setPluginOptions = ({ pluginOptions }) => {
-  // Set global options so they are available
-  // when used by createRemoteImageNode
+exports.initializaGlobalState = (_, pluginOptions) => {
   Object.assign(options, pluginOptions);
 };
 
 exports.getPluginOptions = () => {
   return options;
+};
+
+exports.getCoreSupportsOnPluginInit = () => {
+  let coreSupportsOnPluginInit = undefined;
+  try {
+    const { isGatsbyNodeLifecycleSupported } = require(`gatsby-plugin-utils`);
+    if (isGatsbyNodeLifecycleSupported(`onPluginInit`)) {
+      coreSupportsOnPluginInit = 'stable';
+    } else if (isGatsbyNodeLifecycleSupported(`unstable_onPluginInit`)) {
+      coreSupportsOnPluginInit = 'unstable';
+    }
+  } catch (error) {
+    console.error(
+      `[gatsby-transformer-cloudinary] Cannot check if Gatsby supports onPluginInit`
+    );
+  }
+  return coreSupportsOnPluginInit;
 };
