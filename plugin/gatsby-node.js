@@ -1,4 +1,4 @@
-const { setPluginOptions, getPluginOptions } = require('./options');
+const { setPluginOptions } = require('./options');
 const {
   createCloudinaryAssetType,
   createCloudinaryAssetNodes,
@@ -60,12 +60,12 @@ exports.createSchemaCustomization = (gatsbyUtils) => {
   createCloudinaryAssetType(gatsbyUtils);
 };
 
-exports.createResolvers = (gatsbyUtils) => {
+exports.createResolvers = (gatsbyUtils, pluginOptions) => {
   // Resolvers to be used with gatsby-plugin-image
-  createGatsbyImageDataResolver(gatsbyUtils, getPluginOptions());
+  createGatsbyImageDataResolver(gatsbyUtils, pluginOptions);
 };
 
 exports.onCreateNode = async (gatsbyUtils) => {
-  // Create Cloudinary Asset nodes if applicable
-  await createCloudinaryAssetNodes(gatsbyUtils, getPluginOptions());
+  // Upload and create Cloudinary Asset nodes if applicable
+  await createCloudinaryAssetNodes(gatsbyUtils, pluginOptions);
 };
