@@ -36,11 +36,6 @@ exports.pluginOptionsSchema = ({ Joi }) => {
   });
 };
 
-exports.onPreExtractQueries = async (gatsbyUtils) => {
-  // Fragments to be used with gatsby-image
-  await addGatsbyImageFragments(gatsbyUtils);
-};
-
 exports.createSchemaCustomization = (gatsbyUtils) => {
   // Type to be used for node creation
   createCloudinaryAssetType(gatsbyUtils);
@@ -51,7 +46,7 @@ exports.createResolvers = (gatsbyUtils, pluginOptions) => {
   createGatsbyImageDataResolver(gatsbyUtils, pluginOptions);
 };
 
-exports.onCreateNode = async (gatsbyUtils) => {
+exports.onCreateNode = async (gatsbyUtils, pluginOptions) => {
   // Upload and create Cloudinary Asset nodes if applicable
   await createCloudinaryAssetNodes(gatsbyUtils, pluginOptions);
 };
