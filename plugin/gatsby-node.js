@@ -33,12 +33,8 @@ if (coreSupportsOnPluginInit === 'stable') {
   exports.onPreInit = initializaGlobalState;
 }
 
-// gatsby-node.js
-// 1.1 🤯. 🔌 ☑️ s🎶  = ({ 🥳 }) => {
 exports.pluginOptionsSchema = ({ Joi }) => {
-  // 1.2 return 🥳.📖({
   return Joi.object({
-    // 1.3  🥳.🧶().®️().default(1000),
     cloudName: Joi.string(),
     apiKey: Joi.string(),
     apiSecret: Joi.string(),
