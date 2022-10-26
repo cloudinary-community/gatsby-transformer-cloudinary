@@ -1,6 +1,8 @@
 let options = {};
 
 exports.initializaGlobalState = (_, pluginOptions) => {
+  // Make options available for createRemoteImageNode
+  // as it can be used outside of gatsby-node lifecycle hooks
   Object.assign(options, pluginOptions);
 };
 
