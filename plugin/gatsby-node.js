@@ -44,7 +44,7 @@ exports.pluginOptionsSchema = ({ Joi }) => {
     apiSecret: Joi.string(),
     uploadFolder: Joi.string(),
     uploadSourceInstanceNames: Joi.array().items(Joi.string()),
-    transformTypes: Joi.array().items(Joi.string()).default('CloudinaryAsset'),
+    transformTypes: Joi.array().items(Joi.string()).default['CloudinaryAsset'],
     overwriteExisting: Joi.boolean().default(false),
     defaultTransformations: Joi.array()
       .items(Joi.string())
