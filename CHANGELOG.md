@@ -1,3 +1,10 @@
+# [4.1.0](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v4.0.1...v4.1.0) (2022-10-26)
+
+
+### Features
+
+* validation of plugin options ([#199](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/199)) ([ea27988](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/ea279885a873ab5d212b47e233376ec09a9b27e8))
+
 ## [4.0.1](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v4.0.0...v4.0.1) (2022-10-10)
 
 
