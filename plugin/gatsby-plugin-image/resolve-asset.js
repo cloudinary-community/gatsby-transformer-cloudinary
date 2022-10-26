@@ -10,7 +10,7 @@ const {
   getAssetMetadata,
 } = require('./asset-data');
 
-exports._generateCloudinaryAssetSource = (
+const generateCloudinaryAssetSource = (
   filename,
   width,
   height,
@@ -37,6 +37,9 @@ exports._generateCloudinaryAssetSource = (
 
   return imageSource;
 };
+
+// Make it testable
+exports._generateCloudinaryAssetSource = generateCloudinaryAssetSource;
 
 exports.createResolveCloudinaryAssetData =
   (gatsbyUtils) => async (source, args) => {
@@ -75,7 +78,7 @@ exports.createResolveCloudinaryAssetData =
       // Passing the plugin name allows for better error messages
       pluginName: `gatsby-transformer-cloudinary`,
       sourceMetadata: metadata,
-      generateImageSource: this._generateCloudinaryAssetSource,
+      generateImageSource: generateCloudinaryAssetSource,
       options: args,
     };
 
