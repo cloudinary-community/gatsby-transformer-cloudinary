@@ -1,6 +1,6 @@
 # 🦄 gatsby-transformer-cloudinary
 
-🏗️ Lets you upload local and remote images to [Cloudinary](https://cloudinary.com/) from within your Gatsby project.
+🏗️ Lets you upload local images and remote images to [Cloudinary](https://cloudinary.com/) from within your Gatsby project.
 
 🖼️ Lets you add [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/) support to those uploaded images and also to sourced data on existing Cloudinary images.
 
@@ -30,7 +30,7 @@ yarn add --save gatsby-plugin-image
 
 ### 3. Get your cloudName, apiKey and apiSecret 🤫
 
-Cloudinary offers a generous free tier which is more than enough to bootstrap projects.
+Cloudinary offers you a generous free tier, more than enough to bootstrap projects.
 Get your cloudName, apiKey and apiSecret from your [cloudinary console](https://cloudinary.com/console/) when you sign up at [Cloudinary.com](https://cloudinary.com).
 
 ### 4. Use .env.development 🔑
@@ -62,9 +62,9 @@ require('dotenv').config({
 });
 ```
 
-There are several options to configure `dotenv` to use different env files either in development or production. You can find that [here](https://www.npmjs.com/package/dotenv).
+You can find other ways to configure `dotenv` and to use different env files either in development or production. You can read more about [dotenv here](https://www.npmjs.com/package/dotenv).
 
-Add your `.env.development` file to `.gitignore` so it's not committed.
+Don't commit your `.env.development` file, add it to `.gitignore` instead.
 
 ### 5. Configure your cloudName, apiKey and apiSecret on deployment 🚀
 
@@ -103,7 +103,7 @@ module.exports = {
 
 ## 7. How to use 💅
 
-Our plugin automagically creates childCloudinaryAsset nodes for `File` nodes created by [`gatsby-source-filesystem`](https://www.gatsbyjs.org/packages/gatsby-source-filesystem/).
+Our plugin automagically creates `childCloudinaryAsset` nodes for `File` nodes created by [`gatsby-source-filesystem`](https://www.gatsbyjs.org/packages/gatsby-source-filesystem/).
 
 ## Upload Images to Cloudinary 🏗️
 
@@ -164,9 +164,9 @@ exports.createSchemaCustomization = (gatsbyUtils) => {
 
 ### Use images already on Cloudinary 🖼️
 
-To create GraphQL nodes for images that are already uploaded to Cloudinary, you need to create nodes containing data that describe the asset on Cloudinary.
+To create GraphQL nodes for images you have already uploaded to Cloudinary, you need to create nodes containing data describing the asset on Cloudinary.
 
-For example, you may have sourced existing data from Cloudinary using [gatsby-source-cloudinary](https://www.gatsbyjs.com/plugins/gatsby-source-cloudinary/) and have `CloudinaryMedia` nodes that look like...
+For example, you may have sourced existing data from Cloudinary using [gatsby-source-cloudinary](https://www.gatsbyjs.com/plugins/gatsby-source-cloudinary/) and your `CloudinaryMedia` nodes will look like...
 
 ```js
 {
@@ -178,7 +178,7 @@ For example, you may have sourced existing data from Cloudinary using [gatsby-so
 }
 ```
 
-Or you might have a `Post` node with a cover photo already stored on Cloudinary. The data in the Post node should then look something like...
+Or you might have a `Post` node with a cover photo already stored on Cloudinary. Your data in the Post node should look like...
 
 ```js
 {
@@ -196,13 +196,13 @@ Or you might have a `Post` node with a cover photo already stored on Cloudinary.
 }
 ```
 
-To add Gatsby Plugin Image support you need to to add the GraphQL Type of `coverPhoto` GraphQL to the `transformTypes` plugin option array.
+To add Gatsby Plugin Image support you need to add the GraphQL Type of `coverPhoto` GraphQL to the `transformTypes` plugin option array.
 
 For the example above the GraphQL Types are `CloudinaryMedia` and `PostCoverPhoto`.
 
-To find the GraphQL type of the data describing the assets on Cloudinary use the GraphiQL explorer and hover over the asset key, in the second example this would be `coverPhoto`.
+To find the GraphQL type of the data describing the assets on Cloudinary use the GraphiQL explorer and hover over the asset key, in the second example the GraphQL type is `coverPhoto`.
 
-If you have used the upload functionality of this plugin, the GraphQL type of the nodes describing the uploaded files is `CloudinaryAsset`.
+If you have used the upload functionality of our plugin, the GraphQL type of the nodes describing the uploaded files is `CloudinaryAsset`.
 
 ```js
 module.exports = {
@@ -221,7 +221,7 @@ module.exports = {
 };
 ```
 
-The property `defaultBase64` in the node above can be used by your CMS/backend API to provide precomputed or cached base64 URIs for your images. The provided string must comply with [RFC 2397](https://tools.ietf.org/html/rfc2397). This base64 image will be used unless `ignoreDefaultBase64: true` is set in your GraphQL query. In cases where you prefer to have an accurate base64 image with the same transformations applied as you full-size image, you should use `ignoreDefaultBase64: true` in your GraphQL query. When a defaultBase64 property is not supplied or `ignoreDefaultBase64` is true, an API call to Cloudinary will be made when resolving your GraphQL queries to fetch the base64 image.
+The property `defaultBase64` in the node above can be used by your CMS/backend API to provide precomputed or cached base64 URIs for your images. The provided string must comply with [RFC 2397](https://tools.ietf.org/html/rfc2397). This base64 image will be used unless `ignoreDefaultBase64: true` is set in your GraphQL query. In cases where you prefer to have an accurate base64 image with the same transformations applied as your full-size image, you should use `ignoreDefaultBase64: true` in your GraphQL query. When a defaultBase64 property is not supplied or `ignoreDefaultBase64` is true, an API call to Cloudinary will be made when resolving your GraphQL queries to fetch the base64 image.
 
 When providing `defaultBase64` properties, it's recommended that you set the plugin option `alwaysUseDefaultBase64` to true in development. This may result in your base64 images looking different in development and production, but it will also result in much faster development build times as fewer API calls to Cloudinary will be made. The `alwaysUseDefaultBase64` plugin option overrides the `ignoreDefaultBase64` GraphQL query parameter and forces `gatsby-transformer-cloudinary` to always use `defaultBase64` images when they are provided.
 
@@ -274,7 +274,7 @@ In `gatsby-config.js` the plugin accepts the following options:
 | `overwriteExisting`                                 | `Boolean`  | false    | false                             | Whether to overwrite existing assets with the same public ID. When set to false, return immediately if an asset with the same Public ID was found. It's recommended that this is set to false in development as each image overwrite costs one Cloudinary transformation. |
 | `defaultTransformations` (gatsby-plugin-image only) | `[String]` | false    | ` ['c_fill', 'g_auto', 'q_auto']` | The default value for the `gatsbyImageData` resolver argument `transformations`.                                                                                                                                                                                          |
 
-The options `cloudName`, `apiKey`, and `apiSecret` are required if any images will be uploaded to Cloudinary during the build process. If you're solely using images already uploaded to Cloudinary, then these options can be safely omitted.
+The options `cloudName`, `apiKey`, and `apiSecret` are required if any images will be uploaded to Cloudinary during the build process. You don't need these options if you only use images already uploaded to Cloudinary.
 
 > Note: Each derived image created for a breakpoint will consume one Cloudinary transformation. Enable the `useCloudinaryBreakpoints` option with care. If the `createDerived` option is enabled, transformations will only be consumed when the images are first created. However, created images will consume Cloudinary storage space. If `overwriteExisting` is enabled, each image that you upload will consume one transformation each time your Gatsby cache gets cleared and the image gets re-uploaded. For this reason, it's recommended that you keep `overWriteExisting` disabled and instead set the `overwriteExisting` parameter of `createRemoteImageNode` on a per-image basis when you know that an image has actually been updated.
 
@@ -382,7 +382,7 @@ yarn workspace gatsby-transformer-cloudinary test:watch
 
 ## Contribute 🏴‍☠️
 
-Want to contribute to make this tool even better? Feel free to send in issues and pull requests on feature requests, fixes, bugs, typos, performance lapses or any other challenge faced with using this tool.
+Do you want to contribute to make our plugin even better? Feel free to send in issues and pull requests on feature requests, fixes, bugs, typos, performance lapses or any other challenge you face when using our plugin.
 
 ## License 👑
 
