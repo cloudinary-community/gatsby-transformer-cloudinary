@@ -5,7 +5,7 @@ import { GatsbyImage } from 'gatsby-plugin-image';
 const FluidTransformed = () => {
   const query = `
     query {
-      image: file(name: { eq: "marisa" }) {
+      image: file(name: { eq: "joppe-spaa-unsplash" }) {
         cloudinary: childCloudinaryAsset {
           gatsbyImageData(layout: CONSTRAINED, transformation: "e_grayscale,e_tint:100:blue:0p:white:100p")
         }
@@ -17,7 +17,7 @@ const FluidTransformed = () => {
 
   const data = useStaticQuery(graphql`
     query {
-      image: file(name: { eq: "marisa" }) {
+      image: file(name: { eq: "joppe-spaa-unsplash" }) {
         cloudinary: childCloudinaryAsset {
           gatsbyImageData(
             layout: CONSTRAINED
@@ -34,7 +34,7 @@ const FluidTransformed = () => {
 
       <GatsbyImage
         image={data.image.cloudinary.gatsbyImageData}
-        alt="Marisa Morby standing in a rose garden."
+        alt="Pirate Cat photo by Joppe Spaa from unsplash."
       />
 
       <h3>Query</h3>

@@ -5,7 +5,7 @@ import { GatsbyImage } from 'gatsby-plugin-image';
 const FluidPixelated = () => {
   const query = `
     query {
-      image: file(name: { eq: "marisa" }) {
+      image: file(name: { eq: "joppe-spaa-unsplash" }) {
         cloudinary: childCloudinaryAsset {
           gatsbyImageData(layout: CONSTRAINED, transformations: ["e_pixelate_faces"])
         }
@@ -17,7 +17,7 @@ const FluidPixelated = () => {
 
   const data = useStaticQuery(graphql`
     query {
-      image: file(name: { eq: "marisa" }) {
+      image: file(name: { eq: "joppe-spaa-unsplash" }) {
         cloudinary: childCloudinaryAsset {
           gatsbyImageData(
             layout: CONSTRAINED
@@ -34,7 +34,7 @@ const FluidPixelated = () => {
 
       <GatsbyImage
         image={data.image.cloudinary.gatsbyImageData}
-        alt="Marisa Morby standing in a rose garden."
+        alt="Pirate Cat photo by Joppe Spaa from unsplash."
       />
 
       <h3>Query</h3>
