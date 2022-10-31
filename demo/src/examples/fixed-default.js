@@ -6,7 +6,7 @@ import { GatsbyImage } from 'gatsby-plugin-image';
 const FixedDefault = () => {
   const data = useStaticQuery(graphql`
     query {
-      image: file(name: { eq: "jason" }) {
+      image: file(name: { eq: "sergey-semin-unsplash" }) {
         cloudinary: childCloudinaryAsset {
           gatsbyImageData(width: 300, layout: FIXED, placeholder: TRACED_SVG)
         }
@@ -17,7 +17,7 @@ const FixedDefault = () => {
   // Duplicate the query so we can display it on the page.
   const query = `
     query {
-      image: file(name: { eq: "jason" }) {
+      image: file(name: { eq: "sergey-semin-unsplash" }) {
         cloudinary: childCloudinaryAsset {
           gatsbyImageData(width: 300, layout: FIXED, placeholder: TRACED_SVG)
         }
@@ -33,7 +33,7 @@ const FixedDefault = () => {
 
       <GatsbyImage
         image={data.image.cloudinary.gatsbyImageData}
-        alt="Jason giving finger guns toward the camera."
+        alt="Pirate photo by Sergey Semin from unsplash."
       />
 
       <h3>Query</h3>
