@@ -2,12 +2,16 @@ import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
 import { GatsbyImage } from 'gatsby-plugin-image';
 
-const FluidDefault = () => {
+const UploadedTransformed = () => {
   const data = useStaticQuery(graphql`
     query {
       image: file(name: { eq: "joppe-spaa-unsplash" }) {
         cloudinary: childCloudinaryAsset {
-          gatsbyImageData(layout: CONSTRAINED)
+          gatsbyImageData(
+            layout: CONSTRAINED
+            placeholder: BLURRED
+            transformations: ["e_grayscale", "e_tint:100:blue:0p:white:100p"]
+          )
         }
       }
     }
@@ -18,7 +22,11 @@ const FluidDefault = () => {
     query {
       image: file(name: { eq: "joppe-spaa-unsplash" }) {
         cloudinary: childCloudinaryAsset {
-          gatsbyImageData(layout: CONSTRAINED)
+          gatsbyImageData(
+            layout: CONSTRAINED
+            placeholder: BLURRED
+            transformations: ["e_grayscale", "e_tint:100:blue:0p:white:100p"]
+          )
         }
       }
     }
@@ -28,11 +36,11 @@ const FluidDefault = () => {
 
   return (
     <div className="image-example">
-      <h2>Fluid images loaded from Cloudinary</h2>
+      <h2>Apply Cloudinary transformations</h2>
 
       <GatsbyImage
         image={data.image.cloudinary.gatsbyImageData}
-        alt="Pirate Cat photo by Joppe Spaa from unsplash."
+        alt="Pirate Cat photo by Joppe Spaa from Unsplash."
       />
 
       <h3>Query</h3>
@@ -41,4 +49,4 @@ const FluidDefault = () => {
   );
 };
 
-export default FluidDefault;
+export default UploadedTransformed;

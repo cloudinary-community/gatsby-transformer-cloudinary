@@ -2,12 +2,12 @@ import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
 import { GatsbyImage } from 'gatsby-plugin-image';
 
-const ExistingData1 = () => {
+const ExistingDataNested = ({ variant = 'full' }) => {
   const data = useStaticQuery(graphql`
     query {
-      existingData(name: { eq: "Existing data 1" }) {
-        nested {
-          cloudinary: exampleImage {
+      article(name: { eq: "Article One" }) {
+        feature {
+          image {
             gatsbyImageData(
               width: 300
               height: 300
@@ -24,9 +24,9 @@ const ExistingData1 = () => {
   // Duplicate the query so we can display it on the page.
   const query = `
     query {
-      existingData(name: { eq: "Existing data 1" }) {
-        nested {
-          cloudinary: exampleImage {
+      article(name: { eq: "Article One" }) {
+        feature {
+          image {
             gatsbyImageData(
               width: 300
               height: 300
@@ -44,9 +44,8 @@ const ExistingData1 = () => {
 
   const nodeData = JSON.stringify(
     {
-      nested: {
-        exampleImage: {
-          cloudinaryAssetData: true,
+      feature: {
+        image: {
           cloudName: 'lilly-labs-consulting',
           publicId: 'sample',
         },
@@ -56,21 +55,41 @@ const ExistingData1 = () => {
     2
   );
 
+  const config = JSON.stringify(
+    {
+      resolve: 'gatsby-transformer-cloudinary',
+      options: {
+        transformTypes: ['ArticleFeatureImage'],
+      },
+    },
+    null,
+    2
+  );
+
   return (
     <div className="image-example">
-      <h2>Example 1</h2>
+      <h2>Existing Data with nested data</h2>
 
       <GatsbyImage
-        image={data.existingData.nested.cloudinary.gatsbyImageData}
-        alt="sample image"
+        image={data.article.feature.image.gatsbyImageData}
+        alt="default sample image"
       />
 
       <h3>Query</h3>
       <pre>{query}</pre>
-      <h3>Data</h3>
-      <pre>{nodeData}</pre>
+
+      {variant === 'full' && (
+        <>
+          <h3>
+            <code>Article</code> Node Shape
+          </h3>
+          <pre>{nodeData}</pre>
+          <h3>Config</h3>
+          <pre>{config}</pre>
+        </>
+      )}
     </div>
   );
 };
 
-export default ExistingData1;
+export default ExistingDataNested;

@@ -6,13 +6,14 @@ const RemoteImage2 = () => {
   const data = useStaticQuery(graphql`
     query {
       remoteExample(name: { eq: "Remote Example 2" }) {
-        cloudinary: remoteImage {
+        remoteImage {
           gatsbyImageData(
             layout: CONSTRAINED
-            width: 600
-            aspectRatio: 1
+            height: 300
+            aspectRatio: 0.8
             placeholder: BLURRED
-            transformations: ["c_fill", "e_pixelate_faces"]
+            transformations: ["c_thumb"]
+            chained: ["t_gatsby-demo"]
           )
         }
       }
@@ -22,14 +23,15 @@ const RemoteImage2 = () => {
   // Duplicate the query so we can display it on the page.
   const query = `
     query {
-      remoteExample(name: {eq: "Remote Example 2"}) {
-        cloudinary: remoteImage {
-           gatsbyImageData(
+      remoteExample(name: { eq: "Remote Example 2" }) {
+        remoteImage {
+          gatsbyImageData(
             layout: CONSTRAINED
-            width: 600
-            aspectRatio: 1
+            height: 300
+            aspectRatio: 0.8
             placeholder: BLURRED
-            transformations: ["c_fill", "e_pixelate_faces"]
+            transformations: ["c_thumb"]
+            chained: ["t_gatsby-demo"]
           )
         }
       }
@@ -40,11 +42,11 @@ const RemoteImage2 = () => {
 
   return (
     <div className="image-example">
-      <h2>Example 2</h2>
+      <h2>Remote image</h2>
 
       <GatsbyImage
-        image={data.remoteExample.cloudinary.gatsbyImageData}
-        alt="Jason, victorious."
+        image={data.remoteExample.remoteImage.gatsbyImageData}
+        alt="A display of a scull on top of books with a flower photo from from Unsplash"
       />
 
       <h3>Query</h3>

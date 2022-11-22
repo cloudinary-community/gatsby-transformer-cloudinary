@@ -28,13 +28,6 @@ const Layout = ({ children }) => {
       <main>
         <div className="content">{children}</div>
       </main>
-      <footer>
-        © {new Date().getFullYear()} · built by{' '}
-        <a href="https://lengstorf.com">Jason Lengstorf</a> ·{' '}
-        <a href="https://www.learnwithjason.dev/build-a-gatsby-transformer-plugin-for-cloudinary">
-          watch part of this plugin get built live
-        </a>
-      </footer>
     </>
   );
 };

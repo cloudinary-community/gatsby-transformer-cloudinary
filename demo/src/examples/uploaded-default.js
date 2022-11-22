@@ -1,19 +1,14 @@
 import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
+
 import { GatsbyImage } from 'gatsby-plugin-image';
 
-const FixedChaining = () => {
+const UploadedDefault = () => {
   const data = useStaticQuery(graphql`
     query {
       image: file(name: { eq: "sergey-semin-unsplash" }) {
         cloudinary: childCloudinaryAsset {
-          gatsbyImageData(
-            width: 300
-            layout: FIXED
-            placeholder: BLURRED
-            transformations: ["e_grayscale"]
-            chained: ["t_lwj"]
-          )
+          gatsbyImageData(height: 300, layout: FIXED)
         }
       }
     }
@@ -24,15 +19,8 @@ const FixedChaining = () => {
     query {
       image: file(name: { eq: "sergey-semin-unsplash" }) {
         cloudinary: childCloudinaryAsset {
-          gatsbyImageData(
-            width: 300
-            layout: FIXED
-            placeholder: BLURRED
-            transformations: ["e_grayscale"]
-            chained: ["t_lwj"]
-          )
+          gatsbyImageData(height: 300, layout: FIXED)
         }
-      }
       }
     }
   `
@@ -41,11 +29,11 @@ const FixedChaining = () => {
 
   return (
     <div className="image-example">
-      <h2>For complex effects, use chaining</h2>
+      <h2>Straight forward demo</h2>
 
       <GatsbyImage
         image={data.image.cloudinary.gatsbyImageData}
-        alt="Pirate photo by Sergey Semin from unsplash."
+        alt="Pirate photo by Sergey Semin from Unsplash."
       />
 
       <h3>Query</h3>
@@ -54,4 +42,4 @@ const FixedChaining = () => {
   );
 };
 
-export default FixedChaining;
+export default UploadedDefault;
