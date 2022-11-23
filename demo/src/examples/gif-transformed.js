@@ -5,13 +5,12 @@ import { GatsbyImage } from 'gatsby-plugin-image';
 const GifTransformed = () => {
   const data = useStaticQuery(graphql`
     query {
-      image: file(name: { eq: "victory" }) {
+      image: file(name: { eq: "giphyCat" }) {
         cloudinary: childCloudinaryAsset {
           gatsbyImageData(
             layout: CONSTRAINED
-            placeholder: TRACED_SVG
-            transformations: ["e_gamma:100"]
-            chained: ["e_grayscale", "t_lwj"]
+            placeholder: BLURRED
+            transformations: ["e_gamma:500"]
           )
         }
       }
@@ -21,13 +20,12 @@ const GifTransformed = () => {
   // Duplicate the query so we can display it on the page.
   const query = `
     query {
-      image: file(name: { eq: "victory" }) {
+      image: file(name: { eq: "giphyCat" }) {
         cloudinary: childCloudinaryAsset {
           gatsbyImageData(
             layout: CONSTRAINED
-            placeholder: TRACED_SVG
-            transformations: ["e_gamma:100"]
-            chained: ["e_grayscale", "t_lwj"]
+            placeholder: BLURRED
+            transformations: ["e_gamma:500"]
           )
         }
       }
@@ -42,7 +40,7 @@ const GifTransformed = () => {
 
       <GatsbyImage
         image={data.image.cloudinary.gatsbyImageData}
-        alt="Jason, victorious."
+        alt="Cat Pirate GIF By Product Hunt."
       />
 
       <h3>Query</h3>

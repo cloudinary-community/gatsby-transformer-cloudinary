@@ -1,14 +1,18 @@
 import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
-
 import { GatsbyImage } from 'gatsby-plugin-image';
 
-const FixedDefault = () => {
+const UploadedThumb = () => {
   const data = useStaticQuery(graphql`
     query {
-      image: file(name: { eq: "jason" }) {
+      image: file(name: { eq: "sergey-semin-unsplash" }) {
         cloudinary: childCloudinaryAsset {
-          gatsbyImageData(width: 300, layout: FIXED, placeholder: TRACED_SVG)
+          gatsbyImageData(
+            height: 300
+            aspectRatio: 0.8
+            layout: FIXED
+            transformations: ["c_thumb", "g_face"]
+          )
         }
       }
     }
@@ -17,9 +21,14 @@ const FixedDefault = () => {
   // Duplicate the query so we can display it on the page.
   const query = `
     query {
-      image: file(name: { eq: "jason" }) {
+      image: file(name: { eq: "sergey-semin-unsplash" }) {
         cloudinary: childCloudinaryAsset {
-          gatsbyImageData(width: 300, layout: FIXED, placeholder: TRACED_SVG)
+          gatsbyImageData(
+            height: 300
+            aspectRatio: 0.8
+            layout: FIXED
+            transformations: ["c_thumb", "g_face"]
+          )
         }
       }
     }
@@ -29,11 +38,11 @@ const FixedDefault = () => {
 
   return (
     <div className="image-example">
-      <h2>A fixed-width image at 300px</h2>
+      <h2>Create avatars from any image</h2>
 
       <GatsbyImage
         image={data.image.cloudinary.gatsbyImageData}
-        alt="Jason giving finger guns toward the camera."
+        alt="Pirate photo by Sergey Semin from Unsplash."
       />
 
       <h3>Query</h3>
@@ -42,4 +51,4 @@ const FixedDefault = () => {
   );
 };
 
-export default FixedDefault;
+export default UploadedThumb;

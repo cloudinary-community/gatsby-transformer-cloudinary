@@ -1,9 +1,10 @@
 import React from 'react';
 import Layout from '../components/layout';
-import FluidDefault from '../examples/fluid-default';
-import FixedThumb from '../examples/fixed-thumb';
 import GifDefault from '../examples/gif-default';
-import FluidSilly from '../examples/fluid-silly';
+import UploadedDefault from '../examples/uploaded-default';
+import UploadedThumb from '../examples/uploaded-thumb';
+import ExistingData from '../examples/existing-data';
+import RemoteImage1 from '../examples/remote-image-1';
 
 const IndexPage = () => (
   <Layout>
@@ -28,9 +29,9 @@ const IndexPage = () => (
     </p>
     <p>
       Under the hood, your images will be uploaded to Cloudinary and added back
-      to Gatsby’s data layer. No more dealing with Sharp issues! No more waiting
-      for hundreds of images to be generated on your local machine! Just sweet,
-      sweet, high-performance images with a{' '}
+      to the Gatsby’s data layer. No more dealing with Sharp issues! No more
+      waiting for hundreds of images to be generated on your local machine! Just
+      sweet, sweet, high-performance images with a{' '}
       <a href="https://cloudinary.com/documentation/image_transformation_reference">
         powerful image transformation API
       </a>{' '}
@@ -43,10 +44,11 @@ const IndexPage = () => (
       </a>
     </p>
     <div className="examples">
-      <FluidDefault />
-      <FixedThumb />
+      <UploadedDefault />
+      <UploadedThumb />
+      <ExistingData variant="minimal" />
+      <RemoteImage1 />
       <GifDefault />
-      <FluidSilly />
     </div>
   </Layout>
 );

@@ -2,15 +2,15 @@ import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
 import { GatsbyImage } from 'gatsby-plugin-image';
 
-const FixedTransformed = () => {
+const UploadedTransformed = () => {
   const data = useStaticQuery(graphql`
     query {
-      image: file(name: { eq: "jason" }) {
+      image: file(name: { eq: "joppe-spaa-unsplash" }) {
         cloudinary: childCloudinaryAsset {
           gatsbyImageData(
-            width: 300
-            layout: FIXED
-            transformations: ["e_grayscale"]
+            layout: CONSTRAINED
+            placeholder: BLURRED
+            transformations: ["e_grayscale", "e_tint:100:blue:0p:white:100p"]
           )
         }
       }
@@ -20,12 +20,12 @@ const FixedTransformed = () => {
   // Duplicate the query so we can display it on the page.
   const query = `
     query {
-      image: file(name: { eq: "jason" }) {
+      image: file(name: { eq: "joppe-spaa-unsplash" }) {
         cloudinary: childCloudinaryAsset {
           gatsbyImageData(
-            width: 300
-            layout: FIXED
-            transformations: ["e_grayscale"]
+            layout: CONSTRAINED
+            placeholder: BLURRED
+            transformations: ["e_grayscale", "e_tint:100:blue:0p:white:100p"]
           )
         }
       }
@@ -36,11 +36,11 @@ const FixedTransformed = () => {
 
   return (
     <div className="image-example">
-      <h2>Add any transformations you like</h2>
+      <h2>Apply Cloudinary transformations</h2>
 
       <GatsbyImage
         image={data.image.cloudinary.gatsbyImageData}
-        alt="Jason giving finger guns toward the camera."
+        alt="Pirate Cat photo by Joppe Spaa from Unsplash."
       />
 
       <h3>Query</h3>
@@ -49,4 +49,4 @@ const FixedTransformed = () => {
   );
 };
 
-export default FixedTransformed;
+export default UploadedTransformed;
