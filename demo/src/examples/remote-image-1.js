@@ -5,8 +5,8 @@ import { GatsbyImage } from 'gatsby-plugin-image';
 const RemoteImage1 = () => {
   const data = useStaticQuery(graphql`
     query {
-      remoteExample(name: { eq: "Remote Example 1" }) {
-        remoteImage {
+      project(name: { eq: "Project Example One" }) {
+        coverImage {
           gatsbyImageData(
             layout: FIXED
             height: 300
@@ -22,8 +22,8 @@ const RemoteImage1 = () => {
   // Duplicate the query so we can display it on the page.
   const query = `
     query {
-      remoteExample(name: { eq: "Remote Example 1" }) {
-        remoteImage {
+      project(name: { eq: "Project Example One" }) {
+        coverImage {
           gatsbyImageData(
             layout: FIXED
             height: 300
@@ -43,7 +43,7 @@ const RemoteImage1 = () => {
       <h2>Remote image</h2>
 
       <GatsbyImage
-        image={data.remoteExample.remoteImage.gatsbyImageData}
+        image={data.project.coverImage.gatsbyImageData}
         alt="Drone photo of a Pirate ship with a US flag by Austin Neill from Unsplash."
       />
 

@@ -1,130 +1,309 @@
-# 🦄 gatsby-transformer-cloudinary
+# Gatsby Transformer Cloudinary
 
-🏗️ Lets you upload local images and remote images to [Cloudinary](https://cloudinary.com/) from within your Gatsby project.
+With `gatsby-transformer-cloudinary` you may:
 
-🖼️ Lets you add [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/) support to those uploaded images and also to sourced data on existing Cloudinary images.
+- 🖼️ Add [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/) support to any GraphQL Types describing a Cloudinary assets.
+- 📤 Upload local and remote images to [Cloudinary](https://cloudinary.com/) from within your Gatsby project.
 
-🦄 Automagically serves the most modern image format your user's browser can support on her device. Like AVIF or WebP!
+📥 To pull data from your Cloudinary account into the Gatsby data layer use [gatsby-source-cloudinary](https://www.github.com/cloudinary-devs/gatsby-source-cloudinary/)
 
-## 1. Install plugin 🦄
+&nbsp;
+
+## 📖 Table of Contents
+
+- [🖼️ Add Gatsby Image Support to Existing Cloudinary Assets](#🖼️-add-gatsby-image-support-to-existing-cloudinary-assets)
+  - [Install Packages](#install-packages)
+  - [Configure Plugins](#configure-plugins)
+  - [Example usage](#example-usage)
+- [📤 Upload local images and add Gatsby Image Support](#📤-upload-local-images-and-add-gatsby-image-support)
+  - [Install Packages](#install-packages-1)
+  - [Configure Plugins](#configure-plugins-1)
+  - [Example usage](#example-usage-1)
+- [📤 Upload remote images and add Gatsby Image Support](#📤-upload-remote-images-and-add-gatsby-image-support)
+  - [Install Packages](#install-packages-2)
+  - [Configure Plugins](#configure-plugins-2)
+  - [Example Usage](#example-usage-2)
+- [🔌 Pugin Options](#🔌-plugin-options)
+- [🖼️ Gatsby Image API](#🖼️-gatsby-plugin-image-gatsbyimagedata-api)
+- [📚 Other Resources](#📚-other-resources)
+- [🏴‍☠️ Contribute](#🏴‍☠️-contribute)
+
+&nbsp;
+
+## 🖼️ Add Gatsby Image Support to Existing Cloudinary Assets
+
+Use assets hosted by Cloudinary together with Gatsby's Image component:
+
+- The `gatsbyImageData` resolver is added to each GraphQLType configured.
+
+The configuration and example in this section assumes your Gatsby Data Layer has at least one node of type `BlogPost` with a `heroImage` field describing an already uploaded Cloudinary asset.
+
+👉 More details in [Transform Type Requierments](#transform-type-requierments).
+
+### Install Packages
 
 ```bash
-npm install --save gatsby-transformer-cloudinary gatsby-source-filesystem
+npm install gatsby-transformer-cloudinary gatsby-plugin-image
 ```
+
+or
 
 ```bash
-yarn add gatsby-transformer-cloudinary gatsby-source-filesystem
+yarn add gatsby-transformer-cloudinary gatsby-plugin-image
 ```
 
-### 2. Gatsby Plugin Image 🖼️
-
-Install [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/).
-
-```bash
-npm install --save gatsby-plugin-image
-```
-
-```bash
-yarn add --save gatsby-plugin-image
-```
-
-### 3. Get your cloudName, apiKey and apiSecret 🤫
-
-Cloudinary offers you a generous free tier, more than enough to bootstrap projects.
-Get your cloudName, apiKey and apiSecret from your [cloudinary console](https://cloudinary.com/console/) when you sign up at [Cloudinary.com](https://cloudinary.com).
-
-### 4. Use .env.development 🔑
-
-Create a `.env.development` file in your project's root and add your `cloudName`, `apiKey` and `apiSecret`.
-
+### Configure Plugins
 
 ```js
-CLOUDINARY_API_KEY=INSERT `apiKey`
-CLOUDINARY_API_SECRET=INSERT `apiSecret`
-CLOUDINARY_CLOUD_NAME=INSERT `cloudName`
+// File: ./gatsby-config.js
+
+module.exports = {
+  plugins: [
+    {
+      resolve: `gatsby-transformer-cloudinary`,
+      options: {
+        // Add the `gatsbyImageData` resolver to `BlogPostHeroImage`
+        transformTypes: [`BlogPostHeroImage`],
+        // Optional transformation option
+        defaultTransformations: ['c_fill', 'g_auto', 'q_auto'],
+      },
+    },
+    `gatsby-plugin-image`,
+  ],
+};
 ```
 
-Install `dotenv` in your project.
+### Example Usage
 
-```bash
-npm install dotenv
+```jsx
+// File: ./pages/{BlogPost.slug}.js
+
+import React from 'react';
+import { graphql } from 'gatsby';
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
+
+const BlogPost = ({ data }) => {
+  const { blogPost } = data;
+  const gatsbyImage = getImage(blogPost.heroImage);
+  return (
+    <article>
+      <h1>{blogPost.title}</h1>
+      <GatsbyImage image={gatsbyImage} aria-hidden="true" alt="Hero Image" />
+      {/* ... */}
+    </article>
+  );
+};
+
+export const query = graphql`
+  query BlogPostById($id: String!) {
+    blogPost(id: { eq: $id }) {
+      title
+      heroImage {
+        gatsbyImageData(
+          height: 300
+          aspectRatio: 2
+          placeholder: TRACED_SVG
+          transformations: ["c_fill", "e_grayscale"]
+        )
+      }
+    }
+  }
+`;
+
+export default BlogPost;
 ```
 
-```bash
-yarn add dotenv
-```
+### Transform Type Requierments
 
-In your `gatsby-config.js` file, require and configure `dotenv`.
+You may add Gatsby Image support to any GraphQL Type describing a Cloudinary assets with this data shape:
 
 ```js
-require('dotenv').config({
-  path: `.env.${process.env.NODE_ENV}`,
-});
+{
+  // Required
+  cloudName: "my-amazing-blog",
+  publicId: "blue-blue-blue",
+  // Optional: Saves a network request for size/format data per image queried if all are added
+  originalHeight: 360,
+  originalWidth: 820,
+  originalFormat: "jpg",
+  // Optional: Saves a Cloudinary transformation per image queried with `placeholder=BLURRED` as this value will be used instead
+  defaultBase64: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMXG/8HwAEwAI0Bj1bnwAAAABJRU5ErkJggg==",
+  // Optional: Saves a Cloudinary transformation per image queried with `placeholder=TRACED_SVG` as this value will be used instead
+  defaultTracedSVG: "data:image/svg+xml,%3Csvg%20height%3D%229999%22%20viewBox%3D%220%200%209999%209999%22%20width%3D%229999%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22m0%200h9999v9999h-9999z%22%20fill%3D%22%23f9fafb%22%2F%3E%3C%2Fsvg%3E",
+}
 ```
 
-You can find other ways to configure `dotenv` and to use different env files either in development or production. You can read more about [dotenv here](https://www.npmjs.com/package/dotenv).
+To find the GraphQL Type describing your Cloudinary assets use the buildt in [GraphiQL exlorer](https://www.gatsbyjs.com/docs/how-to/querying-data/running-queries-with-graphiql/). Either by hovering over the field describing the asset, or by looking it up in the "Documentation Explorer".
 
-Don't commit your `.env.development` file, add it to `.gitignore` instead.
+`defaultBase64` and `defaultTracedSVG` is the base64 URI of the placeholder image, it must comply with [RFC 2397](https://tools.ietf.org/html/rfc2397).
 
-### 5. Configure your cloudName, apiKey and apiSecret on deployment 🚀
+&nbsp;
 
-### 6. Include your plugin in `gatsby-config.js` 🦄
+## 📤 Upload Local Images and Add Gatsby Image Support
 
-In your `gatsby-config.js` set up `gatsby-transformer-cloudinary` with your cloudName, apiKey and apiSecret. Then point `gatsby-source-filesystem` to images in your app.
+Upload local images to Cloudinary and skip the use of gatsby-transformer-sharp to speed up your build process and take advantage of Cloudinary's transformations:
+
+- A `CloudinaryAsset` node is created for each image.
+- The `gatsbyImageData` resolver is added to each node by default.
+
+The configuration and example in this section assumes you have a folder with images placed in the root of your project.
+
+### Install packages
+
+```bash
+npm install gatsby-transformer-cloudinary gatsby-source-filesystem gatsby-plugin-image
+```
+
+or
+
+```bash
+yarn add gatsby-transformer-cloudinary gatsby-source-filesystem gatsby-plugin-image
+```
+
+### Configure plugins
 
 ```js
-// Load the environment variables.
-require('dotenv').config({
-  path: `.env.${process.env.NODE_ENV}`,
-});
+// File: ./gatsby-config.js
 
 module.exports = {
   plugins: [
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        name: `images`,
-        path: `${__dirname}/src/images`,
+        name: `gallery`,
+        path: `${__dirname}/gallery`,
       },
     },
     {
       resolve: 'gatsby-transformer-cloudinary',
       options: {
+        // Required for uploading
         cloudName: process.env.CLOUDINARY_CLOUD_NAME,
         apiKey: process.env.CLOUDINARY_API_KEY,
         apiSecret: process.env.CLOUDINARY_API_SECRET,
-        uploadFolder: 'gatsby-cloudinary',
-        uploadSourceInstanceNames: ['images'],
+        // Optional uploading options
+        uploadFolder: process.env.CLOUDINARY_UPLOAD_FOLDER,
+        uploadSourceInstanceNames: ['gallery'],
+        overwriteExisting: process.env.NODE_ENV === 'production' ? true : false,
+        // Optional transformation options
+        transformTypes: ['CloudinaryAsset'],
+        defaultTransformations: ['c_fill', 'g_auto', 'q_auto'],
       },
     },
   ],
 };
 ```
 
-## 7. How to use 💅
+`process.env` ⁉️ Read about [env variables in the Gatsby docs](https://www.gatsbyjs.com/docs/how-to/local-development/environment-variables/).
 
-Our plugin automagically creates `childCloudinaryAsset` nodes for `File` nodes created by [`gatsby-source-filesystem`](https://www.gatsbyjs.org/packages/gatsby-source-filesystem/).
+### Example Usage
 
-## Upload Images to Cloudinary 🏗️
+Example of the plugin in action fetching an asset using the `useStaticQuery` API of Gatsby:
 
-Upload images to Cloudinary in two ways:
+```jsx
+// File ./components/local-upload.js
 
-1. Upload remote images by their URL to Cloudinary
-2. Upload images in `File` nodes to Cloudinary
+import React from 'react';
+import { graphql, useStaticQuery } from 'gatsby';
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 
-A `CloudinaryAsset` node is created for each image.
+const LocalUploadExample = () => {
+  // Using gatsby-transformer-sharp
+  // commented out for comparison
 
+  // const data = useStaticQuery(graphql`
+  //   query {
+  //     file(name: { eq: "sergey-semin-unsplash" }) {
+  //       childImageSharp {
+  //         gatsbyImageData(height: 300, layout: FIXED)
+  //       }
+  //     }
+  //   }
+  // `);
 
-### Upload remote images 🏗️
+  const data = useStaticQuery(graphql`
+    query {
+      file(name: { eq: "sergey-semin-unsplash" }) {
+        childCloudinaryAsset {
+          gatsbyImageData(height: 300, layout: FIXED)
+        }
+      }
+    }
+  `);
 
-To directly upload images to Cloudinary from remote sources, you can use the `createRemoteImageNode` function:
+  // const gatsbyImage = getImage(data.file.childImageSharp);
+  const gatsbyImage = getImage(data.file.childCloudinaryAsset);
+
+  return (
+    <GatsbyImage
+      image={gatsbyImage}
+      alt="Pirate photo by Sergey Semin from Unsplash."
+    />
+  );
+};
+
+export default LocalUploadExample;
+```
+
+&nbsp;
+
+## 📤 Upload Remote Images and add Gatsby Image Support
+
+Upload remote images referenced in any node to Cloudinary and take advantage of Cloudinary's transformations:
+
+- A `CloudinaryAsset` node is created for each image.
+- The `gatsbyImageData` resolver is added to each node by default.
+
+Uploading remote image requires you to write some custom code. We'd like to make it configurable instead, let us know if you'd benefit by [joining the discussion](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/discussions/207).
+
+The configuration and example in this section assumes your Gatsby Data Layer has at least one node of type `Project` with a `coverImageUrl` field containg a url pointing to a publically available image file.
+
+### Install Packages
+
+```bash
+npm install gatsby-transformer-cloudinary gatsby-plugin-image
+```
+
+or
+
+```bash
+yarn add gatsby-transformer-cloudinary gatsby-plugin-image
+```
+
+### Configure Plugins
 
 ```js
-// gatsby-node.js
-import { createRemoteImageNode } from 'gatsby-transformer-cloudinary';
+// File: ./gatsby-config.js
 
-// This example assumes "Post" nodes are created in a `sourceNodes` function.
-const POST_NODE_TYPE = 'Post';
+module.exports = {
+  plugins: [
+    {
+      resolve: 'gatsby-transformer-cloudinary',
+      options: {
+        // Required for uploading
+        cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+        apiKey: process.env.CLOUDINARY_API_KEY,
+        apiSecret: process.env.CLOUDINARY_API_SECRET,
+        // Optional uploading options
+        uploadFolder: process.env.CLOUDINARY_UPLOAD_FOLDER,
+        overwriteExisting: process.env.NODE_ENV === 'production' ? true : false,
+        // Optional transformation options
+        transformTypes: ['CloudinaryAsset'],
+        defaultTransformations: ['c_fill', 'g_auto', 'q_auto'],
+      },
+    },
+  ],
+};
+```
+
+`process.env` ⁉️ Read about [env variables in the Gatsby docs](https://www.gatsbyjs.com/docs/how-to/local-development/environment-variables/).
+
+### Example Usage
+
+```js
+// File: ./gatsby-node.js
+
+import { createRemoteImageNode } from 'gatsby-transformer-cloudinary';
 
 export async function onCreateNode({
   node,
@@ -133,10 +312,10 @@ export async function onCreateNode({
   createContentDigest,
   reporter,
 }) {
-  // In this example, "Post" nodes sometimes have a "cover_photo_url" that's a link to an image.
-  if (node.internal.type === POST_NODE_TYPE && node.coverPhotoUrl) {
+  if (node.internal.type === 'Project' && node.coverImageUrl) {
+    // Upload the image to Cloudinary
     const imageNode = await createRemoteImageNode({
-      url: node.coverPhotoUrl,
+      url: node.coverImageUrl,
       parentNode: node,
       createNode,
       createNodeId,
@@ -144,141 +323,132 @@ export async function onCreateNode({
       reporter,
     });
 
-    createNodeField({ node: node, name: 'coverPhoto', value: imageNode.id });
+    // Add node field to be used by "createSchemaCustomization"
+    createNodeField({ node: node, name: 'coverImage', value: imageNode.id });
   }
 }
 
 exports.createSchemaCustomization = (gatsbyUtils) => {
   const { actions } = gatsbyUtils;
 
-  const PostType = `
-      type Post implements Node  {
-        coverPhotoUrl: String!
-        coverPhoto: CloudinaryAsset @link(from: "fields.coverPhoto" by: "id")
+  // Connect the node to the CloudinaryAsset using @link
+  const ProjectType = `
+      type Project implements Node  {
+        coverImageUrl: String!
+        coverImage: CloudinaryAsset @link(from: "fields.coverImage" by: "id")
       }
     `;
 
-  actions.createTypes([PostType]);
+  actions.createTypes([ProjectType]);
 };
 ```
-
-### Use images already on Cloudinary 🖼️
-
-To create GraphQL nodes for images you have already uploaded to Cloudinary, you need to create nodes containing data describing the asset on Cloudinary.
-
-For example, you may have sourced existing data from Cloudinary using [gatsby-source-cloudinary](https://www.gatsbyjs.com/plugins/gatsby-source-cloudinary/) and your `CloudinaryMedia` nodes will look like...
-
-```js
-{
-  cloudName: "my-amazing-blog",
-  publicId: "blue-blue-blue",
-  originalHeight: 360,
-  originalWidth: 820,
-  originalFormat: "jpg"
-}
-```
-
-Or you might have a `Post` node with a cover photo already stored on Cloudinary. Your data in the Post node should look like...
-
-```js
-{
-  title: "How to beat the pandemic blues",
-  publishedAt: "2020-07-26T21:55:13.358Z",
-  coverPhoto: {
-    cloudName: "my-amazing-blog",
-    publicId: "blue-blue-blue",
-    originalHeight: 360,
-    originalWidth: 820,
-    originalFormat: "jpg",
-    defaultBase64: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMXG/8HwAEwAI0Bj1bnwAAAABJRU5ErkJggg==",
-    defaultTracedSVG: "data:image/svg+xml,%3Csvg%20height%3D%229999%22%20viewBox%3D%220%200%209999%209999%22%20width%3D%229999%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22m0%200h9999v9999h-9999z%22%20fill%3D%22%23f9fafb%22%2F%3E%3C%2Fsvg%3E",
-  }
-}
-```
-
-To add Gatsby Plugin Image support you need to add the GraphQL Type of `coverPhoto` GraphQL to the `transformTypes` plugin option array.
-
-For the example above the GraphQL Types are `CloudinaryMedia` and `PostCoverPhoto`.
-
-To find the GraphQL type of the data describing the assets on Cloudinary use the GraphiQL explorer and hover over the asset key, in the second example the GraphQL type is `coverPhoto`.
-
-If you have used the upload functionality of our plugin, the GraphQL type of the nodes describing the uploaded files is `CloudinaryAsset`.
-
-```js
-module.exports = {
-  plugins: [
-    {
-      resolve: 'gatsby-transformer-cloudinary',
-      options: {
-        transformTypes: [
-          `CloudinaryAsset`,
-          `PostCoverPhoto`,
-          `CloudinaryMedia`,
-        ],
-      },
-    },
-  ],
-};
-```
-
-The property `defaultBase64` in the node above can be used by your CMS/backend API to provide precomputed or cached base64 URIs for your images. The provided string must comply with [RFC 2397](https://tools.ietf.org/html/rfc2397). This base64 image will be used unless `ignoreDefaultBase64: true` is set in your GraphQL query. In cases where you prefer to have an accurate base64 image with the same transformations applied as your full-size image, you should use `ignoreDefaultBase64: true` in your GraphQL query. When a defaultBase64 property is not supplied or `ignoreDefaultBase64` is true, an API call to Cloudinary will be made when resolving your GraphQL queries to fetch the base64 image.
-
-When providing `defaultBase64` properties, it's recommended that you set the plugin option `alwaysUseDefaultBase64` to true in development. This may result in your base64 images looking different in development and production, but it will also result in much faster development build times as fewer API calls to Cloudinary will be made. The `alwaysUseDefaultBase64` plugin option overrides the `ignoreDefaultBase64` GraphQL query parameter and forces `gatsby-transformer-cloudinary` to always use `defaultBase64` images when they are provided.
-
-No API calls to Cloudinary for base64 images will be made if your GraphQL queries do not request base64 images.
-
-The property `defaultTracedSVG` in the node above can be used by your CMS/backend to provide precomputed or cached SVG placeholders for your images. The provided string must comply with [RFC 2397](https://tools.ietf.org/html/rfc2397). It should also be encoded with something like JavaScript's `encodeURIComponent()`.
-
-## Example usage 💄
-
-Here's the plugin in action to fetch a fixed asset using the `useStaticQuery` API of Gatsby:
 
 ```jsx
+// File: ./pages/{Article.slug}.js
+
 import React from 'react';
-import { useStaticQuery, graphql } from 'gatsby';
+import { graphql } from 'gatsby';
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 
-const SingleImage = () => {
-  const data = useStaticQuery(graphql`
-    query ExampleQuery {
-      cloudinaryAsset(publicId: { eq: "gatsby-cloudinary/jason" }) {
-        gatsbyImageData(width: 300, layout: FIXED)
-      }
-    }
-  `);
-
-  const image = getImage(data.cloudinaryAsset);
-
+const Project = ({ data }) => {
+  const { project } = data;
+  const gatsbyImage = getImage(project.coverImage);
   return (
-    <>
-      <GatsbyImage image={image} alt="banner" />
-    </>
+    <article>
+      <h1>{project.name}</h1>
+      <GatsbyImage image={gatsbyImage} aria-hidden="true" alt="Cover Image" />
+      {/* ... */}
+    </article>
   );
 };
 
-export default SingleImage;
+export const query = graphql`
+  query ProjectById($id: String!) {
+    project(id: { eq: $id }) {
+      name
+      coverImage {
+        gatsbyImageData(
+          height: 300
+          aspectRatio: 2
+          placeholder: TRACED_SVG
+          transformations: ["c_fill", "g_auto:subject", "q_auto"]
+        )
+      }
+    }
+  }
+`;
+
+export default Project;
 ```
 
-### Plugin options 🔌
+&nbsp;
+
+## 🔌 Plugin Options
 
 In `gatsby-config.js` the plugin accepts the following options:
 
-| option                                              | type       | required | default value                     | description                                                                                                                                                                                                                                                               |
-| --------------------------------------------------- | ---------- | -------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `cloudName`                                         | `String`   | false    | n/a                               | Cloud name of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable.                                                                                   |
-| `apiKey`                                            | `String`   | false    | n/a                               | API Key of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable.                                                                                      |
-| `apiSecret`                                         | `String`   | false    | n/a                               | API Secret of your Cloudinary account, can be obtained from your [Cloudinary console](https://cloudinary.com/console/). This should be stored and retrieved as an environment variable.                                                                                   |
-| `uploadFolder`                                      | `String`   | false    | n/a                               | An optional folder name where the uploaded assets will be stored on Cloudinary.                                                                                                                                                                                           |
-| `uploadSourceInstanceNames`                         | `[String]` | false    | n/a                               | An optional array limiting uploads to file nodes with a matching sourceInstanceName.                                                                                                                                                                                      |
-| `transformTypes`                                    | `[String]` | false    | `['CloudinaryAsset']`             | An optional array of GraphQL Types needing Gatsby Image support. Adds the resolvers `gatsbyImageData`, `fluid` (deprecated) and `fixed` (deprecated)).                                                                                                                    |
-| `overwriteExisting`                                 | `Boolean`  | false    | false                             | Whether to overwrite existing assets with the same public ID. When set to false, return immediately if an asset with the same Public ID was found. It's recommended that this is set to false in development as each image overwrite costs one Cloudinary transformation. |
-| `defaultTransformations` (gatsby-plugin-image only) | `[String]` | false    | ` ['c_fill', 'g_auto', 'q_auto']` | The default value for the `gatsbyImageData` resolver argument `transformations`.                                                                                                                                                                                          |
+### `cloudName` (required for upload functionality)
 
-The options `cloudName`, `apiKey`, and `apiSecret` are required if any images will be uploaded to Cloudinary during the build process. You don't need these options if you only use images already uploaded to Cloudinary.
+You'll find your Cloudinary account's `cloudName` in your [Cloudinary console](https://cloudinary.com/console/).
 
-> Note: Each derived image created for a breakpoint will consume one Cloudinary transformation. Enable the `useCloudinaryBreakpoints` option with care. If the `createDerived` option is enabled, transformations will only be consumed when the images are first created. However, created images will consume Cloudinary storage space. If `overwriteExisting` is enabled, each image that you upload will consume one transformation each time your Gatsby cache gets cleared and the image gets re-uploaded. For this reason, it's recommended that you keep `overWriteExisting` disabled and instead set the `overwriteExisting` parameter of `createRemoteImageNode` on a per-image basis when you know that an image has actually been updated.
+**Type:** `String`\
+**Default:** n/a\
+**Note:** Store and retrieve your `cloudName` as [an environment variable](https://www.gatsbyjs.com/docs/how-to/local-development/environment-variables/).
 
-## Gatsby Plugin Image API 🖼️
+### `apiKey` (required for upload functionality)
+
+The API Key of your Cloudinary account. You'll find it in your [Cloudinary console](https://cloudinary.com/console/).
+
+**Type:** `String`\
+**Default:** n/a\
+**Note:** Store and retrieve your `apiKey` as [an environment variable](https://www.gatsbyjs.com/docs/how-to/local-development/environment-variables/).
+
+### `apiSecret` (required for upload functionality)
+
+The API Secret of your Cloudinary account. You'll find it in your [Cloudinary console](https://cloudinary.com/console/).
+
+**Type:** `String`\
+**Default:** n/a\
+**Note:** Store and retrieve your `apiSecret` as [an environment variable](https://www.gatsbyjs.com/docs/how-to/local-development/environment-variables/).
+
+### `uploadFolder`
+
+An optional folder name where the uploaded assets will be stored on Cloudinary.
+
+**Type:** `String`\
+**Default:** n/a\
+
+### `uploadSourceInstanceNames`
+
+An optional array limiting uploads to file nodes with a matching `sourceInstanceName`.
+
+**Type:** `[String]`\
+**Default:** n/a\
+
+### `transformTypes`
+
+An optional array of GraphQL Types to add the `gatsbyImageData` resolver to for Gatsby Image support.
+
+**Type:** `[String]`\
+**Default:** `['CloudinaryAsset']`
+
+### `overwriteExisting`
+
+Whether to overwrite existing assets with the same public ID. When set to false, return immediately if an asset with the same Public ID was found. It's recommended that this is set to false in development as each image overwrite costs one Cloudinary transformation.
+
+**Type:** `Boolean`\
+**Default:** `false`
+
+### `defaultTransformations`
+
+The default value for the `gatsbyImageData` resolver argument `transformations`.
+
+**Type:** `[String]`\
+**Default:** `['c_fill', 'g_auto', 'q_auto']`
+
+&nbsp;
+
+## 🖼️ Gatsby Plugin Image (`gatsbyImageData`) API
 
 The plugin supports [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/) by adding a `gatsbyImageData` resolver to the configured GraphQL types.
 
@@ -288,8 +458,8 @@ The plugin supports [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsb
 
 An array of "raw" cloudinary transformations added to the initial transformation together with the width and height.
 
-**Type:** `[String]`
-**Default:**`["c_fill", "g_auto", "q_auto"]` or the configured `defaultTransformations`
+**Type:** `[String]`\
+**Default:**`["c_fill", "g_auto", "q_auto"]` or the configured `defaultTransformations`\
 **Example:** `["c_crop", "x_300"]`
 
 > **WARNING:** Changing the sizing using transformations will mess with the Gatsby Image Component
@@ -298,8 +468,8 @@ An array of "raw" cloudinary transformations added to the initial transformation
 
 An array of "raw" cloudinary transformations added after the initial transformations above.
 
-**Type:** `[String]`
-**Default:** `[]`
+**Type:** `[String]`\
+**Default:** `[]`\
 **Example:** `["e_grayscale","e_pixelate_faces,e_tint:100:663399:0p:white:100p"]`
 
 > **WARNING:** Changing the sizing using chained transformations will mess with the Gatsby Image Component
@@ -308,8 +478,8 @@ An array of "raw" cloudinary transformations added after the initial transformat
 
 The style of the temporary image shown while the larger image is loaded.
 
-**Type:** `NONE`, `BLURRED` or `TRACED_SVG`
-**Default:** `NONE`
+**Type:** `NONE`, `BLURRED` or `TRACED_SVG`\
+**Default:** `NONE`\
 **Example:** `BLURRED`
 
 > **NOTE:** `DOMINANT_COLOR` is not supported
@@ -344,46 +514,19 @@ Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/bui
 
 Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#all-options) for information on `sizes`.
 
-## Running Tests 🧪
+&nbsp;
 
-Run the tests once:
-
-```
-yarn workspace gatsby-transformer-cloudinary test
-```
-
-Run the tests in watch mode:
-
-```
-yarn workspace gatsby-transformer-cloudinary test:watch
-```
-
-## Live demo 🎦
-
-[Live demo](https://gatsby-transformer-cloudinary.netlify.com/) ([source](https://github.com/jlengstorf/gatsby-transformer-cloudinary))
-
-> **DISCLAIMER:** If you try running this demo's source code on your own computer, you might face issues as the demo uses assets and [transformations](https://cloudinary.com/documentation/chained_and_named_transformations#named_transformations) from the author’s Cloudinary account. Before running, please remove them or replace them with images and transformations from your own Cloudinary account.
-
-## Features 🦄
-
-- Upload local project media assets to a secure remote CDN
-- Upload remote media assets to a secure remote CDN
-- Utilize media assets on Cloudinary in gatsby-plugin-image
-- Use gatsby-plugin-image `gatsbyImageData` on Cloudinary assets
-- Retrieve media files in optimized formats with responsive breakpoints
-- Utilize all Cloudinary transformations including chained transformations in gatsby's data layer
-
-## Other Resources 🧐
+## 📚 Other Resources
 
 - [Cloudinary image transformation reference](https://cloudinary.com/documentation/image_transformation_reference)
 - [Try the gatsby-source-cloudinary plugin to source media files into Gatsby file nodes](https://www.npmjs.com/package/gatsby-source-cloudinary)
 - [Using Cloudinary image service for media optimization](https://www.gatsbyjs.org/docs/using-cloudinary-image-service/)
 - [Learn how this plugin was built with Jason Lengstorf](https://www.learnwithjason.dev/build-a-gatsby-transformer-plugin-for-cloudinary)
 
-## Contribute 🏴‍☠️
+&nbsp;
 
-Do you want to contribute to make our plugin even better? Feel free to send in issues and pull requests on feature requests, fixes, bugs, typos, performance lapses or any other challenge you face when using our plugin.
+## 🏴‍☠️ Contribute
 
-## License 👑
+You may improve the documentation, help fellow users, report bugs, suggest enhancements, contribute code and more.
 
-MIT
+Get started by reading the [contribution docs](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/blob/main/CONTRIBUTING.md).

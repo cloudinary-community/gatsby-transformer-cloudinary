@@ -5,7 +5,7 @@ import { GatsbyImage } from 'gatsby-plugin-image';
 const ExistingData = ({ variant = 'full' }) => {
   const data = useStaticQuery(graphql`
     query {
-      blogPost(name: { eq: "Blog Post One" }) {
+      blogPost(title: { eq: "Blog Post Example One" }) {
         heroImage {
           gatsbyImageData(
             height: 300
@@ -21,7 +21,7 @@ const ExistingData = ({ variant = 'full' }) => {
   // Duplicate the query so we can display it on the page.
   const query = `
     query {
-      blogPost(name: { eq: "Blog Post One" }) {
+      blogPost(title: { eq: "Blog Post Example One" }) {
         heroImage {
           gatsbyImageData(
             height: 300
