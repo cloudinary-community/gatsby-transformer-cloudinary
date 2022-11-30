@@ -5,7 +5,7 @@ With `gatsby-transformer-cloudinary` you may:
 - 🖼️ Add [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/) support to any GraphQL Types describing a Cloudinary assets.
 - 📤 Upload local and remote images to [Cloudinary](https://cloudinary.com/) from within your Gatsby project.
 
-📥 To pull data from your Cloudinary account into the Gatsby data layer use [gatsby-source-cloudinary](https://www.github.com/cloudinary-devs/gatsby-source-cloudinary/)
+📥 But if you want to pull data from your Cloudinary account into the Gatsby data layer use our other plugin, [gatsby-source-cloudinary](https://www.github.com/cloudinary-devs/gatsby-source-cloudinary/)
 
 &nbsp;
 
@@ -34,9 +34,10 @@ With `gatsby-transformer-cloudinary` you may:
 
 Use assets hosted by Cloudinary together with Gatsby's Image component:
 
-- The `gatsbyImageData` resolver is added to each GraphQLType configured.
+- You add the `gatsbyImageData` resolver to each GraphQLType configured.
 
-The configuration and example in this section assumes your Gatsby Data Layer has at least one node of type `BlogPost` with a `heroImage` field describing an already uploaded Cloudinary asset.
+
+This configuration and example assumes your Gatsby Data Layer has at least one node of type `BlogPost` with a `heroImage` field describing an already uploaded Cloudinary asset.
 
 👉 More details in [Transform Type Requierments](#transform-type-requierments).
 
@@ -133,7 +134,7 @@ You may add Gatsby Image support to any GraphQL Type describing a Cloudinary ass
 }
 ```
 
-To find the GraphQL Type describing your Cloudinary assets use the buildt in [GraphiQL exlorer](https://www.gatsbyjs.com/docs/how-to/querying-data/running-queries-with-graphiql/). Either by hovering over the field describing the asset, or by looking it up in the "Documentation Explorer".
+To find the GraphQL Type describing your Cloudinary assets use the built in [GraphiQL exlorer](https://www.gatsbyjs.com/docs/how-to/querying-data/running-queries-with-graphiql/). Either you hover over the field describing the asset, or you look in the "Documentation Explorer".
 
 `defaultBase64` and `defaultTracedSVG` is the base64 URI of the placeholder image, it must comply with [RFC 2397](https://tools.ietf.org/html/rfc2397).
 
@@ -141,12 +142,13 @@ To find the GraphQL Type describing your Cloudinary assets use the buildt in [Gr
 
 ## 📤 Upload Local Images and Add Gatsby Image Support
 
-Upload local images to Cloudinary and skip the use of gatsby-transformer-sharp to speed up your build process and take advantage of Cloudinary's transformations:
+If you upload local images to Cloudinary and skip the gatsby-transformer-sharp you speed up your build process and enjoy Cloudinary's transformations:
 
-- A `CloudinaryAsset` node is created for each image.
-- The `gatsbyImageData` resolver is added to each node by default.
 
-The configuration and example in this section assumes you have a folder with images placed in the root of your project.
+- You create a `CloudinaryAsset` node for each image.
+- You add a `gatsbyImageData` resolver to each node by default.
+
+This configuration and example assumes you have your images folder in the root of your project.
 
 ### Install packages
 
@@ -198,7 +200,7 @@ module.exports = {
 
 ### Example Usage
 
-Example of the plugin in action fetching an asset using the `useStaticQuery` API of Gatsby:
+Example of the plugin fetching an asset using the `useStaticQuery` API of Gatsby:
 
 ```jsx
 // File ./components/local-upload.js
@@ -249,14 +251,14 @@ export default LocalUploadExample;
 
 ## 📤 Upload Remote Images and add Gatsby Image Support
 
-Upload remote images referenced in any node to Cloudinary and take advantage of Cloudinary's transformations:
+Upload remote images referenced in any node to Cloudinary and enjoy Cloudinary's transformations:
 
-- A `CloudinaryAsset` node is created for each image.
-- The `gatsbyImageData` resolver is added to each node by default.
+- You create a `CloudinaryAsset` node for each image.
+- You add the `gatsbyImageData` resolver to each node by default.
 
 Uploading remote image requires you to write some custom code. We'd like to make it configurable instead, let us know if you'd benefit by [joining the discussion](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/discussions/207).
 
-The configuration and example in this section assumes your Gatsby Data Layer has at least one node of type `Project` with a `coverImageUrl` field containg a url pointing to a publically available image file.
+This configuration and example assumes your Gatsby Data Layer has at least one node of type `Project` with a `coverImageUrl` field containg a url pointing to a publically available image file.
 
 ### Install Packages
 
@@ -397,7 +399,7 @@ You'll find your Cloudinary account's `cloudName` in your [Cloudinary console](h
 
 ### `apiKey` (required for upload functionality)
 
-The API Key of your Cloudinary account. You'll find it in your [Cloudinary console](https://cloudinary.com/console/).
+You'll find your Cloudinary API Key in your [Cloudinary console](https://cloudinary.com/console/).
 
 **Type:** `String`\
 **Default:** n/a\
@@ -405,7 +407,7 @@ The API Key of your Cloudinary account. You'll find it in your [Cloudinary conso
 
 ### `apiSecret` (required for upload functionality)
 
-The API Secret of your Cloudinary account. You'll find it in your [Cloudinary console](https://cloudinary.com/console/).
+You'll find your Cloudinary API Secret in your [Cloudinary console](https://cloudinary.com/console/).
 
 **Type:** `String`\
 **Default:** n/a\
@@ -427,7 +429,7 @@ An optional array limiting uploads to file nodes with a matching `sourceInstance
 
 ### `transformTypes`
 
-An optional array of GraphQL Types to add the `gatsbyImageData` resolver to for Gatsby Image support.
+An optional array of GraphQL Types to add the `gatsbyImageData` resolver for Gatsby Image support.
 
 **Type:** `[String]`\
 **Default:** `['CloudinaryAsset']`
@@ -456,7 +458,7 @@ The plugin supports [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsb
 
 #### `transformations`
 
-An array of "raw" cloudinary transformations added to the initial transformation together with the width and height.
+An array of "raw" cloudinary transformations added to the initial transformation together with the `width` and `height`.
 
 **Type:** `[String]`\
 **Default:**`["c_fill", "g_auto", "q_auto"]` or the configured `defaultTransformations`\
@@ -484,35 +486,35 @@ The style of the temporary image shown while the larger image is loaded.
 
 > **NOTE:** `DOMINANT_COLOR` is not supported
 
-Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#placeholder) for more information.
+Read the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#placeholder) for more information.
 
 #### `height` / `width`
 
-Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#widthheight) for information on `height` / `width`.
+Read the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#widthheight) on `height` / `width`.
 
 #### `aspectRatio`
 
-Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#aspectratio) for information on `aspectRatio`.
+Read the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#aspectratio) on `aspectRatio`.
 
 #### `layout`
 
-Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#layout) for information on `layout`.
+Read the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#layout) on `layout`.
 
 #### `backgroundColor`
 
-Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image#all-options) for information on `backgroundColor`.
+Read the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image#all-options) on `backgroundColor`.
 
 #### `breakpoints`
 
-Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image#all-options) for information on `breakpoints`.
+Read the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image#all-options) on `breakpoints`.
 
 #### `outputPixelDensities`
 
-Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image#all-options) for information on `outputPixelDensities`.
+Read the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image#all-options) on `outputPixelDensities`.
 
 #### `sizes`
 
-Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#all-options) for information on `sizes`.
+Read the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#all-options) on `sizes`.
 
 &nbsp;
 
@@ -522,6 +524,11 @@ Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/bui
 - [Try the gatsby-source-cloudinary plugin to source media files into Gatsby file nodes](https://www.npmjs.com/package/gatsby-source-cloudinary)
 - [Using Cloudinary image service for media optimization](https://www.gatsbyjs.org/docs/using-cloudinary-image-service/)
 - [Learn how this plugin was built with Jason Lengstorf](https://www.learnwithjason.dev/build-a-gatsby-transformer-plugin-for-cloudinary)
+
+
+
+- [Watch Jason Lengstorf build this plugin's first version](https://www.learnwithjason.dev/build-a-gatsby-transformer-plugin-for-cloudinary)
+
 
 &nbsp;
 
