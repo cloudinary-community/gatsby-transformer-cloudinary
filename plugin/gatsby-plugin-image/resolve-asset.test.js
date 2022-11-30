@@ -36,6 +36,7 @@ describe('generateCloudinaryAssetSource', () => {
   const fit = undefined;
   const options = {
     chained: ['t_lwj'],
+    secure: true,
   };
   it('generated correct source data', () => {
     const result = _generateCloudinaryAssetSource(
@@ -48,7 +49,7 @@ describe('generateCloudinaryAssetSource', () => {
     );
 
     expect(result.src).toBe(
-      'http://res.cloudinary.com/cloud-name/image/upload/f_jpg,h_500,w_300/t_lwj/public-id'
+      'https://res.cloudinary.com/cloud-name/image/upload/f_jpg,h_500,w_300/t_lwj/public-id'
     );
     expect(result.width).toBe(width);
     expect(result.height).toBe(height);

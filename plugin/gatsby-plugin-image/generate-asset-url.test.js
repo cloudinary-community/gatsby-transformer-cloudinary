@@ -40,6 +40,18 @@ describe('generateCloudinaryAssetUrl', () => {
     );
   });
 
+  it('generates correct Cloudinary url with scure option set to true', () => {
+    const url = generateCloudinaryAssetUrl({
+      ...asset,
+      options: {
+        secure: true,
+      },
+    });
+    expect(url).toBe(
+      'https://res.cloudinary.com/cloud-name/image/upload/f_jpg,h_600,w_400/public-id'
+    );
+  });
+
   it('generates correct Cloudinary url in traced SVG mode', () => {
     const url = generateCloudinaryAssetUrl({
       ...asset,

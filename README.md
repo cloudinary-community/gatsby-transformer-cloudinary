@@ -315,6 +315,13 @@ The style of the temporary image shown while the larger image is loaded.
 
 Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#placeholder) for more information.
 
+#### `secure`
+
+When set to `false` uses `http` instead of `https` for the image urls.
+
+**Type:** `Boolean`
+**Default:** `true`
+
 #### `height` / `width`
 
 Go to the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#widthheight) for information on `height` / `width`.
