@@ -8,6 +8,7 @@
     "gatsby-image": "3.11.0",
     "gatsby-plugin-image": "2.21.0",
     "gatsby-source-filesystem": "4.16.0",
+    "gatsby-transformer-cloudinary": "*",
     "react": "18.1.0",
     "react-dom": "18.1.0"
   },
