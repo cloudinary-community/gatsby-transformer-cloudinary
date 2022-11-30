@@ -48,7 +48,7 @@ exports.generateCloudinaryAssetUrl = ({
     transformation.push(generateTracedSVGTransformation(tracedSvg));
   }
 
-  cloudinary.config({ cloud_name: cloudName });
+  cloudinary.config({ cloud_name: cloudName, secure: options.secure });
 
   const url = cloudinary.url(publicId, {
     transformation,
