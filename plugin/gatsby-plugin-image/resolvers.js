@@ -18,6 +18,10 @@ exports.createGatsbyPluginImageResolver = (gatsbyUtils, pluginOptions) => {
         placeholder: {
           type: CloudinaryPlaceholderType,
         },
+        secure: {
+          type: 'Boolean',
+          defaultValue: true,
+        },
       }
     );
   } catch (error) {
