@@ -34,7 +34,7 @@ With `gatsby-transformer-cloudinary` you may:
 
 Use assets hosted by Cloudinary together with Gatsby's Image component:
 
-- You add the `gatsbyImageData` resolver to each GraphQLType configured.
+- The plugin adds the `gatsbyImageData` resolver to each GraphQLType configured.
 
 
 This configuration and example assumes your Gatsby Data Layer has at least one node of type `BlogPost` with a `heroImage` field describing an already uploaded Cloudinary asset.
@@ -134,7 +134,7 @@ You may add Gatsby Image support to any GraphQL Type describing a Cloudinary ass
 }
 ```
 
-To find the GraphQL Type describing your Cloudinary assets use the built in [GraphiQL exlorer](https://www.gatsbyjs.com/docs/how-to/querying-data/running-queries-with-graphiql/). Either you hover over the field describing the asset, or you look in the "Documentation Explorer".
+To find the GraphQL Type describing your Cloudinary assets use the built in [GraphiQL exlorer](https://www.gatsbyjs.com/docs/how-to/querying-data/running-queries-with-graphiql/). Either hover over the field describing the asset, or look in the "Documentation Explorer".
 
 `defaultBase64` and `defaultTracedSVG` is the base64 URI of the placeholder image, it must comply with [RFC 2397](https://tools.ietf.org/html/rfc2397).
 
@@ -144,9 +144,8 @@ To find the GraphQL Type describing your Cloudinary assets use the built in [Gra
 
 If you upload local images to Cloudinary and skip the gatsby-transformer-sharp you speed up your build process and enjoy Cloudinary's transformations:
 
-
-- You create a `CloudinaryAsset` node for each image.
-- You add a `gatsbyImageData` resolver to each node by default.
+- The plugin creates a `CloudinaryAsset` node for each image.
+- The plugin adds a `gatsbyImageData` resolver to each node by default.
 
 This configuration and example assumes you have your images folder in the root of your project.
 
@@ -253,8 +252,8 @@ export default LocalUploadExample;
 
 Upload remote images referenced in any node to Cloudinary and enjoy Cloudinary's transformations:
 
-- You create a `CloudinaryAsset` node for each image.
-- You add the `gatsbyImageData` resolver to each node by default.
+- The plugin creates a `CloudinaryAsset` node for each image.
+- The plugin adds the `gatsbyImageData` resolver to each node by default.
 
 Uploading remote image requires you to write some custom code. We'd like to make it configurable instead, let us know if you'd benefit by [joining the discussion](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/discussions/207).
 
@@ -399,7 +398,7 @@ You'll find your Cloudinary account's `cloudName` in your [Cloudinary console](h
 
 ### `apiKey` (required for upload functionality)
 
-You'll find your Cloudinary API Key in your [Cloudinary console](https://cloudinary.com/console/).
+You'll find your Cloudinary API Key in the [Cloudinary console](https://cloudinary.com/console/).
 
 **Type:** `String`\
 **Default:** n/a\
@@ -523,10 +522,6 @@ Read the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/buil
 - [Cloudinary image transformation reference](https://cloudinary.com/documentation/image_transformation_reference)
 - [Try the gatsby-source-cloudinary plugin to source media files into Gatsby file nodes](https://www.npmjs.com/package/gatsby-source-cloudinary)
 - [Using Cloudinary image service for media optimization](https://www.gatsbyjs.org/docs/using-cloudinary-image-service/)
-- [Learn how this plugin was built with Jason Lengstorf](https://www.learnwithjason.dev/build-a-gatsby-transformer-plugin-for-cloudinary)
-
-
-
 - [Watch Jason Lengstorf build this plugin's first version](https://www.learnwithjason.dev/build-a-gatsby-transformer-plugin-for-cloudinary)
 
 
