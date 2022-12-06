@@ -39,6 +39,25 @@ exports.sourceNodes = (gatsbyUtils) => {
 
   reporter.info(`[site] Create ExistingData node # 1`);
 
+  createNode({
+    id: createNodeId(`GoodData >>> 1`),
+    name: 'GoodData',
+    ...cloudinaryData1,
+    internal: {
+      type: 'SomeBadImageData',
+      contentDigest: createContentDigest('GoodData' + cloudinaryData1),
+    },
+  });
+
+  createNode({
+    id: createNodeId(`BadData >>> 2`),
+    name: 'BadData',
+    internal: {
+      type: 'SomeBadImageData',
+      contentDigest: createContentDigest('BadData'),
+    },
+  });
+
   const cloudinaryData2 = {
     cloudName: 'jlengstorf',
     publicId: 'gatsby-cloudinary/jason',
