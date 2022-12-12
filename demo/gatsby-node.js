@@ -6,66 +6,82 @@ exports.sourceNodes = (gatsbyUtils) => {
     gatsbyUtils;
   const { createNode } = actions;
 
-  const cloudinaryData1 = {
+  const cloudinaryData = {
     cloudName: 'lilly-labs-consulting',
     publicId: 'sample',
   };
 
+  const blogPostData1 = {
+    title: 'Blog Post Example One',
+    slug: 'post-1',
+    heroImage: cloudinaryData,
+  };
+
   createNode({
+    ...blogPostData1,
     id: createNodeId(`BlogPost >>> 1`),
-    name: 'Blog Post One',
-    heroImage: cloudinaryData1,
     internal: {
       type: 'BlogPost',
-      contentDigest: createContentDigest(cloudinaryData1),
+      contentDigest: createContentDigest(blogPostData1),
     },
   });
 
-  reporter.info(`[site] Create BlogPost node # 1`);
+  reporter.info(`[site] Create BlogPost with existing asset # 1`);
+
+  const articleData1 = {
+    title: 'Article Example One',
+    slug: 'article-1',
+    feature: {
+      image: cloudinaryData,
+    },
+  };
 
   createNode({
+    ...articleData1,
     id: createNodeId(`Article >>> 1`),
-    name: 'Article One',
-    feature: {
-      image: cloudinaryData1,
-    },
     internal: {
       type: 'Article',
-      contentDigest: createContentDigest(cloudinaryData1),
+      contentDigest: createContentDigest(articleData1),
     },
   });
 
-  reporter.info(`[site] Create Article node # 1`);
+  reporter.info(`[site] Create Article with existing asset # 1`);
 
-  const remoteImageUrl1 =
-    'https://images.unsplash.com/photo-1527685609591-44b0aef2400b';
+  const projectData1 = {
+    name: 'Project Example One',
+    slug: 'project-1',
+    coverImageUrl:
+      'https://images.unsplash.com/photo-1527685609591-44b0aef2400b',
+  };
 
   createNode({
-    id: createNodeId(`RemoteExample >>> 1`),
-    name: 'Remote Example 1',
-    remoteImageUrl: remoteImageUrl1,
+    ...projectData1,
+    id: createNodeId(`Project >>> 1`),
     internal: {
-      type: 'RemoteExample',
-      contentDigest: createContentDigest(remoteImageUrl1),
+      type: 'Project',
+      contentDigest: createContentDigest(projectData1),
     },
   });
 
-  reporter.info(`[site] Create RemoteExample node # 1`);
+  reporter.info(`[site] Create Project with remote image url # 1`);
 
-  const remoteImageUrl2 =
-    'https://images.unsplash.com/photo-1631462685412-80a75dd611bc';
+  const projectData2 = {
+    name: 'Project Example Two',
+    slug: 'project-2',
+    coverImageUrl:
+      'https://images.unsplash.com/photo-1631462685412-80a75dd611bc',
+  };
 
   createNode({
-    id: createNodeId(`RemoteExample >>> 2`),
-    name: 'Remote Example 2',
-    remoteImageUrl: remoteImageUrl2,
+    ...projectData2,
+    id: createNodeId(`Project >>> 2`),
     internal: {
-      type: 'RemoteExample',
-      contentDigest: createContentDigest(remoteImageUrl2),
+      type: 'Project',
+      contentDigest: createContentDigest(projectData2),
     },
   });
 
-  reporter.info(`[site] Create RemoteExample node # 2`);
+  reporter.info(`[site] Create Project with remote image url # 2`);
 
   // Should NOT be uploaded to Cloudinary
   // since uploadSourceImageNames is set to ["images"]
@@ -87,9 +103,10 @@ exports.onCreateNode = async (gatsbyUtils) => {
     reporter,
   } = gatsbyUtils;
 
-  if (node.internal.type === 'RemoteExample') {
+  if (node.internal.type === 'Project' && node.coverImageUrl) {
+    // Upload the image to Cloudinary
     const imageNode = await createRemoteImageNode({
-      url: node.remoteImageUrl,
+      url: node.coverImageUrl,
       parentNode: node,
       createNode,
       createNodeId,
@@ -97,19 +114,20 @@ exports.onCreateNode = async (gatsbyUtils) => {
       reporter,
     });
 
-    createNodeField({ node: node, name: 'remoteImage', value: imageNode.id });
+    // Add node field to be used by "createSchemaCustomization"
+    createNodeField({ node: node, name: 'coverImage', value: imageNode.id });
   }
 };
 
 exports.createSchemaCustomization = (gatsbyUtils) => {
   const { actions } = gatsbyUtils;
 
-  const RemoteExampleType = `
-      type RemoteExample implements Node  {
-        remoteImageUrl: String!
-        remoteImage: CloudinaryAsset @link(from: "fields.remoteImage" by: "id")
+  const ProjectType = `
+      type Project implements Node  {
+        coverImageUrl: String!
+        coverImage: CloudinaryAsset @link(from: "fields.coverImage" by: "id")
       }
     `;
 
-  actions.createTypes([RemoteExampleType]);
+  actions.createTypes([ProjectType]);
 };

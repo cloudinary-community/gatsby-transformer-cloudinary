@@ -5,7 +5,7 @@ import { GatsbyImage } from 'gatsby-plugin-image';
 const ExistingDataNested = ({ variant = 'full' }) => {
   const data = useStaticQuery(graphql`
     query {
-      article(name: { eq: "Article One" }) {
+      article(title: { eq: "Article Example One" }) {
         feature {
           image {
             gatsbyImageData(
@@ -24,7 +24,7 @@ const ExistingDataNested = ({ variant = 'full' }) => {
   // Duplicate the query so we can display it on the page.
   const query = `
     query {
-      article(name: { eq: "Article One" }) {
+      article(title: { eq: "Article Example One" }) {
         feature {
           image {
             gatsbyImageData(
