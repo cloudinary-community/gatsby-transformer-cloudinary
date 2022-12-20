@@ -3,8 +3,9 @@ jest.mock('./asset-data');
 
 const gatsbyUtilsMocks = {
   reporter: {
-    error: jest.fn(),
     panic: jest.fn(),
+    error: jest.fn(),
+    info: jest.fn(),
     verbose: jest.fn(),
   },
 };
@@ -58,7 +59,7 @@ describe('generateCloudinaryAssetSource', () => {
 });
 
 describe('resolveCloudinaryAssetData', () => {
-  const source = {
+  const sourceWithMetadata = {
     publicId: 'public-id',
     cloudName: 'cloud-name',
     originalWidth: '600',
@@ -66,9 +67,13 @@ describe('resolveCloudinaryAssetData', () => {
     originalFormat: 'jpg',
   };
 
-  const args = {
-    transformations: ['e_grayscale'],
+  const sourceWithoutMeta = {
+    publicId: 'public-id',
+    cloudName: 'cloud-name',
   };
+
+  const context = {}; // Never used
+  const info = {};
 
   beforeEach(() => {
     getAssetMetadata.mockResolvedValue({
@@ -85,13 +90,15 @@ describe('resolveCloudinaryAssetData', () => {
     jest.clearAllMocks();
   });
 
-  it('calls gatsby-plugin-image -> generateImageData', async () => {
-    await resolveCloudinaryAssetData(source, args);
+  it('calls gatsby-plugin-image -> generateImageData once', async () => {
+    const args = {};
+    await resolveCloudinaryAssetData(sourceWithMetadata, args, context, info);
     expect(generateImageData).toBeCalledTimes(1);
   });
 
   it('calls gatsby-plugin-image -> generateImageData with correct data', async () => {
-    await resolveCloudinaryAssetData(source, args);
+    const args = { transformations: ['e_grayscale'] };
+    await resolveCloudinaryAssetData(sourceWithMetadata, args, context, info);
     expect(generateImageData).toBeCalledWith({
       filename: 'cloud-name>>>public-id',
       generateImageSource: _generateCloudinaryAssetSource,
@@ -109,12 +116,13 @@ describe('resolveCloudinaryAssetData', () => {
   });
 
   it('fetches metadata when not present on source', async () => {
-    await resolveCloudinaryAssetData(source, {});
-    await resolveCloudinaryAssetData(
-      { publicId: 'public-id', cloudName: 'cloud-name' },
-      {}
-    );
+    const args = {};
+    await resolveCloudinaryAssetData(sourceWithMetadata, args, context, info);
+    await resolveCloudinaryAssetData(sourceWithoutMeta, args, context, info);
+    // getAssetMetadata should only be called for sourceWithoutMeta
     expect(getAssetMetadata).toBeCalledTimes(1);
+    expect(gatsbyUtilsMocks.reporter.verbose).toBeCalledTimes(1);
+    // gatsby-plugin-image -> generateImageData should be called for both
     expect(generateImageData).toHaveBeenNthCalledWith(2, {
       filename: 'cloud-name>>>public-id',
       generateImageSource: _generateCloudinaryAssetSource,
@@ -129,7 +137,8 @@ describe('resolveCloudinaryAssetData', () => {
   });
 
   it('fetches and adds correct "blurred" placeholder', async () => {
-    await resolveCloudinaryAssetData(source, { placeholder: 'blurred' });
+    const args = { placeholder: 'blurred' };
+    await resolveCloudinaryAssetData(sourceWithMetadata, args, context, info);
 
     expect(getLowResolutionImageURL).toBeCalledTimes(1);
     expect(getUrlAsBase64Image).toBeCalledTimes(1);
@@ -149,7 +158,8 @@ describe('resolveCloudinaryAssetData', () => {
   });
 
   it('fetches and adds correct "tracedSVG" placeholder', async () => {
-    await resolveCloudinaryAssetData(source, { placeholder: 'tracedSVG' });
+    const args = { placeholder: 'tracedSVG' };
+    await resolveCloudinaryAssetData(sourceWithMetadata, args, context, info);
 
     expect(getAssetAsTracedSvg).toBeCalledTimes(1);
     expect(generateImageData).toHaveBeenCalledWith({
@@ -164,6 +174,22 @@ describe('resolveCloudinaryAssetData', () => {
       },
       placeholderURL: 'svgDataUrl',
       placeholder: 'tracedSVG',
+    });
+  });
+
+  describe('when missing required data', () => {
+    it('calls reporter.error and returns null', async () => {
+      const source = {};
+      const args = {};
+      const result = await resolveCloudinaryAssetData(
+        source,
+        args,
+        context,
+        info
+      );
+      expect(generateImageData).toBeCalledTimes(0);
+      expect(gatsbyUtilsMocks.reporter.error).toBeCalledTimes(1);
+      expect(result).toBe(null);
     });
   });
 
@@ -185,17 +211,23 @@ describe('resolveCloudinaryAssetData', () => {
       jest.clearAllMocks();
     });
 
-    it('reporter.panic on fetching metdata error', async () => {
-      await resolveCloudinaryAssetData(
-        { publicId: 'public-id', cloudName: 'cloud-name' },
-        {}
+    it('calls reporter.error on fetching metadata error and returns null', async () => {
+      const args = {};
+      const result = await resolveCloudinaryAssetData(
+        sourceWithoutMeta,
+        args,
+        context,
+        info
       );
       expect(getAssetMetadata).toBeCalledTimes(1);
-      expect(gatsbyUtilsMocks.reporter.panic).toBeCalledTimes(1);
+      expect(generateImageData).toBeCalledTimes(0);
+      expect(gatsbyUtilsMocks.reporter.error).toBeCalledTimes(1);
+      expect(result).toBe(null);
     });
 
-    it('reporter.errror on fetching blurred placeholder error', async () => {
-      await resolveCloudinaryAssetData(source, { placeholder: 'blurred' });
+    it('calls reporter.error on fetching blurred placeholder error', async () => {
+      const args = { placeholder: 'blurred' };
+      await resolveCloudinaryAssetData(sourceWithMetadata, args, context, info);
       expect(getLowResolutionImageURL).toBeCalledTimes(1);
       expect(getUrlAsBase64Image).toBeCalledTimes(1);
       expect(gatsbyUtilsMocks.reporter.error).toBeCalledTimes(1);
@@ -214,8 +246,9 @@ describe('resolveCloudinaryAssetData', () => {
       });
     });
 
-    it('reporter.errror on fetching tracedSVG placeholder error', async () => {
-      await resolveCloudinaryAssetData(source, { placeholder: 'tracedSVG' });
+    it('calls reporter.error on fetching tracedSVG placeholder error', async () => {
+      const args = { placeholder: 'tracedSVG' };
+      await resolveCloudinaryAssetData(sourceWithMetadata, args, context, info);
       expect(getAssetAsTracedSvg).toBeCalledTimes(1);
       expect(gatsbyUtilsMocks.reporter.error).toBeCalledTimes(1);
       expect(generateImageData).toHaveBeenCalledWith({

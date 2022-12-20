@@ -10,12 +10,12 @@ const {
   getAssetMetadata,
 } = require('./asset-data');
 
-exports._generateCloudinaryAssetSource = (
+const generateCloudinaryAssetSource = (
   filename,
   width,
   height,
   format,
-  fit,
+  _fit,
   options
 ) => {
   const [cloudName, publicId] = filename.split('>>>');
@@ -38,9 +38,21 @@ exports._generateCloudinaryAssetSource = (
   return imageSource;
 };
 
+exports._generateCloudinaryAssetSource = generateCloudinaryAssetSource;
+
 exports.createResolveCloudinaryAssetData =
-  (gatsbyUtils) => async (source, args) => {
+  (gatsbyUtils) => async (source, args, _context, info) => {
     const { reporter } = gatsbyUtils;
+    const transformType = info.parentType || 'UnknownTransformType';
+
+    const hasRequiredData = source.cloudName && source.publicId;
+
+    if (!hasRequiredData) {
+      reporter.error(
+        `[gatsby-transformer-cloudinary] Missing required fields on ${transformType}: cloudName=${source.cloudName}, publicId=${source.cloudName}`
+      );
+      return null;
+    }
 
     let metadata = {
       width: source.originalWidth,
@@ -54,18 +66,16 @@ exports.createResolveCloudinaryAssetData =
     if (!hasSizingAndFormatMetadata) {
       // Lacking metadata, so lets request it from Cloudinary
       try {
-        reporter.verbose(
-          `[gatsby-transformer-cloudinary] Missing metadata on ${source.cloudName} > ${source.publicId}`
-        );
-        reporter.verbose(
-          `[gatsby-transformer-cloudinary] >>> To save on network requests add originalWidth, originalHeight and originalFormat to the asset data`
-        );
         metadata = await getAssetMetadata({ source, args });
-      } catch (error) {
-        reporter.panic(
-          `[gatsby-transformer-cloudinary] Could not get metadata for ${source.cloudName} > ${source.publicId}:`,
-          error
+        reporter.verbose(
+          `[gatsby-transformer-cloudinary] Missing metadata fields on ${transformType} for ${source.cloudName} > ${source.publicId}
+          >>> To save on network requests add originalWidth, originalHeight and originalFormat to ${transformType}`
         );
+      } catch (error) {
+        reporter.error(
+          `[gatsby-transformer-cloudinary] Could not get metadata for ${transformType} for ${source.cloudName} > ${source.publicId}: ${error.message}`
+        );
+        return null;
       }
     }
 
@@ -75,7 +85,7 @@ exports.createResolveCloudinaryAssetData =
       // Passing the plugin name allows for better error messages
       pluginName: `gatsby-transformer-cloudinary`,
       sourceMetadata: metadata,
-      generateImageSource: this._generateCloudinaryAssetSource,
+      generateImageSource: generateCloudinaryAssetSource,
       options: args,
     };
 
@@ -98,8 +108,7 @@ exports.createResolveCloudinaryAssetData =
       }
     } catch (error) {
       reporter.error(
-        `[gatsby-transformer-cloudinary] Could not generate placeholder (${args.placeholder}) for ${source.cloudName} > ${source.publicId}:`,
-        error
+        `[gatsby-transformer-cloudinary] Could not generate placeholder (${args.placeholder}) for ${source.cloudName} > ${source.publicId}: ${error.message}`
       );
     }
 

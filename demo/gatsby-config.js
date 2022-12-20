@@ -31,6 +31,7 @@ module.exports = {
           'CloudinaryAsset',
           'ExistingDataExampleImage',
           'ExistingDataNestedExampleImage',
+          'SomeBadImageData',
         ],
       },
     },
