@@ -4,9 +4,9 @@
   "version": "0.2.0",
   "private": true,
   "dependencies": {
-    "gatsby": "4.16.0",
-    "gatsby-plugin-image": "2.21.0",
-    "gatsby-source-filesystem": "4.16.0",
+    "gatsby": "4.25.0",
+    "gatsby-plugin-image": "2.25.0",
+    "gatsby-source-filesystem": "4.25.0",
     "gatsby-transformer-cloudinary": "*",
     "react": "18.1.0",
     "react-dom": "18.1.0"
