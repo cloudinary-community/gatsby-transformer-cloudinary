@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v3.0.1...v3.1.0) (2022-12-20)
+
+
+### Features
+
+* allow invalid source data by making gatsbyImageData nullable ([#218](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/218)) ([acf28f9](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/acf28f932a39ed3f864cf44aeb836e401c865692)), closes [#214](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/214)
+
 ## [3.0.1](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v3.0.0...v3.0.1) (2022-11-30)
 
 
