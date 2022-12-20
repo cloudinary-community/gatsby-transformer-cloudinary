@@ -408,6 +408,15 @@ You'll find your Cloudinary API Key in the [Cloudinary console](https://cloudina
 
 You'll find your Cloudinary API Secret in your [Cloudinary console](https://cloudinary.com/console/).
 
+#### `secure`
+
+When set to `false` uses `http` instead of `https` for the image urls.
+
+**Type:** `Boolean`
+**Default:** `true`
+
+#### `height` / `width`
+
 **Type:** `String`\
 **Default:** n/a\
 **Note:** Store and retrieve your `apiSecret` as [an environment variable](https://www.gatsbyjs.com/docs/how-to/local-development/environment-variables/).

@@ -11,6 +11,25 @@ exports.sourceNodes = (gatsbyUtils) => {
     publicId: 'sample',
   };
 
+  createNode({
+    id: createNodeId(`GoodData >>> 1`),
+    name: 'GoodData',
+    ...cloudinaryData,
+    internal: {
+      type: 'SomeBadImageData',
+      contentDigest: createContentDigest(cloudinaryData),
+    },
+  });
+
+  createNode({
+    id: createNodeId(`BadData >>> 2`),
+    name: 'BadData',
+    internal: {
+      type: 'SomeBadImageData',
+      contentDigest: createContentDigest({}),
+    },
+  });
+
   const blogPostData1 = {
     title: 'Blog Post Example One',
     slug: 'post-1',

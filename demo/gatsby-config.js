@@ -31,6 +31,7 @@ module.exports = {
           'CloudinaryAsset',
           'ArticleFeatureImage',
           'BlogPostHeroImage',
+          'SomeBadImageData',
         ],
       },
     },
