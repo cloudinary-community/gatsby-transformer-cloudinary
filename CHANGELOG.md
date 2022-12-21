@@ -1,3 +1,15 @@
+# [4.3.0](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v4.2.0...v4.3.0) (2022-12-21)
+
+
+### Bug Fixes
+
+* remove gatsby-plugin-utils from dev dependencies ([#221](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/221)) ([037fcc1](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/037fcc1076bdd97992378e51396d9f76b771129f))
+
+
+### Features
+
+* add Gatsby as a peer dependency ([#220](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/220)) ([890193e](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/890193e82dbdafb9054d6bfe861a655777a5226c)), closes [#219](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/219)
+
 # [4.2.0](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v4.1.0...v4.2.0) (2022-12-20)
 
 
