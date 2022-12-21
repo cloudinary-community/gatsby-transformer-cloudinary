@@ -1,30 +1,21 @@
 import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
-import Image from 'gatsby-image';
 import { GatsbyImage } from 'gatsby-plugin-image';
 
-const FluidSilly = () => {
+const UploadedSilly = () => {
   const data = useStaticQuery(graphql`
     query {
-      image: file(name: { eq: "marisa" }) {
+      image: file(name: { eq: "joppe-spaa-unsplash" }) {
         cloudinary: childCloudinaryAsset {
           gatsbyImageData(
             layout: CONSTRAINED
+            placeholder: TRACED_SVG
             transformations: ["e_blackwhite"]
             chained: [
               "e_vectorize:colors:2:despeckle:20,e_tint:100:tomato:0p:white:100p"
-              "l_beard_png,w_0.77,fl_relative,g_face,a_-5,y_0.06"
+              "l_gatsby-cloudinary:sergey-semin-unsplash,w_0.2,g_south"
             ]
           )
-          fluid(
-            transformations: ["e_blackwhite"]
-            chained: [
-              "e_vectorize:colors:2:despeckle:20,e_tint:100:tomato:0p:white:100p"
-              "l_beard_png,w_0.77,fl_relative,g_face,a_-5,y_0.06"
-            ]
-          ) {
-            ...CloudinaryAssetFluid
-          }
         }
       }
     }
@@ -33,25 +24,17 @@ const FluidSilly = () => {
   // Duplicate the query so we can display it on the page.
   const query = `
     query {
-      image: file(name: { eq: "marisa" }) {
+      image: file(name: { eq: "joppe-spaa-unsplash" }) {
         cloudinary: childCloudinaryAsset {
           gatsbyImageData(
             layout: CONSTRAINED
+            placeholder: TRACED_SVG
             transformations: ["e_blackwhite"]
             chained: [
               "e_vectorize:colors:2:despeckle:20,e_tint:100:tomato:0p:white:100p"
-              "l_beard_png,w_0.77,fl_relative,g_face,a_-5,y_0.06"
+              "l_gatsby-cloudinary:sergey-semin-unsplash,w_0.2,g_south"
             ]
           )
-          fluid(
-            transformations: ["e_blackwhite"]
-            chained: [
-              "e_vectorize:colors:2:despeckle:20,e_tint:100:tomato:0p:white:100p",
-              "l_beard_png,w_0.77,fl_relative,g_face,a_-5,y_0.06"
-            ]
-          ) {
-            ...CloudinaryAssetFluid
-          }
         }
       }
     }
@@ -63,16 +46,9 @@ const FluidSilly = () => {
     <div className="image-example">
       <h2>Or you can get plain silly</h2>
 
-      <h3>gatsby-plugin-image</h3>
       <GatsbyImage
         image={data.image.cloudinary.gatsbyImageData}
-        alt="Marisa Morby standing in a rose garden."
-      />
-
-      <h3>gatsby-image</h3>
-      <Image
-        fluid={data.image.cloudinary.fluid}
-        alt="Marisa Morby standing in a rose garden."
+        alt="Pirate Cat photo by Joppe Spaa from Unsplash."
       />
 
       <h3>Query</h3>
@@ -81,4 +57,4 @@ const FluidSilly = () => {
   );
 };
 
-export default FluidSilly;
+export default UploadedSilly;

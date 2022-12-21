@@ -38,6 +38,7 @@ const generateCloudinaryAssetSource = (
   return imageSource;
 };
 
+// Make it testable
 exports._generateCloudinaryAssetSource = generateCloudinaryAssetSource;
 
 exports.createResolveCloudinaryAssetData =

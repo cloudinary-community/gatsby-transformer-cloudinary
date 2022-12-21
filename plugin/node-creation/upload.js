@@ -13,17 +13,9 @@ exports.uploadImageToCloudinary = async ({
   reporter,
 }) => {
   verifyRequiredOptions(reporter);
-  const {
-    apiKey,
-    apiSecret,
-    breakpointsMaxImages,
-    cloudName,
-    createDerived,
-    fluidMaxWidth,
-    fluidMinWidth,
-    uploadFolder,
-    useCloudinaryBreakpoints,
-  } = getPluginOptions();
+
+  const { apiKey, apiSecret, cloudName, uploadFolder } = getPluginOptions();
+
   cloudinary.config({
     cloud_name: cloudName,
     api_key: apiKey,
@@ -37,26 +29,6 @@ exports.uploadImageToCloudinary = async ({
     resource_type: 'auto',
     timeout: FIVE_MINUTES,
   };
-
-  // Each time we ask Cloudinary to calculate the responsive breakpoints for an
-  // image, Cloudinary bills us for one transformation. Since this API call
-  // gets called for every image every time our Gatsby cache gets cleared, this
-  // can get expensive very fast. This option should not be used outside of
-  // production. It's recommended that createDerived be set to true when
-  // useCloudinaryBreakpoints is set to true.This will store the derived images
-  // and prevent Cloudinary from using more transformations to recompute them
-  // in the future.
-  if (useCloudinaryBreakpoints) {
-    uploadOptions.responsive_breakpoints = [
-      {
-        create_derived: createDerived,
-        bytes_step: 20000,
-        min_width: fluidMinWidth,
-        max_width: fluidMaxWidth,
-        max_images: breakpointsMaxImages,
-      },
-    ];
-  }
 
   let attempts = 1;
 

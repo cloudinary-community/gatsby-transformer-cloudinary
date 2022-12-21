@@ -5,8 +5,7 @@ require('dotenv').config({
 module.exports = {
   siteMetadata: {
     title: `Gatsby Cloudinary Image Transformer`,
-    description: `Demo of using the Gatsby Cloudinary image transformer with gatsby-image.`,
-    author: `@jlengstorf`,
+    description: `Demo of using the Gatsby Cloudinary image transformer with gatsby-plugin-image.`,
   },
   plugins: [
     {
@@ -25,12 +24,12 @@ module.exports = {
         cloudName: process.env.CLOUDINARY_CLOUD_NAME,
         apiKey: process.env.CLOUDINARY_API_KEY,
         apiSecret: process.env.CLOUDINARY_API_SECRET,
-        uploadFolder: 'gatsby-cloudinary',
+        uploadFolder: process.env.GATSBY_CLOUDINARY_UPLOAD_FOLDER,
         uploadSourceInstanceNames: ['images'],
         transformTypes: [
           'CloudinaryAsset',
-          'ExistingDataExampleImage',
-          'ExistingDataNestedExampleImage',
+          'ArticleFeatureImage',
+          'BlogPostHeroImage',
           'SomeBadImageData',
         ],
       },

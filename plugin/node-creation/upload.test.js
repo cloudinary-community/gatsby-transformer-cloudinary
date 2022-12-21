@@ -37,9 +37,6 @@ describe('uploadImageToCloudinary', () => {
       apiSecret: 'apiSecret',
       uploadFolder: 'uploadFolder',
       createDerived: false,
-      breakpointsMaxImages: 234,
-      fluidMaxWidth: 345,
-      fluidMinWidth: 456,
       ...options,
     };
   }
@@ -62,27 +59,6 @@ describe('uploadImageToCloudinary', () => {
     expect(cloudinaryConfig).toHaveBeenCalledWith(expected);
   });
 
-  it('does not ask for responsive breakpoints when useCloudinaryBreakpoints is false', async () => {
-    const cloudinaryUpload = jest.fn();
-    cloudinary.uploader.upload = cloudinaryUpload;
-
-    const options = getDefaultOptions({ useCloudinaryBreakpoints: false });
-    getPluginOptions.mockReturnValue(options);
-
-    const args = getDefaultArgs();
-    await uploadImageToCloudinary(args);
-
-    const expectedUrl = args.url;
-    const expectedOptions = {
-      folder: options.uploadFolder,
-      overwrite: args.overwrite,
-      public_id: args.publicId,
-      resource_type: 'auto',
-      timeout: 5 * 60 * 1000,
-    };
-    expect(cloudinaryUpload).toHaveBeenCalledWith(expectedUrl, expectedOptions);
-  });
-
   it('overwrites when passed overwrite:true', async () => {
     const cloudinaryUpload = jest.fn();
     cloudinary.uploader.upload = cloudinaryUpload;
@@ -100,39 +76,6 @@ describe('uploadImageToCloudinary', () => {
       public_id: args.publicId,
       resource_type: 'auto',
       timeout: 5 * 60 * 1000,
-    };
-    expect(cloudinaryUpload).toHaveBeenCalledWith(expectedUrl, expectedOptions);
-  });
-
-  it('asks for responsive breakpoints when useCloudinaryBreakpoints is true', async () => {
-    const cloudinaryUpload = jest.fn();
-    cloudinary.uploader.upload = cloudinaryUpload;
-
-    const options = getDefaultOptions({
-      useCloudinaryBreakpoints: true,
-      createDerived: 'createDerived',
-    });
-    getPluginOptions.mockReturnValue(options);
-
-    const args = getDefaultArgs();
-    await uploadImageToCloudinary(args);
-
-    const expectedUrl = args.url;
-    const expectedOptions = {
-      folder: options.uploadFolder,
-      overwrite: args.overwrite,
-      public_id: args.publicId,
-      resource_type: 'auto',
-      timeout: 5 * 60 * 1000,
-      responsive_breakpoints: [
-        {
-          bytes_step: 20000,
-          create_derived: options.createDerived,
-          max_images: options.breakpointsMaxImages,
-          max_width: options.fluidMaxWidth,
-          min_width: options.fluidMinWidth,
-        },
-      ],
     };
     expect(cloudinaryUpload).toHaveBeenCalledWith(expectedUrl, expectedOptions);
   });

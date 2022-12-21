@@ -1,26 +1,20 @@
 import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
-import Image from 'gatsby-image';
 import { GatsbyImage } from 'gatsby-plugin-image';
 
 const RemoteImage2 = () => {
   const data = useStaticQuery(graphql`
     query {
-      remoteExample(name: { eq: "Remote Example 2" }) {
-        cloudinary: remoteImage {
+      project(name: { eq: "Project Example Two" }) {
+        coverImage {
           gatsbyImageData(
             layout: CONSTRAINED
-            width: 600
-            aspectRatio: 1
+            height: 300
+            aspectRatio: 0.8
             placeholder: BLURRED
-            transformations: ["c_fill", "e_pixelate_faces"]
+            transformations: ["c_thumb"]
+            chained: ["t_gatsby-demo"]
           )
-          fluid(
-            maxWidth: 600
-            transformations: ["ar_1", "c_fill", "e_pixelate_faces"]
-          ) {
-            ...CloudinaryAssetFluid
-          }
         }
       }
     }
@@ -29,21 +23,16 @@ const RemoteImage2 = () => {
   // Duplicate the query so we can display it on the page.
   const query = `
     query {
-      remoteExample(name: {eq: "Remote Example 2"}) {
-        cloudinary: remoteImage {
-           gatsbyImageData(
+      project(name: { eq: "Project Example Two" }) {
+        coverImage {
+          gatsbyImageData(
             layout: CONSTRAINED
-            width: 600
-            aspectRatio: 1
+            height: 300
+            aspectRatio: 0.8
             placeholder: BLURRED
-            transformations: ["c_fill", "e_pixelate_faces"]
+            transformations: ["c_thumb"]
+            chained: ["t_gatsby-demo"]
           )
-          fluid(
-            maxWidth: 600
-            transformations: ["ar_1", "c_fill", "e_pixelate_faces"]
-          ) {
-            ...CloudinaryAssetFluid
-          }
         }
       }
     }
@@ -53,16 +42,12 @@ const RemoteImage2 = () => {
 
   return (
     <div className="image-example">
-      <h2>Example 2</h2>
+      <h2>Remote image</h2>
 
-      <h3>gatsby-plugin-image</h3>
       <GatsbyImage
-        image={data.remoteExample.cloudinary.gatsbyImageData}
-        alt="Jason, victorious."
+        image={data.project.coverImage.gatsbyImageData}
+        alt="A display of a scull on top of books with a flower photo from from Unsplash"
       />
-
-      <h3>gatsby-image</h3>
-      <Image fluid={data.remoteExample.cloudinary.fluid} alt="Remote image" />
 
       <h3>Query</h3>
       <pre>{query}</pre>

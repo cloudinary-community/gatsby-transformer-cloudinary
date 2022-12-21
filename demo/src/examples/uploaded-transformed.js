@@ -2,15 +2,15 @@ import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
 import { GatsbyImage } from 'gatsby-plugin-image';
 
-const GifTransformed = () => {
+const UploadedTransformed = () => {
   const data = useStaticQuery(graphql`
     query {
-      image: file(name: { eq: "giphyCat" }) {
+      image: file(name: { eq: "joppe-spaa-unsplash" }) {
         cloudinary: childCloudinaryAsset {
           gatsbyImageData(
             layout: CONSTRAINED
             placeholder: BLURRED
-            transformations: ["e_gamma:500"]
+            transformations: ["e_grayscale", "e_tint:100:blue:0p:white:100p"]
           )
         }
       }
@@ -20,12 +20,12 @@ const GifTransformed = () => {
   // Duplicate the query so we can display it on the page.
   const query = `
     query {
-      image: file(name: { eq: "giphyCat" }) {
+      image: file(name: { eq: "joppe-spaa-unsplash" }) {
         cloudinary: childCloudinaryAsset {
           gatsbyImageData(
             layout: CONSTRAINED
             placeholder: BLURRED
-            transformations: ["e_gamma:500"]
+            transformations: ["e_grayscale", "e_tint:100:blue:0p:white:100p"]
           )
         }
       }
@@ -36,11 +36,11 @@ const GifTransformed = () => {
 
   return (
     <div className="image-example">
-      <h2>GIFs with transformations!</h2>
+      <h2>Apply Cloudinary transformations</h2>
 
       <GatsbyImage
         image={data.image.cloudinary.gatsbyImageData}
-        alt="Cat Pirate GIF By Product Hunt."
+        alt="Pirate Cat photo by Joppe Spaa from Unsplash."
       />
 
       <h3>Query</h3>
@@ -49,4 +49,4 @@ const GifTransformed = () => {
   );
 };
 
-export default GifTransformed;
+export default UploadedTransformed;

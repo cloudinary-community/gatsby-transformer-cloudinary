@@ -1,17 +1,54 @@
-# [3.1.0](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v3.0.1...v3.1.0) (2022-12-20)
-
+# [4.3.0](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v4.2.0...v4.3.0) (2022-12-21)
 
 ### Features
 
-* allow invalid source data by making gatsbyImageData nullable ([#218](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/218)) ([acf28f9](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/acf28f932a39ed3f864cf44aeb836e401c865692)), closes [#214](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/214)
+- add Gatsby as a peer dependency ([#220](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/220)) ([890193e](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/890193e82dbdafb9054d6bfe861a655777a5226c)), closes [#219](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/219)
 
-## [3.0.1](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v3.0.0...v3.0.1) (2022-11-30)
-
+# [4.2.0](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v4.1.0...v4.2.0) (2022-12-20)
 
 ### Bug Fixes
 
-* gatsbyImageData generates http urls, not https ([#210](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/210)) ([3508cd3](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/3508cd336d3075c88d8e1498893cfc4ff2c4f5ae)), closes [#209](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/209)
-* peer dependency (gatsby-plugin-image) ([#212](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/212)) ([3f40130](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/3f4013082328d57fcbefdea93f813a3a932090f1))
+- gatsbyImageData generates http urls, not https ([#210](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/210)) ([3508cd3](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/3508cd336d3075c88d8e1498893cfc4ff2c4f5ae)), closes [#209](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/209)
+- peer dependency (gatsby-plugin-image) ([#212](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/212)) ([3f40130](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/3f4013082328d57fcbefdea93f813a3a932090f1))
+
+### Features
+
+- allow invalid source data by making gatsbyImageData nullable ([#218](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/218)) ([acf28f9](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/acf28f932a39ed3f864cf44aeb836e401c865692)), closes [#214](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/214)
+
+# [4.1.0](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v4.0.1...v4.1.0) (2022-10-26)
+
+### Features
+
+- validation of plugin options ([#199](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/199)) ([ea27988](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/ea279885a873ab5d212b47e233376ec09a9b27e8))
+
+## [4.0.1](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v4.0.0...v4.0.1) (2022-10-10)
+
+### Performance Improvements
+
+- remove upload code only needed by gatsby-image ([#197](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/197)) ([576f30f](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/576f30f7f04545e8fc614cfeeb50784045d3037b)), closes [#188](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/188)
+
+# [4.0.0](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v3.0.0...v4.0.0) (2022-10-10)
+
+### Features
+
+- remove support for gatsby-image - deprecated Gatsby plugin ([#195](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/195)) ([d451b8e](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/d451b8e17d4bf271bc1f602fadab75d1d67adb87))
+
+### BREAKING CHANGES
+
+- Removed support for gatsby-image (ie. `fixed` and `fluid`), use gatsby-plugin-image (ie. `gatsbyImageData` instead.
+
+# [3.1.0](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v3.0.1...v3.1.0) (2022-12-20)
+
+### Features
+
+- allow invalid source data by making gatsbyImageData nullable ([#218](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/218)) ([acf28f9](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/acf28f932a39ed3f864cf44aeb836e401c865692)), closes [#214](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/214)
+
+## [3.0.1](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v3.0.0...v3.0.1) (2022-11-30)
+
+### Bug Fixes
+
+- gatsbyImageData generates http urls, not https ([#210](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/210)) ([3508cd3](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/3508cd336d3075c88d8e1498893cfc4ff2c4f5ae)), closes [#209](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/209)
+- peer dependency (gatsby-plugin-image) ([#212](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/212)) ([3f40130](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/3f4013082328d57fcbefdea93f813a3a932090f1))
 
 # Version 3.0.0
 

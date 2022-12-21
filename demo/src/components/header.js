@@ -13,23 +13,17 @@ const Header = ({ siteTitle }) => (
       {siteTitle}
     </Link>
     <nav>
-      <Link to="/fluid/" activeClassName="active">
-        Fluid
-      </Link>
-      <Link to="/fixed/" activeClassName="active">
-        Fixed
-      </Link>
-      <Link to="/gifs/" activeClassName="active">
-        GIFs
-      </Link>
-      <Link to="/manual/" activeClassName="active">
-        Manual
+      <Link to="/uploaded/" activeClassName="active">
+        Uploaded
       </Link>
       <Link to="/existing/" activeClassName="active">
         Existing
       </Link>
       <Link to="/remote/" activeClassName="active">
         Remote
+      </Link>
+      <Link to="/gifs/" activeClassName="active">
+        GIFs
       </Link>
       <a href="https://www.npmjs.com/package/gatsby-transformer-cloudinary#install">
         Install
