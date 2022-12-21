@@ -6,7 +6,6 @@ module.exports = {
   siteMetadata: {
     title: `Gatsby Cloudinary Image Transformer`,
     description: `Demo of using the Gatsby Cloudinary image transformer with gatsby-plugin-image.`,
-    author: `@jlengstorf`,
   },
   plugins: [
     {
