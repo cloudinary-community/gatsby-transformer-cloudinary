@@ -49,7 +49,6 @@
 
 - gatsbyImageData generates http urls, not https ([#210](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/210)) ([3508cd3](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/3508cd336d3075c88d8e1498893cfc4ff2c4f5ae)), closes [#209](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/209)
 - peer dependency (gatsby-plugin-image) ([#212](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/212)) ([3f40130](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/3f4013082328d57fcbefdea93f813a3a932090f1))
-  > > > > > > > main
 
 # Version 3.0.0
 
