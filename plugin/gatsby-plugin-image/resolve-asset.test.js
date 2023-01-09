@@ -194,6 +194,33 @@ describe('resolveCloudinaryAssetData', () => {
     });
   });
 
+  describe('when missing metadata even after fetching data', () => {
+    beforeEach(() => {
+      getAssetMetadata.mockResolvedValue({
+        width: 100,
+        //  height: 200,
+        //  format: 'gif',
+      });
+    });
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('calls reporter.warn and returns null', async () => {
+      const args = {};
+      const result = await resolveCloudinaryAssetData(
+        sourceWithoutMeta,
+        args,
+        context,
+        info
+      );
+      expect(generateImageData).toBeCalledTimes(0);
+      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(1);
+      expect(result).toBe(null);
+    });
+  });
+
   describe('when error fetching asset data', () => {
     beforeEach(() => {
       getAssetMetadata.mockImplementation(() => {

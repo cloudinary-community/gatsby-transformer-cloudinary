@@ -73,14 +73,24 @@ exports.createResolveCloudinaryAssetData =
         metadata = await getAssetMetadata({ source, args });
         reporter.verbose(
           `[gatsby-transformer-cloudinary] Missing metadata fields on ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}
-          >>> To save on network requests add originalWidth, originalHeight and originalFormat to ${transformType}`
+              >>> To save on network requests add originalWidth, originalHeight and originalFormat to ${transformType}`
         );
       } catch (error) {
         reporter.warn(
-          `[gatsby-transformer-cloudinary] Could not get metadata for ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}`
+          `[gatsby-transformer-cloudinary] Could not get metadata for ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}
+              >>> gatsbyImageData will resolve to null`
         );
         return null;
       }
+    }
+
+    if (!hasRequiredMetaData(metadata)) {
+      reporter.warn(
+        `[gatsby-transformer-cloudinary] Fetched metadata for ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}
+            >>> does not comply: width=${metadata.width}, height=${metadata.height}, format=${metadata.format}
+            >>> gatsbyImageData will resolve to null`
+      );
+      return null;
     }
 
     const assetDataArgs = {
