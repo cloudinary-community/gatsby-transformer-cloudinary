@@ -5,6 +5,7 @@ const gatsbyUtilsMocks = {
   reporter: {
     panic: jest.fn(),
     error: jest.fn(),
+    warn: jest.fn(),
     info: jest.fn(),
     verbose: jest.fn(),
   },
@@ -178,7 +179,7 @@ describe('resolveCloudinaryAssetData', () => {
   });
 
   describe('when missing required data', () => {
-    it('calls reporter.error and returns null', async () => {
+    it('calls reporter.warn and returns null', async () => {
       const source = {};
       const args = {};
       const result = await resolveCloudinaryAssetData(
@@ -188,7 +189,7 @@ describe('resolveCloudinaryAssetData', () => {
         info
       );
       expect(generateImageData).toBeCalledTimes(0);
-      expect(gatsbyUtilsMocks.reporter.error).toBeCalledTimes(1);
+      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(1);
       expect(result).toBe(null);
     });
   });
@@ -221,7 +222,7 @@ describe('resolveCloudinaryAssetData', () => {
       );
       expect(getAssetMetadata).toBeCalledTimes(1);
       expect(generateImageData).toBeCalledTimes(0);
-      expect(gatsbyUtilsMocks.reporter.error).toBeCalledTimes(1);
+      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(1);
       expect(result).toBe(null);
     });
 

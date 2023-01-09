@@ -45,12 +45,18 @@ exports.createResolveCloudinaryAssetData =
   (gatsbyUtils) => async (source, args, _context, info) => {
     const { reporter } = gatsbyUtils;
     const transformType = info.parentType || 'UnknownTransformType';
+    const hasRequiredData = (source) => {
+      return source?.cloudName && source?.publicId;
+    };
+    const hasRequiredMetaData = (metadata) => {
+      const hasSizingMetadata = metadata?.width && metadata?.height;
+      const hasSizingAndFormatMetadata = hasSizingMetadata && metadata?.format;
+      return hasSizingAndFormatMetadata;
+    };
 
-    const hasRequiredData = source.cloudName && source.publicId;
-
-    if (!hasRequiredData) {
-      reporter.error(
-        `[gatsby-transformer-cloudinary] Missing required fields on ${transformType}: cloudName=${source.cloudName}, publicId=${source.cloudName}`
+    if (!hasRequiredData(source)) {
+      reporter.warn(
+        `[gatsby-transformer-cloudinary] Missing required fields on ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}`
       );
       return null;
     }
@@ -61,20 +67,17 @@ exports.createResolveCloudinaryAssetData =
       format: source.originalFormat,
     };
 
-    const hasSizingMetadata = metadata.width && metadata.height;
-    const hasSizingAndFormatMetadata = hasSizingMetadata && metadata.format;
-
-    if (!hasSizingAndFormatMetadata) {
+    if (!hasRequiredMetaData(metadata)) {
       // Lacking metadata, so lets request it from Cloudinary
       try {
         metadata = await getAssetMetadata({ source, args });
         reporter.verbose(
-          `[gatsby-transformer-cloudinary] Missing metadata fields on ${transformType} for ${source.cloudName} > ${source.publicId}
+          `[gatsby-transformer-cloudinary] Missing metadata fields on ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}
           >>> To save on network requests add originalWidth, originalHeight and originalFormat to ${transformType}`
         );
       } catch (error) {
-        reporter.error(
-          `[gatsby-transformer-cloudinary] Could not get metadata for ${transformType} for ${source.cloudName} > ${source.publicId}: ${error.message}`
+        reporter.warn(
+          `[gatsby-transformer-cloudinary] Could not get metadata for ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}`
         );
         return null;
       }
