@@ -30,6 +30,21 @@ exports.sourceNodes = (gatsbyUtils) => {
     },
   });
 
+  const cloudinaryBadMetaData = {
+    cloudName: 'not-a-good-cloudName',
+    publicId: 'sample',
+  };
+
+  createNode({
+    id: createNodeId(`BadMetaData >>> 2`),
+    name: 'BadMetaData',
+    ...cloudinaryBadMetaData,
+    internal: {
+      type: 'SomeBadImageData',
+      contentDigest: createContentDigest(cloudinaryBadMetaData),
+    },
+  });
+
   const blogPostData1 = {
     title: 'Blog Post Example One',
     slug: 'post-1',
