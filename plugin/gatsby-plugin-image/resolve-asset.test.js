@@ -122,7 +122,7 @@ describe('resolveCloudinaryAssetData', () => {
     await resolveCloudinaryAssetData(sourceWithoutMeta, args, context, info);
     // getAssetMetadata should only be called for sourceWithoutMeta
     expect(getAssetMetadata).toBeCalledTimes(1);
-    expect(gatsbyUtilsMocks.reporter.verbose).toBeCalledTimes(1);
+    expect(gatsbyUtilsMocks.reporter.verbose).toBeCalledTimes(2);
     // gatsby-plugin-image -> generateImageData should be called for both
     expect(generateImageData).toHaveBeenNthCalledWith(2, {
       filename: 'cloud-name>>>public-id',
@@ -207,7 +207,7 @@ describe('resolveCloudinaryAssetData', () => {
       jest.clearAllMocks();
     });
 
-    it('calls reporter.warn and returns null', async () => {
+    it('calls reporter.warn on invalid metadata and returns null', async () => {
       const args = {};
       const result = await resolveCloudinaryAssetData(
         sourceWithoutMeta,
@@ -217,7 +217,7 @@ describe('resolveCloudinaryAssetData', () => {
       );
       expect(getAssetMetadata).toBeCalledTimes(1);
       expect(generateImageData).toBeCalledTimes(0);
-      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(1);
+      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(2);
       expect(result).toBe(null);
     });
   });
@@ -231,7 +231,7 @@ describe('resolveCloudinaryAssetData', () => {
       jest.clearAllMocks();
     });
 
-    it('calls reporter.warn and returns null', async () => {
+    it('calls reporter.warn on undefined metadata and returns null', async () => {
       const args = {};
       const result = await resolveCloudinaryAssetData(
         sourceWithoutMeta,
@@ -241,7 +241,7 @@ describe('resolveCloudinaryAssetData', () => {
       );
       expect(getAssetMetadata).toBeCalledTimes(1);
       expect(generateImageData).toBeCalledTimes(0);
-      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(1);
+      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(2);
       expect(result).toBe(null);
     });
   });
@@ -274,7 +274,7 @@ describe('resolveCloudinaryAssetData', () => {
       );
       expect(getAssetMetadata).toBeCalledTimes(1);
       expect(generateImageData).toBeCalledTimes(0);
-      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(1);
+      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(2);
       expect(result).toBe(null);
     });
 

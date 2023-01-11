@@ -9,6 +9,7 @@ const {
   getUrlAsBase64Image,
   getAssetMetadata,
 } = require('./asset-data');
+const { Joi } = require('gatsby-plugin-utils/joi');
 
 const generateCloudinaryAssetSource = (
   filename,
@@ -38,6 +39,57 @@ const generateCloudinaryAssetSource = (
   return imageSource;
 };
 
+const generateMetadata = async (source, args, transformType, reporter) => {
+  const schema = Joi.object({
+    width: Joi.number().positive().required(),
+    height: Joi.number().positive().required(),
+    format: Joi.string().required(),
+  }).required();
+
+  const originalMetadata = {
+    width: source.originalWidth,
+    height: source.originalHeight,
+    format: source.originalFormat,
+  };
+
+  const { error } = schema.validate(originalMetadata);
+
+  if (!error) {
+    // Original metadata is good, use it
+    return originalMetadata;
+  }
+
+  try {
+    // Lacking metadata, so lets request it from Cloudinary
+    reporter.verbose(
+      `[gatsby-transformer-cloudinary] Missing metadata fields on ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}`
+    );
+    reporter.verbose(
+      `>>> To save on network requests add originalWidth, originalHeight and originalFormat to ${transformType}`
+    );
+
+    const fetchedMetadata = await getAssetMetadata({ source, args });
+    const { error } = schema.validate(fetchedMetadata);
+
+    if (!error) {
+      // Fetched data is good, use it
+      return fetchedMetadata;
+    } else {
+      reporter.verbose(
+        `[gatsby-transformer-cloudinary] Invalid fetched metadata for ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}`
+      );
+      reporter.verbose(`>>> ${error.message}`);
+      return null;
+    }
+  } catch (error) {
+    reporter.verbose(
+      `[gatsby-transformer-cloudinary] Could not fetch metadata for ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}`
+    );
+    reporter.verbose(`>>> ${error.message}`);
+    return null;
+  }
+};
+
 // Make it testable
 exports._generateCloudinaryAssetSource = generateCloudinaryAssetSource;
 
@@ -48,11 +100,6 @@ exports.createResolveCloudinaryAssetData =
     const hasRequiredData = (source) => {
       return source?.cloudName && source?.publicId;
     };
-    const hasRequiredMetaData = (metadata) => {
-      const hasSizingMetadata = metadata?.width && metadata?.height;
-      const hasSizingAndFormatMetadata = hasSizingMetadata && metadata?.format;
-      return hasSizingAndFormatMetadata;
-    };
 
     if (!hasRequiredData(source)) {
       reporter.warn(
@@ -61,35 +108,18 @@ exports.createResolveCloudinaryAssetData =
       return null;
     }
 
-    let metadata = {
-      width: source.originalWidth,
-      height: source.originalHeight,
-      format: source.originalFormat,
-    };
+    const metadata = await generateMetadata(
+      source,
+      args,
+      transformType,
+      reporter
+    );
 
-    if (!hasRequiredMetaData(metadata)) {
-      // Lacking metadata, so lets request it from Cloudinary
-      try {
-        metadata = await getAssetMetadata({ source, args });
-        reporter.verbose(
-          `[gatsby-transformer-cloudinary] Missing metadata fields on ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}
-              >>> To save on network requests add originalWidth, originalHeight and originalFormat to ${transformType}`
-        );
-      } catch (error) {
-        reporter.warn(
-          `[gatsby-transformer-cloudinary] Could not get metadata for ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}
-              >>> gatsbyImageData will resolve to null`
-        );
-        return null;
-      }
-    }
-
-    if (!hasRequiredMetaData(metadata)) {
+    if (!metadata) {
       reporter.warn(
-        `[gatsby-transformer-cloudinary] Fetched metadata for ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}
-            >>> does not comply: width=${metadata.width}, height=${metadata.height}, format=${metadata.format}
-            >>> gatsbyImageData will resolve to null`
+        `[gatsby-transformer-cloudinary] No metadata for ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}`
       );
+      reporter.warn(`>>> gatsbyImageData will resolve to null`);
       return null;
     }
 
