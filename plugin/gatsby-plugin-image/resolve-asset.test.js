@@ -179,7 +179,7 @@ describe('resolveCloudinaryAssetData', () => {
   });
 
   describe('when missing required data', () => {
-    it('calls reporter.warn and returns null', async () => {
+    it('calls reporter.verbose and returns null', async () => {
       const source = {};
       const args = {};
       const result = await resolveCloudinaryAssetData(
@@ -189,7 +189,25 @@ describe('resolveCloudinaryAssetData', () => {
         info
       );
       expect(generateImageData).toBeCalledTimes(0);
-      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(1);
+      expect(gatsbyUtilsMocks.reporter.verbose).toBeCalledTimes(2);
+      expect(result).toBe(null);
+    });
+  });
+
+  describe('when missing some required data', () => {
+    it('calls reporter.warn and returns null', async () => {
+      const source = {
+        publicId: 'publicId',
+      };
+      const args = {};
+      const result = await resolveCloudinaryAssetData(
+        source,
+        args,
+        context,
+        info
+      );
+      expect(generateImageData).toBeCalledTimes(0);
+      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(2);
       expect(result).toBe(null);
     });
   });

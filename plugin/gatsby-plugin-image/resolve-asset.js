@@ -97,14 +97,30 @@ exports.createResolveCloudinaryAssetData =
   (gatsbyUtils) => async (source, args, _context, info) => {
     const { reporter } = gatsbyUtils;
     const transformType = info.parentType || 'UnknownTransformType';
-    const hasRequiredData = (source) => {
-      return source?.cloudName && source?.publicId;
-    };
 
-    if (!hasRequiredData(source)) {
-      reporter.warn(
-        `[gatsby-transformer-cloudinary] Missing required fields on ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}`
-      );
+    const schema = Joi.object({
+      cloudName: Joi.string().required(),
+      publicId: Joi.string().required(),
+    }).required();
+
+    const { error } = schema.validate(source, {
+      allowUnknown: true,
+      abortEarly: false,
+    });
+
+    if (error) {
+      if (error.details.length < 2) {
+        reporter.warn(
+          `[gatsby-transformer-cloudinary] Missing required field on ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}`
+        );
+        reporter.warn(`>>> gatsbyImageData will resolve to null`);
+      } else {
+        reporter.verbose(
+          `[gatsby-transformer-cloudinary] Missing cloudName and publicId on ${transformType}`
+        );
+        reporter.verbose(`>>> gatsbyImageData will resolve to null`);
+      }
+
       return null;
     }
 
