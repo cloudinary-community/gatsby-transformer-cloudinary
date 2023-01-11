@@ -194,7 +194,7 @@ describe('resolveCloudinaryAssetData', () => {
     });
   });
 
-  describe('when missing metadata even after fetching data', () => {
+  describe('when fetched asset data is invalid', () => {
     beforeEach(() => {
       getAssetMetadata.mockResolvedValue({
         width: 100,
@@ -215,6 +215,31 @@ describe('resolveCloudinaryAssetData', () => {
         context,
         info
       );
+      expect(getAssetMetadata).toBeCalledTimes(1);
+      expect(generateImageData).toBeCalledTimes(0);
+      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(1);
+      expect(result).toBe(null);
+    });
+  });
+
+  describe('when fetched asset data is undefined', () => {
+    beforeEach(() => {
+      getAssetMetadata.mockResolvedValue(undefined);
+    });
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('calls reporter.warn and returns null', async () => {
+      const args = {};
+      const result = await resolveCloudinaryAssetData(
+        sourceWithoutMeta,
+        args,
+        context,
+        info
+      );
+      expect(getAssetMetadata).toBeCalledTimes(1);
       expect(generateImageData).toBeCalledTimes(0);
       expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(1);
       expect(result).toBe(null);
@@ -239,7 +264,7 @@ describe('resolveCloudinaryAssetData', () => {
       jest.clearAllMocks();
     });
 
-    it('calls reporter.error on fetching metadata error and returns null', async () => {
+    it('calls reporter.error on metadata error and returns null', async () => {
       const args = {};
       const result = await resolveCloudinaryAssetData(
         sourceWithoutMeta,
@@ -253,7 +278,7 @@ describe('resolveCloudinaryAssetData', () => {
       expect(result).toBe(null);
     });
 
-    it('calls reporter.error on fetching blurred placeholder error', async () => {
+    it('calls reporter.error on blurred placeholder error', async () => {
       const args = { placeholder: 'blurred' };
       await resolveCloudinaryAssetData(sourceWithMetadata, args, context, info);
       expect(getLowResolutionImageURL).toBeCalledTimes(1);
@@ -274,7 +299,7 @@ describe('resolveCloudinaryAssetData', () => {
       });
     });
 
-    it('calls reporter.error on fetching tracedSVG placeholder error', async () => {
+    it('calls reporter.error on tracedSVG placeholder error', async () => {
       const args = { placeholder: 'tracedSVG' };
       await resolveCloudinaryAssetData(sourceWithMetadata, args, context, info);
       expect(getAssetAsTracedSvg).toBeCalledTimes(1);
