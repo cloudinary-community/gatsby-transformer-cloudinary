@@ -81,6 +81,7 @@ describe('resolveCloudinaryAssetData', () => {
       width: 100,
       height: 200,
       format: 'gif',
+      bytes: 6779,
     });
     getUrlAsBase64Image.mockResolvedValue('base64DataUrl');
     getAssetAsTracedSvg.mockResolvedValue('svgDataUrl');

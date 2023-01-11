@@ -52,11 +52,12 @@ const generateMetadata = async (source, args, transformType, reporter) => {
     format: source.originalFormat,
   };
 
-  const { error } = schema.validate(originalMetadata);
+  const { value, error } = schema.validate(originalMetadata);
 
   if (!error) {
-    // Original metadata is good, use it
-    return originalMetadata;
+    // Original metadata is good,
+    // use validated value
+    return value;
   }
 
   try {
@@ -69,11 +70,13 @@ const generateMetadata = async (source, args, transformType, reporter) => {
     );
 
     const fetchedMetadata = await getAssetMetadata({ source, args });
-    const { error } = schema.validate(fetchedMetadata);
+    const { value, error } = schema.validate(fetchedMetadata, {
+      stripUnknown: true,
+    });
 
     if (!error) {
-      // Fetched data is good, use it
-      return fetchedMetadata;
+      // Value is the validate fetchedMetadata stripped for unknowns
+      return value;
     } else {
       reporter.verbose(
         `[gatsby-transformer-cloudinary] Invalid fetched metadata for ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}`
