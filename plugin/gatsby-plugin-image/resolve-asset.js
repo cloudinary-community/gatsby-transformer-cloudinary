@@ -66,7 +66,7 @@ const generateMetadata = async (source, args, transformType, reporter) => {
       `[gatsby-transformer-cloudinary] Missing metadata fields on ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}`
     );
     reporter.verbose(
-      `>>> To save on network requests add originalWidth, originalHeight and originalFormat to ${transformType}`
+      `  >>>  To save on network requests add originalWidth, originalHeight and originalFormat to ${transformType}`
     );
 
     const fetchedMetadata = await getAssetMetadata({ source, args });
@@ -81,14 +81,14 @@ const generateMetadata = async (source, args, transformType, reporter) => {
       reporter.verbose(
         `[gatsby-transformer-cloudinary] Invalid fetched metadata for ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}`
       );
-      reporter.verbose(`>>> ${error.message}`);
+      reporter.verbose(`[gatsby-transformer-cloudinary] >>> ${error.message}`);
       return null;
     }
   } catch (error) {
     reporter.verbose(
       `[gatsby-transformer-cloudinary] Could not fetch metadata for ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}`
     );
-    reporter.verbose(`>>> ${error.message}`);
+    reporter.verbose(`[gatsby-transformer-cloudinary] >>> ${error.message}`);
     return null;
   }
 };
@@ -116,12 +116,16 @@ exports.createResolveCloudinaryAssetData =
         reporter.warn(
           `[gatsby-transformer-cloudinary] Missing required field on ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}`
         );
-        reporter.warn(`>>> gatsbyImageData will resolve to null`);
+        reporter.warn(
+          `[gatsby-transformer-cloudinary] >>> gatsbyImageData will resolve to null`
+        );
       } else {
         reporter.verbose(
           `[gatsby-transformer-cloudinary] Missing cloudName and publicId on ${transformType}`
         );
-        reporter.verbose(`>>> gatsbyImageData will resolve to null`);
+        reporter.verbose(
+          `[gatsby-transformer-cloudinary] >>> gatsbyImageData will resolve to null`
+        );
       }
 
       return null;
@@ -138,7 +142,9 @@ exports.createResolveCloudinaryAssetData =
       reporter.warn(
         `[gatsby-transformer-cloudinary] No metadata for ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId}`
       );
-      reporter.warn(`>>> gatsbyImageData will resolve to null`);
+      reporter.warn(
+        `[gatsby-transformer-cloudinary] >>> gatsbyImageData will resolve to null`
+      );
       return null;
     }
 
