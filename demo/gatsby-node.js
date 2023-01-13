@@ -6,49 +6,119 @@ exports.sourceNodes = (gatsbyUtils) => {
     gatsbyUtils;
   const { createNode } = actions;
 
-  const cloudinaryData = {
+  const existingAssetsWithoutMetadata = {
     cloudName: 'lilly-labs-consulting',
     publicId: 'sample',
   };
 
   createNode({
-    id: createNodeId(`GoodData >>> 1`),
+    id: createNodeId(`SomeBadImageData >>> 1`),
     name: 'GoodData',
-    ...cloudinaryData,
+    ...existingAssetsWithoutMetadata,
     internal: {
       type: 'SomeBadImageData',
-      contentDigest: createContentDigest(cloudinaryData),
+      contentDigest: createContentDigest(existingAssetsWithoutMetadata),
     },
   });
+
+  reporter.info(
+    `[site] Create SomeBadImageData with existing asset without metadata`
+  );
+
+  const noAssetInfo = {};
 
   createNode({
-    id: createNodeId(`BadData >>> 2`),
-    name: 'BadData',
+    id: createNodeId(`SomeBadImageData >>> 2`),
+    name: 'NoAssetInfo',
     internal: {
       type: 'SomeBadImageData',
-      contentDigest: createContentDigest({}),
+      contentDigest: createContentDigest(noAssetInfo),
     },
   });
 
-  const cloudinaryBadMetaData = {
+  reporter.info(`[site] Create SomeBadImageData without asset info`);
+
+  const nonExistingAsset = {
     cloudName: 'not-a-good-cloudName',
     publicId: 'sample',
   };
 
   createNode({
-    id: createNodeId(`BadMetaData >>> 2`),
+    id: createNodeId(`SomeBadImageData >>> 3`),
     name: 'BadMetaData',
-    ...cloudinaryBadMetaData,
+    ...nonExistingAsset,
     internal: {
       type: 'SomeBadImageData',
-      contentDigest: createContentDigest(cloudinaryBadMetaData),
+      contentDigest: createContentDigest(nonExistingAsset),
     },
   });
+
+  reporter.info(`[site] Create SomeBadImageData with nonexisting asset`);
+
+  const existingVideoWithoutMetadata = {
+    cloudName: 'lilly-labs-consulting',
+    publicId: 'diverse mime types/chop-chop-video.mp4',
+  };
+
+  createNode({
+    id: createNodeId(`SomeBadImageData >>> 4`),
+    name: 'ExistingVideoWithoutMetadata',
+    ...existingVideoWithoutMetadata,
+    internal: {
+      type: 'SomeBadImageData',
+      contentDigest: createContentDigest(existingVideoWithoutMetadata),
+    },
+  });
+
+  reporter.info(
+    `[site] Create SomeBadImageData with existing video asset without metadata`
+  );
+
+  const existingGifWithoutMetadata = {
+    cloudName: 'lilly-labs-consulting',
+    publicId: 'diverse%20mime%20types/giphyCat.gif',
+  };
+
+  createNode({
+    id: createNodeId(`SomeBadImageData >>> 5`),
+    name: 'ExistingGifWithoutMetadata',
+    ...existingGifWithoutMetadata,
+    internal: {
+      type: 'SomeBadImageData',
+      contentDigest: createContentDigest(existingGifWithoutMetadata),
+    },
+  });
+
+  reporter.info(
+    `[site] Create SomeBadImageData with gif asset without metadata`
+  );
+
+  const existingGifWithMetadata = {
+    cloudName: 'lilly-labs-consulting',
+    publicId: 'diverse%20mime%20types/giphyCat.gif',
+    originalWidth: 480,
+    originalHeight: 315,
+    originalFormat: 'gif',
+  };
+
+  createNode({
+    id: createNodeId(`SomeBadImageData >>> 6`),
+    name: 'ExistingGifWithMetadata',
+    ...existingGifWithMetadata,
+    internal: {
+      type: 'SomeBadImageData',
+      contentDigest: createContentDigest(existingGifWithMetadata),
+    },
+  });
+
+  reporter.info(
+    `[site] Create SomeBadImageData with gif asset without metadata`
+  );
 
   const blogPostData1 = {
     title: 'Blog Post Example One',
     slug: 'post-1',
-    heroImage: cloudinaryData,
+    heroImage: existingAssetsWithoutMetadata,
   };
 
   createNode({
@@ -66,7 +136,7 @@ exports.sourceNodes = (gatsbyUtils) => {
     title: 'Article Example One',
     slug: 'article-1',
     feature: {
-      image: cloudinaryData,
+      image: existingAssetsWithoutMetadata,
     },
   };
 

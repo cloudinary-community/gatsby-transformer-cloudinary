@@ -8,7 +8,7 @@ const ProblemExample = () => {
       allSomeBadImageData {
         nodes {
           name
-          gatsbyImageData(height: 200)
+          gatsbyImageData(height: 200, backgroundColor: "#BADA55")
         }
       }
     }
@@ -17,11 +17,16 @@ const ProblemExample = () => {
   return data.allSomeBadImageData.nodes.map((node, index) => {
     const gatsbyImage = getImage(node);
 
-    if (gatsbyImage) {
-      return <GatsbyImage key={index} image={gatsbyImage} alt={node.name} />;
-    } else {
-      return <div>No image for node with name: {node.name}</div>;
-    }
+    return (
+      <>
+        <h2>{node.name}</h2>
+        {gatsbyImage ? (
+          <GatsbyImage key={index} image={gatsbyImage} alt={node.name} />
+        ) : (
+          <div>No image for node with name: {node.name}</div>
+        )}
+      </>
+    );
   });
 };
 
