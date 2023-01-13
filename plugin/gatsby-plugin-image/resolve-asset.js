@@ -70,9 +70,7 @@ const generateMetadata = async (source, args, transformType, reporter) => {
     );
 
     const fetchedMetadata = await getAssetMetadata({ source, args });
-    const { value, error } = schema.validate(fetchedMetadata, {
-      stripUnknown: true,
-    });
+    const { value, error } = schema.validate(fetchedMetadata);
 
     if (!error) {
       // Value is the validate fetchedMetadata stripped for unknowns

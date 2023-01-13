@@ -1,15 +1,25 @@
 const axios = require('axios');
+const probe = require('probe-image-size');
 const { generateCloudinaryAssetUrl } = require('./generate-asset-url');
 
-const cache = {};
+const dataCache = {};
+const probeCache = {};
 
 const getData = async (url, options) => {
-  if (!cache[url]) {
-    cache[url] = axios.get(url, options);
+  if (!dataCache[url]) {
+    dataCache[url] = axios.get(url, options);
   }
 
-  const { data } = await cache[url];
+  const { data } = await dataCache[url];
   return data;
+};
+
+const probeImage = async (url) => {
+  if (!probeCache[url]) {
+    probeCache[url] = probe(url);
+  }
+
+  return await probeCache[url];
 };
 
 exports.getAssetAsTracedSvg = async ({ source, args }) => {
@@ -36,11 +46,14 @@ exports.getAssetMetadata = async ({ source, args }) => {
     publicId: source.publicId,
     cloudName: source.cloudName,
     options: args,
-    flags: 'getinfo',
   });
 
-  const data = await getData(metaDataUrl);
-  return data.output;
+  const result = await probeImage(metaDataUrl);
+  return {
+    width: result.width,
+    height: result.height,
+    format: result.type,
+  };
 };
 
 exports.getUrlAsBase64Image = async (url) => {
