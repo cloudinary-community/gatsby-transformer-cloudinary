@@ -3,7 +3,7 @@ const cloudinary = require('cloudinary').v2;
 const generateTransformations = ({ width, height, format, options = {} }) => {
   return [
     {
-      fetch_format: format,
+      fetch_format: format || 'auto',
       width: width,
       height: height,
       raw_transformation: (options.transformations || []).join(','),

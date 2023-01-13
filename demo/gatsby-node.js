@@ -115,6 +115,69 @@ exports.sourceNodes = (gatsbyUtils) => {
     `[site] Create SomeBadImageData with gif asset without metadata`
   );
 
+  const existingPdfWithoutMetadata = {
+    cloudName: 'lilly-labs-consulting',
+    publicId: 'diverse%20mime%20types/en-US-YearCompass-booklet.pdf',
+  };
+
+  createNode({
+    id: createNodeId(`SomeBadImageData >>> 7`),
+    name: 'ExistingPDFWithoutMetadata',
+    ...existingPdfWithoutMetadata,
+    internal: {
+      type: 'SomeBadImageData',
+      contentDigest: createContentDigest(existingPdfWithoutMetadata),
+    },
+  });
+
+  reporter.info(
+    `[site] Create SomeBadImageData with pdf asset without metadata`
+  );
+
+  const existingPdfWithPDFMetadata = {
+    cloudName: 'lilly-labs-consulting',
+    publicId: 'diverse%20mime%20types/en-US-YearCompass-booklet.pdf',
+    originalWidth: 1650,
+    originalHeight: 1275,
+    originalFormat: 'pdf',
+  };
+
+  createNode({
+    id: createNodeId(`SomeBadImageData >>> 8`),
+    name: 'ExistingPdfWithPDFMetadata',
+    ...existingPdfWithPDFMetadata,
+    internal: {
+      type: 'SomeBadImageData',
+      contentDigest: createContentDigest(existingPdfWithPDFMetadata),
+    },
+  });
+
+  reporter.info(
+    `[site] Create SomeBadImageData with pdf asset with pdf metadata`
+  );
+
+  const existingPdfWithPNGMetadata = {
+    cloudName: 'lilly-labs-consulting',
+    publicId: 'diverse%20mime%20types/en-US-YearCompass-booklet.pdf',
+    originalWidth: 1650,
+    originalHeight: 1275,
+    originalFormat: 'png',
+  };
+
+  createNode({
+    id: createNodeId(`SomeBadImageData >>> 9`),
+    name: 'ExistingPdfWithPNGMetadata',
+    ...existingPdfWithPNGMetadata,
+    internal: {
+      type: 'SomeBadImageData',
+      contentDigest: createContentDigest(existingPdfWithPNGMetadata),
+    },
+  });
+
+  reporter.info(
+    `[site] Create SomeBadImageData with pdf asset with png metadata`
+  );
+
   const blogPostData1 = {
     title: 'Blog Post Example One',
     slug: 'post-1',
