@@ -108,9 +108,9 @@ exports.createResolveCloudinaryAssetData =
     });
 
     if (error) {
-      if (error.details.length < 2) {
+      if (error.details.length < 2 && error.details[0].path.length > 0) {
         reporter.warn(
-          `[gatsby-transformer-cloudinary] Missing required field on ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId} >>> gatsbyImageData will resolve to null`
+          `[gatsby-transformer-cloudinary] Missing required field on ${transformType}: cloudName=${source?.cloudName}, publicId=${source?.publicId} >>> gatsbyImageData will resolve to null`
         );
       } else {
         reporter.verbose(

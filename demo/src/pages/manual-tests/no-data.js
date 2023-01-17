@@ -2,21 +2,23 @@ import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 
-const VariedDataPage = () => {
+const EmptyDataPage = () => {
   const data = useStaticQuery(graphql`
     query {
-      allVariedData {
+      allEmptyData {
         nodes {
           name
           expected
-          gatsbyImageData(height: 200, backgroundColor: "#BADA55")
+          cloudinary {
+            gatsbyImageData(width: 200, backgroundColor: "#BADA55")
+          }
         }
       }
     }
   `);
 
-  return data.allVariedData.nodes.map((node, index) => {
-    const gatsbyImage = getImage(node);
+  return data.allEmptyData.nodes.map((node, index) => {
+    const gatsbyImage = getImage(node.cloudinary);
 
     return (
       <>
@@ -34,4 +36,4 @@ const VariedDataPage = () => {
   });
 };
 
-export default VariedDataPage;
+export default EmptyDataPage;

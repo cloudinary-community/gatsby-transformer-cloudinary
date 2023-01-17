@@ -31,6 +31,7 @@ module.exports = {
           'ArticleFeatureImage',
           'BlogPostHeroImage',
           'VariedData',
+          'EmptyDataCloudinary',
         ],
       },
     },

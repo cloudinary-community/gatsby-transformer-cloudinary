@@ -156,6 +156,30 @@ exports.sourceNodes = (gatsbyUtils) => {
     reporter.info(`[site] Create VariedData: ${asset.name}`);
   });
 
+  const emptyData = [
+    { name: 'Empty data', expected: 'No image', cloudinary: {} },
+    { name: 'Undefined data', expected: 'No image', cloudinary: undefined },
+    { name: 'Null data', expected: 'No image', cloudinary: null },
+    {
+      name: 'Non empty data',
+      expected: 'An image',
+      cloudinary: { cloudName: 'lilly-labs-consulting', publicId: 'sample' },
+    },
+  ];
+
+  emptyData.forEach((asset, key) => {
+    createNode({
+      id: createNodeId(`EmptyData >>> ${key}`),
+      ...asset,
+      internal: {
+        type: 'EmptyData',
+        contentDigest: createContentDigest(asset),
+      },
+    });
+
+    reporter.info(`[site] Create EmptyData: ${key}`);
+  });
+
   const sampleAsset = {
     name: 'Asset with metadata',
     cloudName: 'lilly-labs-consulting',

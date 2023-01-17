@@ -202,8 +202,8 @@ describe('resolveCloudinaryAssetData', () => {
     });
   });
 
-  describe('when missing required data', () => {
-    it('calls reporter.verbose and returns null', async () => {
+  describe('when unconforming source', () => {
+    it('calls reporter.verbose and returns null for empty source', async () => {
       const source = {};
       const args = {};
       const result = await resolveCloudinaryAssetData(
@@ -216,12 +216,56 @@ describe('resolveCloudinaryAssetData', () => {
       expect(gatsbyUtilsMocks.reporter.verbose).toBeCalledTimes(1);
       expect(result).toBe(null);
     });
-  });
 
-  describe('when missing some required data', () => {
-    it('calls reporter.warn and returns null', async () => {
+    it('calls reporter.verbose and returns null for weird source', async () => {
+      const source = {
+        one: 'thing',
+        another: 'thang',
+      };
+      const args = {};
+      const result = await resolveCloudinaryAssetData(
+        source,
+        args,
+        context,
+        info
+      );
+      expect(generateImageData).toBeCalledTimes(0);
+      expect(gatsbyUtilsMocks.reporter.verbose).toBeCalledTimes(1);
+      expect(result).toBe(null);
+    });
+
+    it('calls reporter.verbose and returns null for null source', async () => {
+      const source = null;
+      const args = {};
+      const result = await resolveCloudinaryAssetData(
+        source,
+        args,
+        context,
+        info
+      );
+      expect(generateImageData).toBeCalledTimes(0);
+      expect(gatsbyUtilsMocks.reporter.verbose).toBeCalledTimes(1);
+      expect(result).toBe(null);
+    });
+
+    it('calls reporter.verbose and returns null for undefined source', async () => {
+      const source = undefined;
+      const args = {};
+      const result = await resolveCloudinaryAssetData(
+        source,
+        args,
+        context,
+        info
+      );
+      expect(generateImageData).toBeCalledTimes(0);
+      expect(gatsbyUtilsMocks.reporter.verbose).toBeCalledTimes(1);
+      expect(result).toBe(null);
+    });
+
+    it('calls reporter.warn and returns null for missing data', async () => {
       const source = {
         publicId: 'publicId',
+        one: 'thing',
       };
       const args = {};
       const result = await resolveCloudinaryAssetData(
