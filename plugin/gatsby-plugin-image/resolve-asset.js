@@ -55,13 +55,13 @@ const generateMetadata = async (source, args, transformType, reporter) => {
   const { value, error } = schema.validate(originalMetadata);
 
   if (!error) {
-    // Original metadata is good,
+    // Original metadata is valid,
     // use validated value
     return value;
   }
 
   try {
-    // Lacking metadata, so lets request it from Cloudinary
+    // Lacking metadata, so let's fetch it
     reporter.verbose(
       `[gatsby-transformer-cloudinary] Missing metadata fields on ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId} >>> To save on network requests add originalWidth, originalHeight and originalFormat to ${transformType}`
     );
@@ -70,15 +70,18 @@ const generateMetadata = async (source, args, transformType, reporter) => {
     const { value, error } = schema.validate(fetchedMetadata);
 
     if (!error) {
-      // Value is the validate fetchedMetadata stripped for unknowns
+      // Fetched metadata is valid,
+      // use validated value
       return value;
     } else {
+      // Fetched metadata is not valid
       reporter.verbose(
         `[gatsby-transformer-cloudinary] Invalid fetched metadata for ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId} >>> ${error.message}`
       );
       return null;
     }
   } catch (error) {
+    // Error fetching
     reporter.verbose(
       `[gatsby-transformer-cloudinary] Could not fetch metadata for ${transformType}: cloudName=${source.cloudName}, publicId=${source.publicId} >>> ${error.message}`
     );
