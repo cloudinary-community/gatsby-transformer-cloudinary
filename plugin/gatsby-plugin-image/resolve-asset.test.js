@@ -81,7 +81,6 @@ describe('resolveCloudinaryAssetData', () => {
       width: 100,
       height: 200,
       format: 'gif',
-      bytes: 6779,
     });
     getUrlAsBase64Image.mockResolvedValue('base64DataUrl');
     getAssetAsTracedSvg.mockResolvedValue('svgDataUrl');
@@ -110,8 +109,8 @@ describe('resolveCloudinaryAssetData', () => {
       pluginName: 'gatsby-transformer-cloudinary',
       sourceMetadata: {
         format: 'jpg',
-        height: '300',
-        width: '600',
+        height: 300,
+        width: 600,
       },
       transformations: ['e_grayscale'],
     });
@@ -123,8 +122,9 @@ describe('resolveCloudinaryAssetData', () => {
     await resolveCloudinaryAssetData(sourceWithoutMeta, args, context, info);
     // getAssetMetadata should only be called for sourceWithoutMeta
     expect(getAssetMetadata).toBeCalledTimes(1);
-    expect(gatsbyUtilsMocks.reporter.verbose).toBeCalledTimes(2);
+    expect(gatsbyUtilsMocks.reporter.verbose).toBeCalledTimes(1);
     // gatsby-plugin-image -> generateImageData should be called for both
+    expect(generateImageData).toBeCalledTimes(2);
     expect(generateImageData).toHaveBeenNthCalledWith(2, {
       filename: 'cloud-name>>>public-id',
       generateImageSource: _generateCloudinaryAssetSource,
@@ -151,8 +151,8 @@ describe('resolveCloudinaryAssetData', () => {
       pluginName: 'gatsby-transformer-cloudinary',
       sourceMetadata: {
         format: 'jpg',
-        height: '300',
-        width: '600',
+        height: 300,
+        width: 600,
       },
       placeholderURL: 'base64DataUrl',
       placeholder: 'blurred',
@@ -171,8 +171,8 @@ describe('resolveCloudinaryAssetData', () => {
       pluginName: 'gatsby-transformer-cloudinary',
       sourceMetadata: {
         format: 'jpg',
-        height: '300',
-        width: '600',
+        height: 300,
+        width: 600,
       },
       placeholderURL: 'svgDataUrl',
       placeholder: 'tracedSVG',
@@ -190,7 +190,7 @@ describe('resolveCloudinaryAssetData', () => {
         info
       );
       expect(generateImageData).toBeCalledTimes(0);
-      expect(gatsbyUtilsMocks.reporter.verbose).toBeCalledTimes(2);
+      expect(gatsbyUtilsMocks.reporter.verbose).toBeCalledTimes(1);
       expect(result).toBe(null);
     });
   });
@@ -208,7 +208,7 @@ describe('resolveCloudinaryAssetData', () => {
         info
       );
       expect(generateImageData).toBeCalledTimes(0);
-      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(2);
+      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(1);
       expect(result).toBe(null);
     });
   });
@@ -236,7 +236,7 @@ describe('resolveCloudinaryAssetData', () => {
       );
       expect(getAssetMetadata).toBeCalledTimes(1);
       expect(generateImageData).toBeCalledTimes(0);
-      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(2);
+      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(1);
       expect(result).toBe(null);
     });
   });
@@ -260,7 +260,7 @@ describe('resolveCloudinaryAssetData', () => {
       );
       expect(getAssetMetadata).toBeCalledTimes(1);
       expect(generateImageData).toBeCalledTimes(0);
-      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(2);
+      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(1);
       expect(result).toBe(null);
     });
   });
@@ -293,7 +293,7 @@ describe('resolveCloudinaryAssetData', () => {
       );
       expect(getAssetMetadata).toBeCalledTimes(1);
       expect(generateImageData).toBeCalledTimes(0);
-      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(2);
+      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(1);
       expect(result).toBe(null);
     });
 
@@ -310,8 +310,8 @@ describe('resolveCloudinaryAssetData', () => {
         pluginName: 'gatsby-transformer-cloudinary',
         sourceMetadata: {
           format: 'jpg',
-          height: '300',
-          width: '600',
+          height: 300,
+          width: 600,
         },
         //  placeholderURL: 'base64DataUrl',
         placeholder: 'blurred',
@@ -330,8 +330,8 @@ describe('resolveCloudinaryAssetData', () => {
         pluginName: 'gatsby-transformer-cloudinary',
         sourceMetadata: {
           format: 'jpg',
-          height: '300',
-          width: '600',
+          height: 300,
+          width: 600,
         },
         // placeholderURL: 'svgDataUrl',
         placeholder: 'tracedSVG',

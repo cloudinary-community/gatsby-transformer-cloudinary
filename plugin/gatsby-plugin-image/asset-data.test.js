@@ -1,6 +1,8 @@
 jest.mock('axios');
+jest.mock('probe-image-size');
 
 const axios = require('axios');
+const probe = require('probe-image-size');
 const {
   getAssetMetadata,
   getUrlAsBase64Image,
@@ -18,7 +20,12 @@ const args = {
 
 describe('getAssetMetaData', () => {
   beforeEach(() => {
-    axios.get.mockResolvedValue({ data: { output: 'metadata' } });
+    probe.mockResolvedValue({
+      width: 400,
+      height: 300,
+      type: 'jpg',
+      extra: 'extra',
+    });
   });
 
   afterEach(() => {
@@ -27,15 +34,14 @@ describe('getAssetMetaData', () => {
 
   it('fetches the correct metadata url', async () => {
     await getAssetMetadata({ source, args });
-    expect(axios.get).toHaveBeenCalledWith(
-      `http://res.cloudinary.com/cloud-name/image/upload/e_grayscale/fl_getinfo/public-id`,
-      undefined
+    expect(probe).toHaveBeenCalledWith(
+      `http://res.cloudinary.com/cloud-name/image/upload/f_auto,e_grayscale/public-id`
     );
   });
 
   it('returns the metadata', async () => {
     const metadata = await getAssetMetadata({ source, args });
-    expect(metadata).toBe('metadata');
+    expect(metadata).toStrictEqual({ width: 400, height: 300, format: 'jpg' });
   });
 
   it('to cache responses', async () => {
@@ -43,7 +49,7 @@ describe('getAssetMetaData', () => {
     await getAssetMetadata({ source, args: {} });
     await getAssetMetadata({ source, args: { chained: ['t_lwj'] } });
     await getAssetMetadata({ source, args: { chained: ['t_lwj'] } });
-    expect(axios.get).toHaveBeenCalledTimes(2);
+    expect(probe).toHaveBeenCalledTimes(2);
   });
 });
 
