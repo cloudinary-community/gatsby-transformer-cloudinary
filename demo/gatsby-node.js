@@ -39,7 +39,8 @@ exports.sourceNodes = (gatsbyUtils) => {
       publicId: 'sample',
       originalWidth: 864,
       originalHeight: 576,
-      originalFormat: 'jpg',
+      // No originalFormat
+      // originalFormat: 'jpg',
     },
     {
       name: 'Video without metadata',

@@ -43,7 +43,7 @@ const generateMetadata = async (source, args, transformType, reporter) => {
   const schema = Joi.object({
     width: Joi.number().positive().required(),
     height: Joi.number().positive().required(),
-    format: Joi.string().required(),
+    format: Joi.string().default('auto'),
   }).required();
 
   const originalMetadata = {

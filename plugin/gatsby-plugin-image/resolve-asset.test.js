@@ -68,6 +68,13 @@ describe('resolveCloudinaryAssetData', () => {
     originalFormat: 'jpg',
   };
 
+  const sourceWithoutFormat = {
+    publicId: 'public-id',
+    cloudName: 'cloud-name',
+    originalWidth: '600',
+    originalHeight: '300',
+  };
+
   const sourceWithoutMeta = {
     publicId: 'public-id',
     cloudName: 'cloud-name',
@@ -100,7 +107,9 @@ describe('resolveCloudinaryAssetData', () => {
   it('calls gatsby-plugin-image -> generateImageData with correct data', async () => {
     const args = { transformations: ['e_grayscale'] };
     await resolveCloudinaryAssetData(sourceWithMetadata, args, context, info);
-    expect(generateImageData).toBeCalledWith({
+    await resolveCloudinaryAssetData(sourceWithoutFormat, args, context, info);
+    expect(getAssetMetadata).toBeCalledTimes(0);
+    expect(generateImageData).toHaveBeenNthCalledWith(1, {
       filename: 'cloud-name>>>public-id',
       generateImageSource: _generateCloudinaryAssetSource,
       options: {
@@ -109,6 +118,20 @@ describe('resolveCloudinaryAssetData', () => {
       pluginName: 'gatsby-transformer-cloudinary',
       sourceMetadata: {
         format: 'jpg',
+        height: 300,
+        width: 600,
+      },
+      transformations: ['e_grayscale'],
+    });
+    expect(generateImageData).toHaveBeenNthCalledWith(2, {
+      filename: 'cloud-name>>>public-id',
+      generateImageSource: _generateCloudinaryAssetSource,
+      options: {
+        transformations: ['e_grayscale'],
+      },
+      pluginName: 'gatsby-transformer-cloudinary',
+      sourceMetadata: {
+        format: 'auto',
         height: 300,
         width: 600,
       },
