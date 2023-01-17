@@ -6,182 +6,168 @@ exports.sourceNodes = (gatsbyUtils) => {
     gatsbyUtils;
   const { createNode } = actions;
 
-  const existingAssetsWithoutMetadata = {
+  const variedData = [
+    {
+      name: 'No assed info',
+      expected: 'No image',
+    },
+    {
+      name: 'Non existing asset without metadata',
+      expected: 'No image',
+      cloudName: 'not-a-good-cloudName',
+      publicId: 'sample',
+    },
+    {
+      name: 'Non existing asset with metadata',
+      expected: 'Broken image',
+      cloudName: 'not-a-good-cloudName',
+      publicId: 'sample',
+      originalHeight: 400,
+      originalWidth: 300,
+      originalFormat: 'png',
+    },
+    {
+      name: 'Asset without metadata',
+      expected: 'Rastered image',
+      cloudName: 'lilly-labs-consulting',
+      publicId: 'sample',
+    },
+    {
+      name: 'Asset with metadata',
+      expected: 'Rastered image',
+      cloudName: 'lilly-labs-consulting',
+      publicId: 'sample',
+      originalWidth: 864,
+      originalHeight: 576,
+      originalFormat: 'jpg',
+    },
+    {
+      name: 'Video without metadata',
+      expected: 'No image - in future: rastered image ',
+      cloudName: 'lilly-labs-consulting',
+      publicId: 'diverse mime types/chop-chop-video.mp4',
+    },
+    {
+      name: 'Video with metadata',
+      expected: 'Broken image - in future: rastered image ',
+      cloudName: 'lilly-labs-consulting',
+      publicId: 'diverse mime types/chop-chop-video.mp4',
+      originalHeight: 1800,
+      originalWidth: 1800,
+      originalFormat: 'mp4',
+    },
+    {
+      name: 'Video with metadata - jpg',
+      expected: 'Broken image - in future: rastered image ',
+      cloudName: 'lilly-labs-consulting',
+      publicId: 'diverse mime types/chop-chop-video.mp4',
+      originalHeight: 1800,
+      originalWidth: 1800,
+      originalFormat: 'jpg',
+    },
+    {
+      name: 'Gif without metadata',
+      expected: 'Animated image',
+      cloudName: 'lilly-labs-consulting',
+      publicId: 'diverse%20mime%20types/giphyCat.gif',
+    },
+    {
+      name: 'Gif with metdata',
+      expected: 'Animated image',
+      cloudName: 'lilly-labs-consulting',
+      publicId: 'diverse%20mime%20types/giphyCat.gif',
+      originalWidth: 480,
+      originalHeight: 315,
+      originalFormat: 'gif',
+    },
+    {
+      name: 'Gif with metdata - png',
+      expected: 'Animated image',
+      cloudName: 'lilly-labs-consulting',
+      publicId: 'diverse%20mime%20types/giphyCat.gif',
+      originalWidth: 480,
+      originalHeight: 315,
+      // Wrong original format
+      originalFormat: 'png',
+    },
+    {
+      name: 'Pdf without metadata',
+      expected: 'Rastered image of first page',
+      cloudName: 'lilly-labs-consulting',
+      publicId: 'diverse%20mime%20types/en-US-YearCompass-booklet.pdf',
+    },
+    {
+      name: 'Pdf with metadata',
+      expected: 'Rastered image of first page',
+      cloudName: 'lilly-labs-consulting',
+      publicId: 'diverse%20mime%20types/en-US-YearCompass-booklet.pdf',
+      originalWidth: 1650,
+      originalHeight: 1275,
+      originalFormat: 'pdf',
+    },
+    {
+      name: 'Pdf with metadata - jpg',
+      expected: 'Rastered image of first page',
+      cloudName: 'lilly-labs-consulting',
+      publicId: 'diverse%20mime%20types/en-US-YearCompass-booklet.pdf',
+      originalWidth: 1650,
+      originalHeight: 1275,
+      // Wrong original format
+      originalFormat: 'jpg',
+    },
+    {
+      name: 'Svg without metdata',
+      expected: 'Rastered image',
+      cloudName: 'lilly-labs-consulting',
+      publicId: 'diverse%20mime%20types/bubble-gum-ice-skating.svg',
+    },
+    {
+      name: 'Svg with metdata',
+      expected: 'Rastered image',
+      cloudName: 'lilly-labs-consulting',
+      publicId: 'diverse%20mime%20types/bubble-gum-ice-skating.svg',
+      originalHeight: 3000,
+      originalWidth: 3000,
+      originalFormat: 'svg',
+    },
+    {
+      name: 'Svg with metdata - png',
+      expected: 'Rastered image',
+      cloudName: 'lilly-labs-consulting',
+      publicId: 'diverse%20mime%20types/bubble-gum-ice-skating.svg',
+      originalHeight: 3000,
+      originalWidth: 3000,
+      // Wrong original format
+      originalFormat: 'png',
+    },
+  ];
+
+  variedData.forEach((asset, key) => {
+    createNode({
+      id: createNodeId(`VariedData >>> ${key}`),
+      ...asset,
+      internal: {
+        type: 'VariedData',
+        contentDigest: createContentDigest(asset),
+      },
+    });
+
+    reporter.info(`[site] Create VariedData: ${asset.name}`);
+  });
+
+  const sampleAsset = {
+    name: 'Asset with metadata',
     cloudName: 'lilly-labs-consulting',
     publicId: 'sample',
+    originalWidth: 864,
+    originalHeight: 576,
+    originalFormat: 'jpg',
   };
-
-  createNode({
-    id: createNodeId(`SomeBadImageData >>> 1`),
-    name: 'GoodData',
-    ...existingAssetsWithoutMetadata,
-    internal: {
-      type: 'SomeBadImageData',
-      contentDigest: createContentDigest(existingAssetsWithoutMetadata),
-    },
-  });
-
-  reporter.info(
-    `[site] Create SomeBadImageData with existing asset without metadata`
-  );
-
-  const noAssetInfo = {};
-
-  createNode({
-    id: createNodeId(`SomeBadImageData >>> 2`),
-    name: 'NoAssetInfo',
-    internal: {
-      type: 'SomeBadImageData',
-      contentDigest: createContentDigest(noAssetInfo),
-    },
-  });
-
-  reporter.info(`[site] Create SomeBadImageData without asset info`);
-
-  const nonExistingAsset = {
-    cloudName: 'not-a-good-cloudName',
-    publicId: 'sample',
-  };
-
-  createNode({
-    id: createNodeId(`SomeBadImageData >>> 3`),
-    name: 'BadMetaData',
-    ...nonExistingAsset,
-    internal: {
-      type: 'SomeBadImageData',
-      contentDigest: createContentDigest(nonExistingAsset),
-    },
-  });
-
-  reporter.info(`[site] Create SomeBadImageData with nonexisting asset`);
-
-  const existingVideoWithoutMetadata = {
-    cloudName: 'lilly-labs-consulting',
-    publicId: 'diverse mime types/chop-chop-video.mp4',
-  };
-
-  createNode({
-    id: createNodeId(`SomeBadImageData >>> 4`),
-    name: 'ExistingVideoWithoutMetadata',
-    ...existingVideoWithoutMetadata,
-    internal: {
-      type: 'SomeBadImageData',
-      contentDigest: createContentDigest(existingVideoWithoutMetadata),
-    },
-  });
-
-  reporter.info(
-    `[site] Create SomeBadImageData with existing video asset without metadata`
-  );
-
-  const existingGifWithoutMetadata = {
-    cloudName: 'lilly-labs-consulting',
-    publicId: 'diverse%20mime%20types/giphyCat.gif',
-  };
-
-  createNode({
-    id: createNodeId(`SomeBadImageData >>> 5`),
-    name: 'ExistingGifWithoutMetadata',
-    ...existingGifWithoutMetadata,
-    internal: {
-      type: 'SomeBadImageData',
-      contentDigest: createContentDigest(existingGifWithoutMetadata),
-    },
-  });
-
-  reporter.info(
-    `[site] Create SomeBadImageData with gif asset without metadata`
-  );
-
-  const existingGifWithMetadata = {
-    cloudName: 'lilly-labs-consulting',
-    publicId: 'diverse%20mime%20types/giphyCat.gif',
-    originalWidth: 480,
-    originalHeight: 315,
-    originalFormat: 'gif',
-  };
-
-  createNode({
-    id: createNodeId(`SomeBadImageData >>> 6`),
-    name: 'ExistingGifWithMetadata',
-    ...existingGifWithMetadata,
-    internal: {
-      type: 'SomeBadImageData',
-      contentDigest: createContentDigest(existingGifWithMetadata),
-    },
-  });
-
-  reporter.info(
-    `[site] Create SomeBadImageData with gif asset without metadata`
-  );
-
-  const existingPdfWithoutMetadata = {
-    cloudName: 'lilly-labs-consulting',
-    publicId: 'diverse%20mime%20types/en-US-YearCompass-booklet.pdf',
-  };
-
-  createNode({
-    id: createNodeId(`SomeBadImageData >>> 7`),
-    name: 'ExistingPDFWithoutMetadata',
-    ...existingPdfWithoutMetadata,
-    internal: {
-      type: 'SomeBadImageData',
-      contentDigest: createContentDigest(existingPdfWithoutMetadata),
-    },
-  });
-
-  reporter.info(
-    `[site] Create SomeBadImageData with pdf asset without metadata`
-  );
-
-  const existingPdfWithPDFMetadata = {
-    cloudName: 'lilly-labs-consulting',
-    publicId: 'diverse%20mime%20types/en-US-YearCompass-booklet.pdf',
-    originalWidth: 1650,
-    originalHeight: 1275,
-    originalFormat: 'pdf',
-  };
-
-  createNode({
-    id: createNodeId(`SomeBadImageData >>> 8`),
-    name: 'ExistingPdfWithPDFMetadata',
-    ...existingPdfWithPDFMetadata,
-    internal: {
-      type: 'SomeBadImageData',
-      contentDigest: createContentDigest(existingPdfWithPDFMetadata),
-    },
-  });
-
-  reporter.info(
-    `[site] Create SomeBadImageData with pdf asset with pdf metadata`
-  );
-
-  const existingPdfWithPNGMetadata = {
-    cloudName: 'lilly-labs-consulting',
-    publicId: 'diverse%20mime%20types/en-US-YearCompass-booklet.pdf',
-    originalWidth: 1650,
-    originalHeight: 1275,
-    originalFormat: 'png',
-  };
-
-  createNode({
-    id: createNodeId(`SomeBadImageData >>> 9`),
-    name: 'ExistingPdfWithPNGMetadata',
-    ...existingPdfWithPNGMetadata,
-    internal: {
-      type: 'SomeBadImageData',
-      contentDigest: createContentDigest(existingPdfWithPNGMetadata),
-    },
-  });
-
-  reporter.info(
-    `[site] Create SomeBadImageData with pdf asset with png metadata`
-  );
 
   const blogPostData1 = {
     title: 'Blog Post Example One',
     slug: 'post-1',
-    heroImage: existingAssetsWithoutMetadata,
+    heroImage: sampleAsset,
   };
 
   createNode({
@@ -199,7 +185,7 @@ exports.sourceNodes = (gatsbyUtils) => {
     title: 'Article Example One',
     slug: 'article-1',
     feature: {
-      image: existingAssetsWithoutMetadata,
+      image: sampleAsset,
     },
   };
 

@@ -5,21 +5,25 @@ import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 const ProblemExample = () => {
   const data = useStaticQuery(graphql`
     query {
-      allSomeBadImageData {
+      allVariedData {
         nodes {
           name
+          expected
           gatsbyImageData(height: 200, backgroundColor: "#BADA55")
         }
       }
     }
   `);
 
-  return data.allSomeBadImageData.nodes.map((node, index) => {
+  return data.allVariedData.nodes.map((node, index) => {
     const gatsbyImage = getImage(node);
 
     return (
       <>
         <h2>{node.name}</h2>
+        <div>
+          <strong>Expected:</strong> {node.expected}
+        </div>
         {gatsbyImage ? (
           <GatsbyImage key={index} image={gatsbyImage} alt={node.name} />
         ) : (
