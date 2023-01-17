@@ -1,3 +1,10 @@
+## [4.3.1](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v4.3.0...v4.3.1) (2023-01-17)
+
+
+### Bug Fixes
+
+* problem getting metadata ([#227](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/227)) ([bf3e75a](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/bf3e75ae3934ccb26dde979fd59475f93cd9582b)), closes [#223](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/223)
+
 # [4.3.0](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v4.2.0...v4.3.0) (2022-12-21)
 
 ### Features
