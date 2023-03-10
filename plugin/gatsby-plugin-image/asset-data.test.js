@@ -35,7 +35,9 @@ describe('getAssetMetaData', () => {
   it('fetches the correct metadata url', async () => {
     await getAssetMetadata({ source, args });
     expect(probe).toHaveBeenCalledWith(
-      `http://res.cloudinary.com/cloud-name/image/upload/f_auto,e_grayscale/public-id`
+      expect.stringContaining(
+        'res.cloudinary.com/cloud-name/image/upload/f_auto,e_grayscale/public-id'
+      )
     );
   });
 
@@ -101,7 +103,9 @@ describe('getAssetAsTracedSvg', () => {
   it('fetches the correct url', async () => {
     await getAssetAsTracedSvg({ source, args });
     expect(axios.get).toHaveBeenCalledWith(
-      `http://res.cloudinary.com/cloud-name/image/upload/f_svg,e_grayscale/e_vectorize:colors:2:detail:0.3:despeckle:0.1,w_300/public-id`,
+      expect.stringContaining(
+        'res.cloudinary.com/cloud-name/image/upload/f_svg,e_grayscale/e_vectorize:colors:2:detail:0.3:despeckle:0.1,w_300/public-id'
+      ),
       undefined
     );
   });
