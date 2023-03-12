@@ -1,4 +1,10 @@
 const cloudinary = require('cloudinary').v2;
+const pluginPkg = require('../package.json');
+const gatsbyPkg = require('gatsby/package.json');
+
+const SDK_CODE = 'X';
+const SDK_SEMVER = pluginPkg.version;
+const TECH_VERSION = gatsbyPkg.version;
 
 const generateTransformations = ({ width, height, format, options = {} }) => {
   return [
@@ -48,11 +54,15 @@ exports.generateCloudinaryAssetUrl = ({
     transformation.push(generateTracedSVGTransformation(tracedSvg));
   }
 
-  cloudinary.config({ cloud_name: cloudName, secure: options.secure });
-
   const url = cloudinary.url(publicId, {
-    transformation,
-    flags,
+    cloud_name: cloudName,
+    secure: options.secure,
+    transformation: transformation,
+    flags: flags,
+    urlAnalytics: true,
+    sdkCode: SDK_CODE,
+    sdkSemver: SDK_SEMVER,
+    techVersion: TECH_VERSION,
   });
 
   return url;
