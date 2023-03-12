@@ -1,3 +1,10 @@
+# [4.4.0](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v4.3.1...v4.4.0) (2023-03-12)
+
+
+### Features
+
+* add analytics to generated urls ([#231](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/231)) ([507504f](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/507504fc95d448102faa66c7d89e5558e7790658)), closes [#229](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/229)
+
 ## [4.3.1](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v4.3.0...v4.3.1) (2023-01-17)
 
 
