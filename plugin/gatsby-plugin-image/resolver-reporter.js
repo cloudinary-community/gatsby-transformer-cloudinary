@@ -3,6 +3,8 @@ const LEVEL = {
   info: 1,
   warn: 2,
   error: 3,
+  panic: 4,
+  panicOnBuild: 4,
 };
 
 exports.resolverReporter = ({ reporter, logLevel }) => {
