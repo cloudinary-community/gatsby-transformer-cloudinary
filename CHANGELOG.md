@@ -1,3 +1,10 @@
+# [4.5.0](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v4.4.0...v4.5.0) (2023-08-01)
+
+
+### Features
+
+* add resolver log level ([#242](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/242)) ([b8cf805](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/commit/b8cf8051161df546d0c243931c813951c0033b69)), closes [#239](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/issues/239)
+
 # [4.4.0](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v4.3.1...v4.4.0) (2023-03-12)
 
 
