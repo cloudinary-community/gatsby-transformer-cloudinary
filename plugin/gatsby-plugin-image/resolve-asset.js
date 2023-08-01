@@ -11,6 +11,8 @@ const {
 } = require('./asset-data');
 const { Joi } = require('gatsby-plugin-utils/joi');
 
+const { resolverReporter } = require('./resolver-reporter');
+
 const generateCloudinaryAssetSource = (
   filename,
   width,
@@ -94,7 +96,8 @@ exports._generateCloudinaryAssetSource = generateCloudinaryAssetSource;
 
 exports.createResolveCloudinaryAssetData =
   (gatsbyUtils) => async (source, args, _context, info) => {
-    const { reporter } = gatsbyUtils;
+    let { reporter } = gatsbyUtils;
+    reporter = resolverReporter({ reporter, logLevel: args.logLevel });
     const transformType = info.parentType || 'UnknownTransformType';
 
     const schema = Joi.object({

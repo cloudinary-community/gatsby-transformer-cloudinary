@@ -22,6 +22,9 @@ exports.createGatsbyPluginImageResolver = (gatsbyUtils, pluginOptions) => {
           type: 'Boolean',
           defaultValue: true,
         },
+        logLevel: {
+          type: 'String',
+        },
       }
     );
   } catch (error) {

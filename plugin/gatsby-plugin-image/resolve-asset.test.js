@@ -218,21 +218,61 @@ describe('resolveCloudinaryAssetData', () => {
       expect(result).toBe(null);
     });
 
-    it('calls reporter.verbose and returns null for weird source', async () => {
-      const source = {
-        one: 'thing',
-        another: 'thang',
-      };
-      const args = {};
-      const result = await resolveCloudinaryAssetData(
-        source,
-        args,
-        context,
-        info
-      );
-      expect(generateImageData).toBeCalledTimes(0);
-      expect(gatsbyUtilsMocks.reporter.verbose).toBeCalledTimes(1);
-      expect(result).toBe(null);
+    describe('returns null for weird source', () => {
+      it('calls reporter.verbose when undefined log level', async () => {
+        const source = {
+          one: 'thing',
+          another: 'thang',
+        };
+        const args = {};
+        const result = await resolveCloudinaryAssetData(
+          source,
+          args,
+          context,
+          info
+        );
+        expect(generateImageData).toBeCalledTimes(0);
+        expect(gatsbyUtilsMocks.reporter.verbose).toBeCalledTimes(1);
+        expect(result).toBe(null);
+      });
+
+      it('calls reporter.verbose when log level = "verbose"', async () => {
+        const source = {
+          one: 'thing',
+          another: 'thang',
+        };
+        const args = {
+          logLevel: 'verbose',
+        };
+        const result = await resolveCloudinaryAssetData(
+          source,
+          args,
+          context,
+          info
+        );
+        expect(generateImageData).toBeCalledTimes(0);
+        expect(gatsbyUtilsMocks.reporter.verbose).toBeCalledTimes(1);
+        expect(result).toBe(null);
+      });
+
+      it('does not call reporter.verbose when log level = "warn"', async () => {
+        const source = {
+          one: 'thing',
+          another: 'thang',
+        };
+        const args = {
+          logLevel: 'warn',
+        };
+        const result = await resolveCloudinaryAssetData(
+          source,
+          args,
+          context,
+          info
+        );
+        expect(generateImageData).toBeCalledTimes(0);
+        expect(gatsbyUtilsMocks.reporter.verbose).toBeCalledTimes(0);
+        expect(result).toBe(null);
+      });
     });
 
     it('calls reporter.verbose and returns null for null source', async () => {
@@ -263,21 +303,42 @@ describe('resolveCloudinaryAssetData', () => {
       expect(result).toBe(null);
     });
 
-    it('calls reporter.warn and returns null for missing data', async () => {
-      const source = {
-        publicId: 'publicId',
-        one: 'thing',
-      };
-      const args = {};
-      const result = await resolveCloudinaryAssetData(
-        source,
-        args,
-        context,
-        info
-      );
-      expect(generateImageData).toBeCalledTimes(0);
-      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(1);
-      expect(result).toBe(null);
+    describe('returns null for missing data', () => {
+      it('returns null for missing data when log level is undefined', async () => {
+        const source = {
+          publicId: 'publicId',
+          one: 'thing',
+        };
+        const args = {};
+        const result = await resolveCloudinaryAssetData(
+          source,
+          args,
+          context,
+          info
+        );
+        expect(generateImageData).toBeCalledTimes(0);
+        expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(1);
+        expect(result).toBe(null);
+      });
+
+      it('does not call reporter.warn when log level = "error"', async () => {
+        const source = {
+          publicId: 'publicId',
+          one: 'thing',
+        };
+        const args = {
+          logLevel: 'error',
+        };
+        const result = await resolveCloudinaryAssetData(
+          source,
+          args,
+          context,
+          info
+        );
+        expect(generateImageData).toBeCalledTimes(0);
+        expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(0);
+        expect(result).toBe(null);
+      });
     });
   });
 
