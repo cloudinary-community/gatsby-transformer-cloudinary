@@ -1,4 +1,7 @@
-exports.createGatsbyPluginImageResolver = (gatsbyUtils, pluginOptions) => {
+exports.createGatsbyPluginImageResolver = (
+  gatsbyUtils,
+  transformTypeConfig
+) => {
   const { reporter } = gatsbyUtils;
   try {
     const {
@@ -7,12 +10,12 @@ exports.createGatsbyPluginImageResolver = (gatsbyUtils, pluginOptions) => {
     const { createResolveCloudinaryAssetData } = require('./resolve-asset');
     const { CloudinaryPlaceholderType } = require('./types');
 
-    return getGatsbyImageResolver(
-      createResolveCloudinaryAssetData(gatsbyUtils),
+    const gatsbyImageResolver = getGatsbyImageResolver(
+      createResolveCloudinaryAssetData(gatsbyUtils, transformTypeConfig),
       {
         transformations: {
           type: '[String]',
-          defaultValue: pluginOptions.defaultTransformations,
+          defaultValue: transformTypeConfig.Transformations,
         },
         chained: '[String]',
         placeholder: {
@@ -27,6 +30,10 @@ exports.createGatsbyPluginImageResolver = (gatsbyUtils, pluginOptions) => {
         },
       }
     );
+
+    gatsbyImageResolver.type = 'GatsbyImageData';
+
+    return gatsbyImageResolver;
   } catch (error) {
     reporter.warn(
       '[gatsby-transformer-cloudinary] Install and configure gatsby-plugin-image to use the new GatsbyImage component and gatsbyImageData resolver'

@@ -9,23 +9,26 @@ export default function BlogPostTemplate({ data }) {
   return (
     <>
       <h2>{title}</h2>
+
       {heroImage?.gatsbyImageData ? (
         <GatsbyImage image={heroImage.gatsbyImageData} alt={heroImage.alt} />
       ) : (
-        <div>
+        <p>
           No gatsby image for <code>heroImage</code>
-        </div>
+        </p>
       )}
+
       {heroImageWithUnconformingShape?.gatsbyImageData ? (
         <GatsbyImage
           image={heroImageWithUnconformingShape.gatsbyImageData}
           alt={heroImageWithUnconformingShape.alt}
         />
       ) : (
-        <div>
+        <p>
           No gatsby image for <code>heroImageWithUnconformingShape</code>
-        </div>
+        </p>
       )}
+
       <div dangerouslySetInnerHTML={{ __html: html }} />
     </>
   );
@@ -39,11 +42,11 @@ export const pageQuery = graphql`
         slug
         title
         heroImage {
-          gatsbyImageData(height: 200, backgroundColor: "#BADA55")
+          gatsbyImageData(height: 200, layout: FIXED)
           alt
         }
         heroImageWithUnconformingShape {
-          gatsbyImageData(height: 200, backgroundColor: "#BADA55")
+          gatsbyImageData(height: 200, layout: FIXED)
           alt
         }
       }

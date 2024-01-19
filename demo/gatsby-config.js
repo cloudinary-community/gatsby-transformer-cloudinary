@@ -47,9 +47,11 @@ module.exports = {
           //   publicId: `publicId`,
           // },
           {
-            name: 'MarkdownRemarkFrontmatterHeroImageWithUnconformingShape',
+            type: 'MarkdownRemarkFrontmatterHeroImageWithUnconformingShape',
             cloudName: `a_cloud_name`,
-            publicId: `a_public_id`,
+            publicId: (data) => {
+              return data['a_public_id'];
+            },
           },
         ],
       },

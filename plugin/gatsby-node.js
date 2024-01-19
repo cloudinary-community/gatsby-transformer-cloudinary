@@ -27,7 +27,19 @@ exports.pluginOptionsSchema = ({ Joi }) => {
     uploadFolder: Joi.string(),
     uploadSourceInstanceNames: Joi.array().items(Joi.string()),
     transformTypes: Joi.array()
-      .items(Joi.string())
+      .items(
+        Joi.string(),
+        Joi.object({
+          type: Joi.string().required(),
+          cloudName: [Joi.function(), Joi.string()],
+          publicId: [Joi.function(), Joi.string()],
+          height: [Joi.function(), Joi.number()],
+          width: [Joi.function(), Joi.number()],
+          format: [Joi.function(), Joi.string()],
+          base64: [Joi.function(), Joi.string()],
+          tracedSVG: [Joi.function(), Joi.string()],
+        })
+      )
       .default(['CloudinaryAsset']),
     overwriteExisting: Joi.boolean().default(false),
     defaultTransformations: Joi.array()
