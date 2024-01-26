@@ -1,6 +1,6 @@
 const {
   createGatsbyImageDataResolver,
-  _amendTransformTypeConfig,
+  _amendTransformTypeMapping,
 } = require('./index');
 
 const gatsbyUtilsMocks = {
@@ -9,8 +9,7 @@ const gatsbyUtilsMocks = {
 
 describe('_amendTransformTypeConfig', () => {
   it('defaults to using the field name as key', () => {
-    const originalConfig = 'CloudinaryAsset';
-    const ammenedConfig = _amendTransformTypeConfig(originalConfig);
+    const ammendedMapping = _amendTransformTypeMapping({});
 
     const source = {
       publicId: 'a publicId',
@@ -23,19 +22,18 @@ describe('_amendTransformTypeConfig', () => {
     };
 
     expect({
-      publicId: ammenedConfig.publicId(source),
-      cloudName: ammenedConfig.cloudName(source),
-      height: ammenedConfig.height(source),
-      width: ammenedConfig.width(source),
-      format: ammenedConfig.format(source),
-      base64: ammenedConfig.base64(source),
-      tracedSVG: ammenedConfig.tracedSVG(source),
+      publicId: ammendedMapping.publicId(source),
+      cloudName: ammendedMapping.cloudName(source),
+      height: ammendedMapping.height(source),
+      width: ammendedMapping.width(source),
+      format: ammendedMapping.format(source),
+      base64: ammendedMapping.base64(source),
+      tracedSVG: ammendedMapping.tracedSVG(source),
     }).toEqual(source);
   });
 
   it('allows field name config', () => {
-    const originalConfig = {
-      type: 'CloudinaryAsset',
+    const originalMapping = {
       publicId: 'field1',
       cloudName: 'field2',
       height: 'field3',
@@ -44,7 +42,7 @@ describe('_amendTransformTypeConfig', () => {
       base64: 'field6',
       tracedSVG: 'field7',
     };
-    const ammenedConfig = _amendTransformTypeConfig(originalConfig);
+    const ammenedMapping = _amendTransformTypeMapping(originalMapping);
 
     const source = {
       field1: 'a publicId',
@@ -67,19 +65,18 @@ describe('_amendTransformTypeConfig', () => {
     };
 
     expect({
-      publicId: ammenedConfig.publicId(source),
-      cloudName: ammenedConfig.cloudName(source),
-      height: ammenedConfig.height(source),
-      width: ammenedConfig.width(source),
-      format: ammenedConfig.format(source),
-      base64: ammenedConfig.base64(source),
-      tracedSVG: ammenedConfig.tracedSVG(source),
+      publicId: ammenedMapping.publicId(source),
+      cloudName: ammenedMapping.cloudName(source),
+      height: ammenedMapping.height(source),
+      width: ammenedMapping.width(source),
+      format: ammenedMapping.format(source),
+      base64: ammenedMapping.base64(source),
+      tracedSVG: ammenedMapping.tracedSVG(source),
     }).toEqual(asset);
   });
 
   it('allows function config', () => {
-    const originalConfig = {
-      type: 'CloudinaryAsset',
+    const originalMapping = {
       publicId: (source) => {
         return source.field1;
       },
@@ -102,7 +99,7 @@ describe('_amendTransformTypeConfig', () => {
         return undefined;
       },
     };
-    const ammenedConfig = _amendTransformTypeConfig(originalConfig);
+    const ammendedMapping = _amendTransformTypeMapping(originalMapping);
 
     const source = {
       field1: 'a publicId',
@@ -125,13 +122,13 @@ describe('_amendTransformTypeConfig', () => {
     };
 
     expect({
-      publicId: ammenedConfig.publicId(source),
-      cloudName: ammenedConfig.cloudName(source),
-      height: ammenedConfig.height(source),
-      width: ammenedConfig.width(source),
-      format: ammenedConfig.format(source),
-      base64: ammenedConfig.base64(source),
-      tracedSVG: ammenedConfig.tracedSVG(source),
+      publicId: ammendedMapping.publicId(source),
+      cloudName: ammendedMapping.cloudName(source),
+      height: ammendedMapping.height(source),
+      width: ammendedMapping.width(source),
+      format: ammendedMapping.format(source),
+      base64: ammendedMapping.base64(source),
+      tracedSVG: ammendedMapping.tracedSVG(source),
     }).toEqual(asset);
   });
 });

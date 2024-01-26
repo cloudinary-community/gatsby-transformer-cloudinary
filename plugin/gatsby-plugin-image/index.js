@@ -1,7 +1,7 @@
 const { createGatsbyPluginImageResolver } = require('./resolvers');
 
-const amendTransformTypeConfig = (transformType) => {
-  const transformTypeConfig = [
+const amendTransformTypeMapping = (mapping) => {
+  return [
     'cloudName',
     'publicId',
     'height',
@@ -9,30 +9,24 @@ const amendTransformTypeConfig = (transformType) => {
     'format',
     'base64',
     'tracedSVG',
-  ].reduce(
-    (acc, key) => {
-      if (typeof transformType[key] === 'function') {
-        // Example config: { publicId: (data) => data['a_public_id'] }
-        // Use the configued function to get the field value
-        acc[key] = transformType[key];
-      } else if (typeof transformType[key] === 'string') {
-        // Example config: { publicId: 'a_public_id' }
-        // Use the configured key as the field name
-        acc[key] = (source) => source[transformType[key]];
-      } else {
-        // Use the key as the field name
-        acc[key] = (source) => source[key];
-      }
-      return acc;
-    },
-    {
-      type: transformType.type || transformType,
+  ].reduce((acc, key) => {
+    if (typeof mapping[key] === 'function') {
+      // Example config: { publicId: (data) => data['a_public_id'] }
+      // Use the configued function to get the field value
+      acc[key] = mapping[key];
+    } else if (typeof mapping[key] === 'string') {
+      // Example config: { publicId: 'a_public_id' }
+      // Use the configured key as the field name
+      acc[key] = (source) => source[mapping[key]];
+    } else {
+      // Use the key as the field name
+      acc[key] = (source) => source[key];
     }
-  );
-  return transformTypeConfig;
+    return acc;
+  }, {});
 };
 
-exports._amendTransformTypeConfig = amendTransformTypeConfig;
+exports._amendTransformTypeMapping = amendTransformTypeMapping;
 
 exports.createGatsbyImageDataResolver = (gatsbyUtils, pluginOptions) => {
   const { createResolvers } = gatsbyUtils;
@@ -41,7 +35,11 @@ exports.createGatsbyImageDataResolver = (gatsbyUtils, pluginOptions) => {
   const resolvers = {};
 
   transformTypes.forEach((transformType) => {
-    const transformTypeConfig = amendTransformTypeConfig(transformType);
+    const transformTypeConfig = {
+      type: transformType.type || transformType,
+      mapping: amendTransformTypeMapping(transformType.mapping || {}),
+    };
+
     const gatsbyImageResolver = createGatsbyPluginImageResolver(
       gatsbyUtils,
       transformTypeConfig,

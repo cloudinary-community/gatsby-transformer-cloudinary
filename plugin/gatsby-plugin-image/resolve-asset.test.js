@@ -31,13 +31,15 @@ const resolveCloudinaryAssetData = createResolveCloudinaryAssetData(
   gatsbyUtilsMocks,
   {
     type: 'CloudinaryAsset',
-    cloudName: (data) => data.cloudName,
-    publicId: (data) => data.publicId,
-    height: () => 300,
-    width: (data) => data.width,
-    format: (data) => data.format,
-    base64: (data) => data.base64,
-    tracedSVG: (data) => data.tracedSVG,
+    mapping: {
+      cloudName: (data) => data.cloudName,
+      publicId: (data) => data.publicId,
+      height: () => 300,
+      width: (data) => data.width,
+      format: (data) => data.format,
+      base64: (data) => data.base64,
+      tracedSVG: (data) => data.tracedSVG,
+    },
   }
 );
 

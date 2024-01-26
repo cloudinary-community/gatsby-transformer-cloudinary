@@ -129,17 +129,17 @@ exports.createResolveCloudinaryAssetData =
     let { reporter } = gatsbyUtils;
     reporter = resolverReporter({ reporter, logLevel: args.logLevel });
     source = source || {};
+    const mapping = transformTypeConfig.mapping || {};
 
     let cldAssetSource = {
       type: transformTypeConfig.type,
-      cloudName: transformTypeConfig['cloudName'](source),
-      publicId: transformTypeConfig['publicId'](source),
-      height: transformTypeConfig['height'](source) || source['originalHeight'],
-      width: transformTypeConfig['width'](source) || source['originalWidth'],
-      format: transformTypeConfig['format'](source) || source['originalFormat'],
-      base64: transformTypeConfig['base64'](source) || source['defaultBase64'],
-      tracedSVG:
-        transformTypeConfig['tracedSVG'](source) || source['defaultTracedSVG'],
+      cloudName: mapping['cloudName'](source),
+      publicId: mapping['publicId'](source),
+      height: mapping['height'](source) || source['originalHeight'],
+      width: mapping['width'](source) || source['originalWidth'],
+      format: mapping['format'](source) || source['originalFormat'],
+      base64: mapping['base64'](source) || source['defaultBase64'],
+      tracedSVG: mapping['tracedSVG'](source) || source['defaultTracedSVG'],
     };
 
     const cldAssetRequired = validateRequiredData(cldAssetSource, reporter);

@@ -43,14 +43,18 @@ module.exports = {
           'MarkdownRemarkFrontmatterHeroImage',
           // {
           //   name: 'MarkdownRemarkFrontmatterHeroImage',
-          //   cloudName: `cloudName`,
-          //   publicId: `publicId`,
+          //   mapping: {
+          //     cloudName: `cloudName`,
+          //     publicId: `publicId`,
+          //    }
           // },
           {
             type: 'MarkdownRemarkFrontmatterHeroImageWithUnconformingShape',
-            cloudName: `a_cloud_name`,
-            publicId: (data) => {
-              return data['a_public_id'];
+            mapping: {
+              cloudName: `a_cloud_name`,
+              publicId: (data) => {
+                return data['a_public_id'];
+              },
             },
           },
         ],

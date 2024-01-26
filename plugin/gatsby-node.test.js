@@ -54,73 +54,87 @@ describe('pluginOptionsSchema', () => {
         'Type0',
         {
           type: 'Type1',
-          cloudName: 'cloud_name',
-          publicId: 'public_id',
-          height: () => 400,
-          width: 700,
-          format: () => 'jpg',
-          base64: () => 'base64',
-          tracedSVG: () => 'tracedSVG',
+          mapping: {
+            cloudName: 'cloud_name',
+            publicId: 'public_id',
+            height: () => 400,
+            width: 700,
+            format: () => 'jpg',
+            base64: () => 'base64',
+            tracedSVG: () => 'tracedSVG',
+          },
         },
         {
           type: undefined, // Missing type
-          cloudName: 'cloud_name',
-          publicId: 'public_id',
-          height: () => 400,
-          width: 700,
-          format: () => 'jpg',
-          base64: () => 'base64',
-          tracedSVG: () => 'tracedSVG',
+          mapping: {
+            cloudName: 'cloud_name',
+            publicId: 'public_id',
+            height: () => 400,
+            width: 700,
+            format: () => 'jpg',
+            base64: () => 'base64',
+            tracedSVG: () => 'tracedSVG',
+          },
         },
         {
           type: 'Type3',
-          cloudName: 'cloud_name',
-          publicId: 'public_id',
-          height: 'test', // height is string, not number or function
-          width: 700,
-          format: () => 'jpg',
-          base64: () => 'base64',
-          tracedSVG: () => 'tracedSVG',
+          mapping: {
+            cloudName: 'cloud_name',
+            publicId: 'public_id',
+            height: 'test', // height is string, not number or function
+            width: 700,
+            format: () => 'jpg',
+            base64: () => 'base64',
+            tracedSVG: () => 'tracedSVG',
+          },
         },
         {
           type: 'Type4',
-          cloudName: 'cloud_name',
-          publicId: 'public_id',
-          height: 300,
-          width: 'test', // width is string, not number or function
-          format: () => 'jpg',
-          base64: 'base64',
-          tracedSVG: 'tracedSVG',
+          mapping: {
+            cloudName: 'cloud_name',
+            publicId: 'public_id',
+            height: 300,
+            width: 'test', // width is string, not number or function
+            format: () => 'jpg',
+            base64: 'base64',
+            tracedSVG: 'tracedSVG',
+          },
         },
         {
           type: 'Type5',
-          cloudName: 'cloud_name',
-          publicId: 'public_id',
-          height: 300,
-          width: () => 200,
-          format: new Date('Hello'), // format is not string or function
-          base64: () => 'base64',
-          tracedSVG: () => 'tracedSVG',
+          mapping: {
+            cloudName: 'cloud_name',
+            publicId: 'public_id',
+            height: 300,
+            width: () => 200,
+            format: new Date('Hello'), // format is not string or function
+            base64: () => 'base64',
+            tracedSVG: () => 'tracedSVG',
+          },
         },
         {
           type: 'Type6',
-          cloudName: 'cloud_name',
-          publicId: 'public_id',
-          height: 300,
-          width: () => 200,
-          format: 'png',
-          base64: 2342, // base64 is not string or function
-          tracedSVG: () => 'tracedSVG',
+          mapping: {
+            cloudName: 'cloud_name',
+            publicId: 'public_id',
+            height: 300,
+            width: () => 200,
+            format: 'png',
+            base64: 2342, // base64 is not string or function
+            tracedSVG: () => 'tracedSVG',
+          },
         },
         {
           type: 'Type7',
-          cloudName: 'cloud_name',
-          publicId: 'public_id',
-          height: 300,
-          width: () => 200,
-          format: 'png',
-          base64: 'base64',
-          tracedSVG: 224, // tracedSVG is not string or function
+          mapping: {
+            cloudName: 'cloud_name',
+            publicId: 'public_id',
+            height: 300,
+            width: () => 200,
+            format: 'png',
+            base64: 'base64',
+            tracedSVG: 224, // tracedSVG is not string or function
+          },
         },
       ],
     };
