@@ -41,28 +41,34 @@ const generateCloudinaryAssetSource = (
   return imageSource;
 };
 
-const generateMetadata = async (cldAsset, args, transformType, reporter) => {
+const validateMetadataAndFetchIfNeeded = async (
+  cldAssetSource,
+  args,
+  reporter
+) => {
   const schema = Joi.object({
     width: Joi.number().positive().required(),
     height: Joi.number().positive().required(),
     format: Joi.string().default('auto'),
   }).required();
 
-  const { value, error } = schema.validate(cldAsset);
+  const { value, error } = schema.validate(cldAssetSource, {
+    stripUnknown: true,
+  });
 
   if (!error) {
-    // Original metadata is valid,
-    // use validated value
     return value;
   }
 
   try {
-    // Lacking metadata, so let's fetch it
     reporter.verbose(
-      `[gatsby-transformer-cloudinary] Missing metadata fields on ${transformType}: cloudName=${cldAsset.cloudName}, publicId=${cldAsset.publicId} >>> To save on network requests add width, height and format to ${transformType}`
+      `[gatsby-transformer-cloudinary] Missing metadata fields on ${cldAssetSource.type}: cloudName=${cldAssetSource.cloudName}, publicId=${cldAssetSource.publicId} >>> To save on network requests add width, height and format to ${cldAssetSource.transformType}`
     );
 
-    const fetchedMetadata = await getAssetMetadata({ source: cldAsset, args });
+    const fetchedMetadata = await getAssetMetadata({
+      source: cldAssetSource,
+      args,
+    });
     const { value, error } = schema.validate(fetchedMetadata);
 
     if (!error) {
@@ -72,14 +78,44 @@ const generateMetadata = async (cldAsset, args, transformType, reporter) => {
     } else {
       // Fetched metadata is not valid
       reporter.verbose(
-        `[gatsby-transformer-cloudinary] Invalid fetched metadata for ${transformType}: cloudName=${cldAsset.cloudName}, publicId=${cldAsset.publicId} >>> ${error.message}`
+        `[gatsby-transformer-cloudinary] Invalid fetched metadata for ${cldAssetSource.type}: cloudName=${cldAssetSource.cloudName}, publicId=${cldAssetSource.publicId} >>> ${error.message}`
       );
       return null;
     }
   } catch (error) {
     // Error fetching
     reporter.verbose(
-      `[gatsby-transformer-cloudinary] Could not fetch metadata for ${transformType}: cloudName=${cldAsset.cloudName}, publicId=${cldAsset.publicId} >>> ${error.message}`
+      `[gatsby-transformer-cloudinary] Could not fetch metadata for ${cldAssetSource.type}: cloudName=${cldAssetSource.cloudName}, publicId=${cldAssetSource.publicId} >>> ${error.message}`
+    );
+    return null;
+  }
+};
+
+const validateRequiredData = (cldAssetSource, reporter) => {
+  const schema = Joi.object({
+    cloudName: Joi.string().required(),
+    publicId: Joi.string().required(),
+  }).required();
+
+  const { value, error } = schema.validate(cldAssetSource, {
+    abortEarly: false,
+    stripUnknown: true,
+  });
+
+  if (!error) {
+    return value;
+  }
+
+  if (error?.details.length < 2 && error?.details[0].path.length > 0) {
+    // Probably a mistake as it has one of the required fields
+    reporter.warn(
+      `[gatsby-transformer-cloudinary] Missing required field on ${cldAssetSource.type}: cloudName=${cldAssetSource.cloudName}, publicId=${cldAssetSource.publicId} >>> gatsbyImageData will resolve to null`
+    );
+    return null;
+  } else {
+    // Probably a non Cloudinary asses as it has none of the required fields
+    reporter.verbose(
+      `[gatsby-transformer-cloudinary] Missing cloudName and publicId on ${cldAssetSource.type} >>> gatsbyImageData will resolve to null`
     );
     return null;
   }
@@ -92,8 +128,10 @@ exports.createResolveCloudinaryAssetData =
   (gatsbyUtils, transformTypeConfig) => async (source, args, _context) => {
     let { reporter } = gatsbyUtils;
     reporter = resolverReporter({ reporter, logLevel: args.logLevel });
+    source = source || {};
 
-    const cldAssetData = {
+    let cldAssetSource = {
+      type: transformTypeConfig.type,
       cloudName: transformTypeConfig['cloudName'](source),
       publicId: transformTypeConfig['publicId'](source),
       height: transformTypeConfig['height'](source) || source['originalHeight'],
@@ -104,60 +142,40 @@ exports.createResolveCloudinaryAssetData =
         transformTypeConfig['tracedSVG'](source) || source['defaultTracedSVG'],
     };
 
-    console.log(transformTypeConfig.type, source, cldAssetData);
+    const cldAssetRequired = validateRequiredData(cldAssetSource, reporter);
+    if (!cldAssetRequired) return null;
 
-    const schema = Joi.object({
-      cloudName: Joi.string().required(),
-      publicId: Joi.string().required(),
-    }).required();
+    cldAssetSource = {
+      ...cldAssetSource,
+      ...cldAssetRequired,
+    };
 
-    const { error } = schema.validate(cldAssetData, {
-      allowUnknown: true,
-      abortEarly: false,
-    });
-
-    if (error) {
-      if (error.details.length < 2 && error.details[0].path.length > 0) {
-        reporter.warn(
-          `[gatsby-transformer-cloudinary] Missing required field on ${transformTypeConfig.type}: cloudName=${cldAssetData?.cloudName}, publicId=${cldAssetData?.publicId} >>> gatsbyImageData will resolve to null`
-        );
-      } else {
-        reporter.verbose(
-          `[gatsby-transformer-cloudinary] Missing cloudName and publicId on ${transformTypeConfig.type} >>> gatsbyImageData will resolve to null`
-        );
-      }
-
-      return null;
-    }
-
-    const metadata = await generateMetadata(
-      cldAssetData,
+    const cldAssetMetadata = await validateMetadataAndFetchIfNeeded(
+      cldAssetSource,
       args,
-      transformTypeConfig.type,
       reporter
     );
+    if (!cldAssetMetadata) return null;
 
-    if (!metadata) {
-      reporter.warn(
-        `[gatsby-transformer-cloudinary] No metadata for ${transformTypeConfig.type}: cloudName=${cldAssetData.cloudName}, publicId=${cldAssetData.publicId} >>> gatsbyImageData will resolve to null`
-      );
-      return null;
-    }
+    cldAssetSource = {
+      ...cldAssetSource,
+      ...cldAssetMetadata,
+    };
 
     const gatsbyAssetDataArgs = {
       ...args,
-      filename: cldAssetData.cloudName + '>>>' + cldAssetData.publicId,
+      filename: cldAssetSource.cloudName + '>>>' + cldAssetSource.publicId,
       // Passing the plugin name allows for better error messages
       pluginName: `gatsby-transformer-cloudinary`,
-      sourceMetadata: metadata,
+      sourceMetadata: cldAssetMetadata,
       generateImageSource: generateCloudinaryAssetSource,
       options: args,
     };
 
     try {
       if (args.placeholder === 'blurred') {
-        if (cldAssetData.defaultBase64) {
-          gatsbyAssetDataArgs.placeholderURL = cldAssetData.defaultBase64;
+        if (cldAssetSource.base64) {
+          gatsbyAssetDataArgs.placeholderURL = cldAssetSource.base64;
         } else {
           const lowResolutionUrl =
             getLowResolutionImageURL(gatsbyAssetDataArgs);
@@ -165,16 +183,19 @@ exports.createResolveCloudinaryAssetData =
           gatsbyAssetDataArgs.placeholderURL = base64;
         }
       } else if (args.placeholder === 'tracedSVG') {
-        if (cldAssetData.defaultTracedSVG) {
-          gatsbyAssetDataArgs.placeholderURL = cldAssetData.defaultTracedSVG;
+        if (cldAssetSource.tracedSVG) {
+          gatsbyAssetDataArgs.placeholderURL = cldAssetSource.tracedSVG;
         } else {
-          const tracedSvg = await getAssetAsTracedSvg({ cldAssetData, args });
+          const tracedSvg = await getAssetAsTracedSvg({
+            source: cldAssetSource,
+            args,
+          });
           gatsbyAssetDataArgs.placeholderURL = tracedSvg;
         }
       }
     } catch (error) {
       reporter.error(
-        `[gatsby-transformer-cloudinary] Could not generate placeholder (${args.placeholder}) for ${cldAssetData.cloudName} > ${cldAssetData.publicId}: ${error.message}`
+        `[gatsby-transformer-cloudinary] Could not generate placeholder (${args.placeholder}) for ${cldAssetSource.cloudName} > ${cldAssetSource.publicId}: ${error.message}`
       );
     }
 

@@ -1,6 +1,7 @@
 exports.createGatsbyPluginImageResolver = (
   gatsbyUtils,
-  transformTypeConfig
+  transformTypeConfig,
+  defaultValues = {}
 ) => {
   const { reporter } = gatsbyUtils;
   try {
@@ -15,7 +16,7 @@ exports.createGatsbyPluginImageResolver = (
       {
         transformations: {
           type: '[String]',
-          defaultValue: transformTypeConfig.Transformations,
+          defaultValue: defaultValues.transformations,
         },
         chained: '[String]',
         placeholder: {
@@ -23,7 +24,7 @@ exports.createGatsbyPluginImageResolver = (
         },
         secure: {
           type: 'Boolean',
-          defaultValue: true,
+          defaultValue: defaultValues.secure,
         },
         logLevel: {
           type: 'String',
@@ -31,6 +32,7 @@ exports.createGatsbyPluginImageResolver = (
       }
     );
 
+    // Make the resolver nullable
     gatsbyImageResolver.type = 'GatsbyImageData';
 
     return gatsbyImageResolver;
