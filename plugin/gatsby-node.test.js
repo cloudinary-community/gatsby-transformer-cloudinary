@@ -58,7 +58,7 @@ describe('pluginOptionsSchema', () => {
             cloudName: 'cloud_name',
             publicId: 'public_id',
             height: () => 400,
-            width: 700,
+            width: 'the_width',
             format: () => 'jpg',
             base64: () => 'base64',
             tracedSVG: () => 'tracedSVG',
@@ -70,7 +70,7 @@ describe('pluginOptionsSchema', () => {
             cloudName: 'cloud_name',
             publicId: 'public_id',
             height: () => 400,
-            width: 700,
+            width: 'the_width',
             format: () => 'jpg',
             base64: () => 'base64',
             tracedSVG: () => 'tracedSVG',
@@ -81,8 +81,8 @@ describe('pluginOptionsSchema', () => {
           mapping: {
             cloudName: 'cloud_name',
             publicId: 'public_id',
-            height: 'test', // height is string, not number or function
-            width: 700,
+            height: 400, // height is a number
+            width: 'the_width',
             format: () => 'jpg',
             base64: () => 'base64',
             tracedSVG: () => 'tracedSVG',
@@ -93,8 +93,8 @@ describe('pluginOptionsSchema', () => {
           mapping: {
             cloudName: 'cloud_name',
             publicId: 'public_id',
-            height: 300,
-            width: 'test', // width is string, not number or function
+            height: 'the_height',
+            width: 700, // width is string, not number or function
             format: () => 'jpg',
             base64: 'base64',
             tracedSVG: 'tracedSVG',

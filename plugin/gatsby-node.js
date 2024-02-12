@@ -32,13 +32,27 @@ exports.pluginOptionsSchema = ({ Joi }) => {
         Joi.object({
           type: Joi.string().required(),
           mapping: Joi.object({
-            cloudName: [Joi.function(), Joi.string()],
-            publicId: [Joi.function(), Joi.string()],
-            height: [Joi.function(), Joi.number()],
-            width: [Joi.function(), Joi.number()],
-            format: [Joi.function(), Joi.string()],
-            base64: [Joi.function(), Joi.string()],
-            tracedSVG: [Joi.function(), Joi.string()],
+            cloudName: Joi.alternatives()
+              .try(Joi.function(), Joi.string())
+              .default('cloud_name'),
+            publicId: Joi.alternatives()
+              .try(Joi.function(), Joi.string())
+              .default('public_id'),
+            height: Joi.alternatives()
+              .try(Joi.function(), Joi.string())
+              .default('height'),
+            width: Joi.alternatives()
+              .try(Joi.function(), Joi.string())
+              .default('width'),
+            format: Joi.alternatives()
+              .try(Joi.function(), Joi.string())
+              .default('format'),
+            base64: Joi.alternatives()
+              .try(Joi.function(), Joi.string())
+              .default('base64'),
+            tracedSVG: Joi.alternatives()
+              .try(Joi.function(), Joi.string())
+              .default('tracedSVG'),
           }),
         })
       )

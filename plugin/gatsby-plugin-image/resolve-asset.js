@@ -133,8 +133,8 @@ exports.createResolveCloudinaryAssetData =
 
     let cldAssetSource = {
       type: transformTypeConfig.type,
-      cloudName: mapping['cloudName'](source),
-      publicId: mapping['publicId'](source),
+      cloudName: mapping['cloudName'](source) || source['cloudName'],
+      publicId: mapping['publicId'](source) || source['publicId'],
       height: mapping['height'](source) || source['originalHeight'],
       width: mapping['width'](source) || source['originalWidth'],
       format: mapping['format'](source) || source['originalFormat'],
