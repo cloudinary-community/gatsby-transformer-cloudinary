@@ -15,6 +15,7 @@ With `gatsby-transformer-cloudinary` you may:
   - [Install Packages](#install-packages)
   - [Configure Plugins](#configure-plugins)
   - [Example usage](#example-usage)
+  - [Sanity.io Configuration](#sanityio-configuration)
 - [📤 Upload local images and add Gatsby Image Support](#📤-upload-local-images-and-add-gatsby-image-support)
   - [Install Packages](#install-packages-1)
   - [Configure Plugins](#configure-plugins-1)
@@ -36,10 +37,7 @@ Use assets hosted by Cloudinary together with Gatsby's Image component:
 
 - The plugin adds the `gatsbyImageData` resolver to each GraphQLType configured.
 
-
-This configuration and example assumes your Gatsby Data Layer has at least one node of type `BlogPost` with a `heroImage` field describing an already uploaded Cloudinary asset.
-
-👉 More details in [Transform Type Requierments](#transform-type-requierments).
+The GraphQLType must describe an existing Cloudinary asset and [contain the following data](#transform-type-requierments).
 
 ### Install Packages
 
@@ -63,8 +61,12 @@ module.exports = {
     {
       resolve: `gatsby-transformer-cloudinary`,
       options: {
-        // Add the `gatsbyImageData` resolver to `BlogPostHeroImage`
-        transformTypes: [`BlogPostHeroImage`],
+        transformTypes: [
+          // Assumes a GraphQL Type named `BlogPostHeroImage`
+          // Could be a `BlogPost` node with a `heroImage` field
+          // with the required data shape
+          `BlogPostHeroImage`,
+        ],
         // Optional transformation option
         defaultTransformations: ['c_fill', 'g_auto', 'q_auto'],
       },
@@ -114,29 +116,70 @@ export const query = graphql`
 export default BlogPost;
 ```
 
-### Transform Type Requierments
+### Transform Type Requirements
 
-You may add Gatsby Image support to any GraphQL Type describing a Cloudinary assets with this data shape:
+You may add Gatsby Image support to any GraphQL Type describing a Cloudinary asset. The GraphQL Type must have the following data:
 
 ```js
 {
   // Required
-  cloudName: "my-amazing-blog",
-  publicId: "blue-blue-blue",
+  cloud_name: "my-amazing-blog",
+  public_id: "blue-blue-blue",
   // Optional: Saves a network request for size/format data per image queried if all are added
-  originalHeight: 360,
-  originalWidth: 820,
-  originalFormat: "jpg",
+  heigh: 360,
+  width: 820,
+  format: "jpg",
   // Optional: Saves a Cloudinary transformation per image queried with `placeholder=BLURRED` as this value will be used instead
-  defaultBase64: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMXG/8HwAEwAI0Bj1bnwAAAABJRU5ErkJggg==",
+  base64: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMXG/8HwAEwAI0Bj1bnwAAAABJRU5ErkJggg==",
   // Optional: Saves a Cloudinary transformation per image queried with `placeholder=TRACED_SVG` as this value will be used instead
-  defaultTracedSVG: "data:image/svg+xml,%3Csvg%20height%3D%229999%22%20viewBox%3D%220%200%209999%209999%22%20width%3D%229999%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22m0%200h9999v9999h-9999z%22%20fill%3D%22%23f9fafb%22%2F%3E%3C%2Fsvg%3E",
+  tracedSVG: "data:image/svg+xml,%3Csvg%20height%3D%229999%22%20viewBox%3D%220%200%209999%209999%22%20width%3D%229999%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22m0%200h9999v9999h-9999z%22%20fill%3D%22%23f9fafb%22%2F%3E%3C%2Fsvg%3E",
 }
 ```
 
-To find the GraphQL Type describing your Cloudinary assets use the built in [GraphiQL exlorer](https://www.gatsbyjs.com/docs/how-to/querying-data/running-queries-with-graphiql/). Either hover over the field describing the asset, or look in the "Documentation Explorer".
+If the GraphQL Type does not have the required data, you may use the `mapping` option to map the data from the sourced data shape to the required data shape:
+
+```js
+{
+  type: `CustomType`,
+  mapping: {
+    // Use a static value
+    cloudName: () => "my-cloud",
+    // Use a differnt key than the default on `CustomType`
+    publicId: 'thePublicId', // default for publicId is `public_id`
+    // Resolve a value using a function
+    height: (data) => data.dimensions?.height,
+    width: (data) => data.dimentions?.width,
+  },
+}
+```
+
+To find the GraphQL Type describing your Cloudinary assets use the built-in [GraphiQL exlorer](https://www.gatsbyjs.com/docs/how-to/querying-data/running-queries-with-graphiql/)](https://www.gatsbyjs.com/docs/how-to/querying-data/running-queries-with-graphiql/). Either hover over the field describing the asset or look in the "Documentation Explorer".
 
 `defaultBase64` and `defaultTracedSVG` is the base64 URI of the placeholder image, it must comply with [RFC 2397](https://tools.ietf.org/html/rfc2397).
+
+### Sanity.io Configuration
+
+If you are using [Sanity.io](https://www.sanity.io/) and the [gatsby-source-sanity](https://www.gatsbyjs.com/plugins/gatsby-source-sanity/) plugin use the following configuration to add the `gatsbyImageData` resolver to the sourced Sanity Cloudinary assets:
+
+```js
+{
+  type: 'SanityCloudinaryAsset',
+  mapping: {
+    // Dynamically get the cloud name
+    // from SanityCloudinaryAsset.url
+    cloudName: (data) => {
+      const findCloudName = new RegExp(
+        '(cloudinary.com/)([^/]+)',
+        'i'
+      );
+      const result = data.url.match(findCloudName);
+      return result[1];
+    },
+    // Or set it statically if all assets are from the same cloud
+    // cloudName: () => "my-cloud",
+  },
+},
+```
 
 &nbsp;
 
@@ -439,7 +482,7 @@ An optional array limiting uploads to file nodes with a matching `sourceInstance
 
 An optional array of GraphQL Types to add the `gatsbyImageData` resolver for Gatsby Image support.
 
-**Type:** `[String]`\
+**Type:** `[String] | [Object]`\
 **Default:** `['CloudinaryAsset']`
 
 ### `overwriteExisting`
@@ -532,7 +575,6 @@ Read the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/buil
 - [Try the gatsby-source-cloudinary plugin to source media files into Gatsby file nodes](https://www.npmjs.com/package/gatsby-source-cloudinary)
 - [Using Cloudinary image service for media optimization](https://www.gatsbyjs.org/docs/using-cloudinary-image-service/)
 - [Watch Jason Lengstorf build this plugin's first version](https://www.learnwithjason.dev/build-a-gatsby-transformer-plugin-for-cloudinary)
-
 
 &nbsp;
 
