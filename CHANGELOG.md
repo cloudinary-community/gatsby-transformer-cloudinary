@@ -1,3 +1,10 @@
+# [4.6.0-beta.1](https://github.com/cloudinary-community/gatsby-transformer-cloudinary/compare/v4.5.0...v4.6.0-beta.1) (2024-02-13)
+
+
+### Features
+
+* configurable transform types [#245](https://github.com/cloudinary-community/gatsby-transformer-cloudinary/issues/245) ([#250](https://github.com/cloudinary-community/gatsby-transformer-cloudinary/issues/250)) ([202ed12](https://github.com/cloudinary-community/gatsby-transformer-cloudinary/commit/202ed12b859957d2008f048373e54a728ee07f63))
+
 # [4.5.0](https://github.com/cloudinary-devs/gatsby-transformer-cloudinary/compare/v4.4.0...v4.5.0) (2023-08-01)
 
 
