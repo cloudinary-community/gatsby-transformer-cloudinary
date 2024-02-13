@@ -34,11 +34,11 @@ With `gatsby-transformer-cloudinary` you may:
 
 ## 🖼️ Add Gatsby Image Support to Existing Cloudinary Assets
 
-Use assets hosted by Cloudinary together with Gatsby's Image component:
+Information about Existing Cloudinary Assets is sourced into the Gatsby data layer using a plugin like [gatsby-source-contentful](https://www.gatsbyjs.com/plugins/gatsby-source-contentful/), [gatsby-source-sanity](https://www.gatsbyjs.com/plugins/gatsby-source-sanity/) etc. or a custom source plugin.
 
-- The plugin adds the `gatsbyImageData` resolver to each GraphQLType configured.
+- The plugin adds the `gatsbyImageData` resolver to the sourced GraphQL Types configured.
 
-The GraphQLType must describe an existing Cloudinary asset and [contain the following data](#transform-type-requierments).
+The GraphQL Type must describe an existing Cloudinary asset and [contain the following data](#transform-type-requierments).
 
 ### Install Packages
 
@@ -59,6 +59,7 @@ yarn add gatsby-transformer-cloudinary gatsby-plugin-image
 
 module.exports = {
   plugins: [
+    // Some source plugin creating a GraphQL Type named `BlogPostHeroImage`
     {
       resolve: `gatsby-transformer-cloudinary`,
       options: {
@@ -119,7 +120,7 @@ export default BlogPost;
 
 ### Transform Type Requirements
 
-You may add Gatsby Image support to any GraphQL Type describing a Cloudinary asset. The GraphQL Type must have the following data:
+Gatsby Image support may be added to any GraphQL Type describing a Cloudinary asset with the following information:
 
 ```js
 {
@@ -137,21 +138,38 @@ You may add Gatsby Image support to any GraphQL Type describing a Cloudinary ass
 }
 ```
 
-If the GraphQL Type does not have the required data, you may use the `mapping` option to map the data from the sourced data shape to the required data shape:
+If the GraphQL Type does not have the required data shape, you may use the `mapping` option to map the data from the sourced data shape to the required data shape:
 
 ```js
-{
-  type: `CustomType`,
-  mapping: {
-    // Use a static value
-    cloudName: () => "my-cloud",
-    // Use a differnt key than the default on `CustomType`
-    publicId: 'thePublicId', // default for publicId is `public_id`
-    // Resolve a value using a function
-    height: (data) => data.dimensions?.height,
-    width: (data) => data.dimentions?.width,
-  },
-}
+// File: ./gatsby-config.js
+
+module.exports = {
+  plugins: [
+    // Some source plugin creating a GraphQL Type named `BlogPostHeroImage`
+    {
+      resolve: `gatsby-transformer-cloudinary`,
+      options: {
+        transformTypes: [
+          {
+            type: `CustomType`,
+            mapping: {
+              // Use a static value
+              cloudName: () => 'my-cloud',
+              // Use a differnt key than the default
+              publicId: 'thePublicId', // default for publicId is `public_id`
+              // Resolve a value using a function
+              height: (data) => data.dimensions?.height,
+              width: (data) => data.dimentions?.width,
+            },
+          },
+        ],
+        // Optional transformation option
+        defaultTransformations: ['c_fill', 'g_auto', 'q_auto'],
+      },
+    },
+    `gatsby-plugin-image`,
+  ],
+};
 ```
 
 To find the GraphQL Type describing your Cloudinary assets use the built-in [GraphiQL exlorer](https://www.gatsbyjs.com/docs/how-to/querying-data/running-queries-with-graphiql/)](https://www.gatsbyjs.com/docs/how-to/querying-data/running-queries-with-graphiql/). Either hover over the field describing the asset or look in the "Documentation Explorer".
@@ -163,23 +181,47 @@ To find the GraphQL Type describing your Cloudinary assets use the built-in [Gra
 If you are using [Sanity.io](https://www.sanity.io/) and the [gatsby-source-sanity](https://www.gatsbyjs.com/plugins/gatsby-source-sanity/) plugin use the following configuration to add the `gatsbyImageData` resolver to the sourced Sanity Cloudinary assets:
 
 ```js
-{
-  type: 'SanityCloudinaryAsset',
-  mapping: {
-    // Dynamically get the cloud name
-    // from SanityCloudinaryAsset.url
-    cloudName: (data) => {
-      const findCloudName = new RegExp(
-        '(cloudinary.com/)([^/]+)',
-        'i'
-      );
-      const result = data.url.match(findCloudName);
-      return result[1];
+// File: ./gatsby-config.js
+
+module.exports = {
+  plugins: [
+    {
+      resolve: `gatsby-source-sanity`,
+      options: {
+        projectId: process.env.SANITY_PROJECT_ID,
+        dataset: process.env.SANITY_DATASET,
+        token: process.env.SANITY_TOKEN,
+      },
     },
-    // Or set it statically if all assets are from the same cloud
-    // cloudName: () => "my-cloud",
-  },
-},
+    {
+      resolve: `gatsby-transformer-cloudinary`,
+      options: {
+        transformTypes: [
+          {
+            type: 'SanityCloudinaryAsset',
+            mapping: {
+              // Dynamically get the cloud name
+              // from SanityCloudinaryAsset.url
+              cloudName: (data) => {
+                const findCloudName = new RegExp(
+                  '(cloudinary.com/)([^/]+)',
+                  'i'
+                );
+                const result = data.url.match(findCloudName);
+                return result[1];
+              },
+              // Or set it statically if all assets are from the same cloud
+              // cloudName: () => "my-cloud",
+            },
+          },
+        ],
+        // Optional transformation option
+        defaultTransformations: ['c_fill', 'g_auto', 'q_auto'],
+      },
+    },
+    `gatsby-plugin-image`,
+  ],
+};
 ```
 
 ### Contentful Configuration
@@ -187,26 +229,49 @@ If you are using [Sanity.io](https://www.sanity.io/) and the [gatsby-source-sani
 If you are using [Contentful](https://www.contentful.com/) and the [gatsby-source-contentful](https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-source-contentful) plugin use the following configuration to add the `gatsbyImageData` resolver to the sourced Cloudinary assets:
 
 ```js
-{
-  // ❗❕ Replace `contentfulBlogPostFeaturedImageJsonNode`
-  // with the name of the GraphQL Type describing your Cloudinary assets
-  // will always start with `contentful` and end with `JsonNode`
-  type: 'contentfulBlogPostFeaturedImageJsonNode',
-  mapping: {
-    // Dynamically get the cloud name
-    // from SanityCloudinaryAsset.url
-    cloudName: (data) => {
-      const findCloudName = new RegExp(
-        '(cloudinary.com/)([^/]+)',
-        'i'
-      );
-      const result = data.url.match(findCloudName);
-      return result[1];
+// File: ./gatsby-config.js
+
+module.exports = {
+  plugins: [
+    {
+      resolve: `gatsby-source-contentful`,
+      options: {
+        spaceId: process.env.CONTENTFUL_SPACE_ID,
+        accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
+      },
     },
-    // Or set it statically if all assets are from the same cloud
-    // cloudName: () => "my-cloud",
-  },
-},
+    {
+      resolve: `gatsby-transformer-cloudinary`,
+      options: {
+        transformTypes: [
+          {
+            // ❗❕ Replace `contentfulBlogPostFeaturedImageJsonNode`
+            // with the name of the GraphQL Type describing your Cloudinary assets
+            // will always start with `contentful` and end with `JsonNode`
+            type: 'contentfulBlogPostFeaturedImageJsonNode',
+            mapping: {
+              // Dynamically get the cloud name
+              // from SanityCloudinaryAsset.url
+              cloudName: (data) => {
+                const findCloudName = new RegExp(
+                  '(cloudinary.com/)([^/]+)',
+                  'i'
+                );
+                const result = data.url.match(findCloudName);
+                return result[1];
+              },
+              // Or set it statically if all assets are from the same cloud
+              // cloudName: () => "my-cloud",
+            },
+          },
+        ],
+        // Optional transformation option
+        defaultTransformations: ['c_fill', 'g_auto', 'q_auto'],
+      },
+    },
+    `gatsby-plugin-image`,
+  ],
+};
 ```
 
 &nbsp;
