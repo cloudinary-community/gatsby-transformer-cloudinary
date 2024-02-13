@@ -27,8 +27,21 @@ const {
   createResolveCloudinaryAssetData,
 } = require('./resolve-asset');
 
-const resolveCloudinaryAssetData =
-  createResolveCloudinaryAssetData(gatsbyUtilsMocks);
+const resolveCloudinaryAssetData = createResolveCloudinaryAssetData(
+  gatsbyUtilsMocks,
+  {
+    type: 'CloudinaryAsset',
+    mapping: {
+      cloudName: (data) => data.cloudName,
+      publicId: (data) => data.publicId,
+      height: () => 300,
+      width: (data) => data.width,
+      format: (data) => data.format,
+      base64: (data) => data.base64,
+      tracedSVG: (data) => data.tracedSVG,
+    },
+  }
+);
 
 describe('generateCloudinaryAssetSource', () => {
   const filename = 'cloud-name>>>public-id';
@@ -65,20 +78,30 @@ describe('resolveCloudinaryAssetData', () => {
     publicId: 'public-id',
     cloudName: 'cloud-name',
     originalWidth: '600',
-    originalHeight: '300',
+    // originalHeight: '300',
     originalFormat: 'jpg',
   };
 
   const sourceWithoutFormat = {
     publicId: 'public-id',
     cloudName: 'cloud-name',
-    originalWidth: '600',
-    originalHeight: '300',
+    width: '600',
+    // height: '300',
   };
 
   const sourceWithoutMeta = {
     publicId: 'public-id',
     cloudName: 'cloud-name',
+  };
+
+  const sourceWithPlaceholder = {
+    publicId: 'public-id',
+    cloudName: 'cloud-name',
+    originalWidth: '600',
+    // originalHeight: '300',
+    originalFormat: 'jpg',
+    defaultBase64: 'defaultBase64DataUrl',
+    tracedSVG: 'defaultSvgDataUrl',
   };
 
   const context = {}; // Never used
@@ -109,7 +132,10 @@ describe('resolveCloudinaryAssetData', () => {
     const args = { transformations: ['e_grayscale'] };
     await resolveCloudinaryAssetData(sourceWithMetadata, args, context, info);
     await resolveCloudinaryAssetData(sourceWithoutFormat, args, context, info);
+
     expect(getAssetMetadata).toBeCalledTimes(0);
+    expect(generateImageData).toBeCalledTimes(2);
+
     expect(generateImageData).toHaveBeenNthCalledWith(1, {
       filename: 'cloud-name>>>public-id',
       generateImageSource: _generateCloudinaryAssetSource,
@@ -165,10 +191,17 @@ describe('resolveCloudinaryAssetData', () => {
   it('fetches and adds correct "blurred" placeholder', async () => {
     const args = { placeholder: 'blurred' };
     await resolveCloudinaryAssetData(sourceWithMetadata, args, context, info);
+    await resolveCloudinaryAssetData(
+      sourceWithPlaceholder,
+      args,
+      context,
+      info
+    );
 
     expect(getLowResolutionImageURL).toBeCalledTimes(1);
     expect(getUrlAsBase64Image).toBeCalledTimes(1);
-    expect(generateImageData).toHaveBeenCalledWith({
+    expect(generateImageData).toBeCalledTimes(2);
+    expect(generateImageData).toHaveBeenNthCalledWith(1, {
       filename: 'cloud-name>>>public-id',
       generateImageSource: _generateCloudinaryAssetSource,
       options: { placeholder: 'blurred' },
@@ -181,14 +214,34 @@ describe('resolveCloudinaryAssetData', () => {
       placeholderURL: 'base64DataUrl',
       placeholder: 'blurred',
     });
+    expect(generateImageData).toHaveBeenNthCalledWith(2, {
+      filename: 'cloud-name>>>public-id',
+      generateImageSource: _generateCloudinaryAssetSource,
+      options: { placeholder: 'blurred' },
+      pluginName: 'gatsby-transformer-cloudinary',
+      sourceMetadata: {
+        format: 'jpg',
+        height: 300,
+        width: 600,
+      },
+      placeholderURL: 'defaultBase64DataUrl',
+      placeholder: 'blurred',
+    });
   });
 
   it('fetches and adds correct "tracedSVG" placeholder', async () => {
     const args = { placeholder: 'tracedSVG' };
     await resolveCloudinaryAssetData(sourceWithMetadata, args, context, info);
+    await resolveCloudinaryAssetData(
+      sourceWithPlaceholder,
+      args,
+      context,
+      info
+    );
 
     expect(getAssetAsTracedSvg).toBeCalledTimes(1);
-    expect(generateImageData).toHaveBeenCalledWith({
+    expect(generateImageData).toBeCalledTimes(2);
+    expect(generateImageData).toHaveBeenNthCalledWith(1, {
       filename: 'cloud-name>>>public-id',
       generateImageSource: _generateCloudinaryAssetSource,
       options: { placeholder: 'tracedSVG' },
@@ -199,6 +252,19 @@ describe('resolveCloudinaryAssetData', () => {
         width: 600,
       },
       placeholderURL: 'svgDataUrl',
+      placeholder: 'tracedSVG',
+    });
+    expect(generateImageData).toHaveBeenNthCalledWith(2, {
+      filename: 'cloud-name>>>public-id',
+      generateImageSource: _generateCloudinaryAssetSource,
+      options: { placeholder: 'tracedSVG' },
+      pluginName: 'gatsby-transformer-cloudinary',
+      sourceMetadata: {
+        format: 'jpg',
+        height: 300,
+        width: 600,
+      },
+      placeholderURL: 'defaultSvgDataUrl',
       placeholder: 'tracedSVG',
     });
   });
@@ -342,7 +408,7 @@ describe('resolveCloudinaryAssetData', () => {
     });
   });
 
-  describe('when fetched asset data is invalid', () => {
+  describe('when fetched asset metadata is invalid', () => {
     beforeEach(() => {
       getAssetMetadata.mockResolvedValue({
         width: 100,
@@ -355,7 +421,7 @@ describe('resolveCloudinaryAssetData', () => {
       jest.clearAllMocks();
     });
 
-    it('calls reporter.warn on invalid metadata and returns null', async () => {
+    it('calls reporter.verbose on invalid metadata and returns null', async () => {
       const args = {};
       const result = await resolveCloudinaryAssetData(
         sourceWithoutMeta,
@@ -365,12 +431,14 @@ describe('resolveCloudinaryAssetData', () => {
       );
       expect(getAssetMetadata).toBeCalledTimes(1);
       expect(generateImageData).toBeCalledTimes(0);
-      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(1);
+      // Once to notify invalid original metadata
+      // Once to notify about invalid fetched metadata
+      expect(gatsbyUtilsMocks.reporter.verbose).toBeCalledTimes(2);
       expect(result).toBe(null);
     });
   });
 
-  describe('when fetched asset data is undefined', () => {
+  describe('when fetched asset metadata is undefined', () => {
     beforeEach(() => {
       getAssetMetadata.mockResolvedValue(undefined);
     });
@@ -379,7 +447,7 @@ describe('resolveCloudinaryAssetData', () => {
       jest.clearAllMocks();
     });
 
-    it('calls reporter.warn on undefined metadata and returns null', async () => {
+    it('calls reporter.verbose on undefined metadata and returns null', async () => {
       const args = {};
       const result = await resolveCloudinaryAssetData(
         sourceWithoutMeta,
@@ -389,7 +457,9 @@ describe('resolveCloudinaryAssetData', () => {
       );
       expect(getAssetMetadata).toBeCalledTimes(1);
       expect(generateImageData).toBeCalledTimes(0);
-      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(1);
+      // Once to notify invalid original metadata
+      // Once to notify about invalid fetched metadata
+      expect(gatsbyUtilsMocks.reporter.verbose).toBeCalledTimes(2);
       expect(result).toBe(null);
     });
   });
@@ -412,7 +482,7 @@ describe('resolveCloudinaryAssetData', () => {
       jest.clearAllMocks();
     });
 
-    it('calls reporter.error on metadata error and returns null', async () => {
+    it('calls reporter.verbose on metadata error and returns null', async () => {
       const args = {};
       const result = await resolveCloudinaryAssetData(
         sourceWithoutMeta,
@@ -422,7 +492,9 @@ describe('resolveCloudinaryAssetData', () => {
       );
       expect(getAssetMetadata).toBeCalledTimes(1);
       expect(generateImageData).toBeCalledTimes(0);
-      expect(gatsbyUtilsMocks.reporter.warn).toBeCalledTimes(1);
+      // Once to notify invalid original metadata
+      // Once to notify about invalid fetched metadata
+      expect(gatsbyUtilsMocks.reporter.verbose).toBeCalledTimes(2);
       expect(result).toBe(null);
     });
 

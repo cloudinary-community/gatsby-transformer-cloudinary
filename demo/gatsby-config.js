@@ -12,9 +12,17 @@ module.exports = {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `images`,
-        path: `${__dirname}/src/images`,
+        path: `${__dirname}/src/content/images`,
       },
     },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `images`,
+        path: `${__dirname}/src/content/manual-tests`,
+      },
+    },
+    `gatsby-transformer-remark`,
     {
       resolve: `gatsby-plugin-image`,
     },
@@ -32,6 +40,23 @@ module.exports = {
           'BlogPostHeroImage',
           'VariedData',
           'EmptyDataCloudinary',
+          'MarkdownRemarkFrontmatterHeroImage',
+          // {
+          //   name: 'MarkdownRemarkFrontmatterHeroImage',
+          //   mapping: {
+          //     cloudName: `cloudName`,
+          //     publicId: `publicId`,
+          //    }
+          // },
+          {
+            type: 'MarkdownRemarkFrontmatterHeroImageWithUnconformingShape',
+            mapping: {
+              cloudName: `a_cloud_name`,
+              publicId: (data) => {
+                return data['a_public_id'];
+              },
+            },
+          },
         ],
       },
     },
