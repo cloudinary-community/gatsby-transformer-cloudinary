@@ -16,6 +16,7 @@ With `gatsby-transformer-cloudinary` you may:
   - [Configure Plugins](#configure-plugins)
   - [Example usage](#example-usage)
   - [Sanity.io Configuration](#sanityio-configuration)
+  - [Contentful Configuration](#contentful-configuration)
 - [📤 Upload local images and add Gatsby Image Support](#📤-upload-local-images-and-add-gatsby-image-support)
   - [Install Packages](#install-packages-1)
   - [Configure Plugins](#configure-plugins-1)
@@ -164,6 +165,33 @@ If you are using [Sanity.io](https://www.sanity.io/) and the [gatsby-source-sani
 ```js
 {
   type: 'SanityCloudinaryAsset',
+  mapping: {
+    // Dynamically get the cloud name
+    // from SanityCloudinaryAsset.url
+    cloudName: (data) => {
+      const findCloudName = new RegExp(
+        '(cloudinary.com/)([^/]+)',
+        'i'
+      );
+      const result = data.url.match(findCloudName);
+      return result[1];
+    },
+    // Or set it statically if all assets are from the same cloud
+    // cloudName: () => "my-cloud",
+  },
+},
+```
+
+### Contentful Configuration
+
+If you are using [Contentful](https://www.contentful.com/) and the [gatsby-source-contentful](https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-source-contentful) plugin use the following configuration to add the `gatsbyImageData` resolver to the sourced Cloudinary assets:
+
+```js
+{
+  // ❗❕ Replace `contentfulBlogPostFeaturedImageJsonNode`
+  // with the name of the GraphQL Type describing your Cloudinary assets
+  // will always start with `contentful` and end with `JsonNode`
+  type: 'contentfulBlogPostFeaturedImageJsonNode',
   mapping: {
     // Dynamically get the cloud name
     // from SanityCloudinaryAsset.url
