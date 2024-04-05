@@ -7,7 +7,7 @@ With `gatsby-transformer-cloudinary` you may:
 
 📥 But if you want to pull data from your Cloudinary account into the Gatsby data layer use our other plugin, [gatsby-source-cloudinary](https://www.github.com/cloudinary-devs/gatsby-source-cloudinary/)
 
-&nbsp;
+**This is a community library supported by the Cloudinary Developer Experience team.**
 
 ## 📖 Table of Contents
 
