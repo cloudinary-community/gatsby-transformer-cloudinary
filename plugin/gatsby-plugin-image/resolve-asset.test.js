@@ -49,27 +49,131 @@ describe('generateCloudinaryAssetSource', () => {
   const height = 500;
   const format = 'jpg';
   const fit = undefined;
-  const options = {
-    chained: ['t_lwj'],
-    secure: true,
-  };
 
-  it('generated correct source data', () => {
-    const result = _generateCloudinaryAssetSource(
-      filename,
-      width,
-      height,
-      format,
-      fit,
-      options
-    );
+  describe('generated correct source data', () => {
+    it('when no options', () => {
+      const options = {};
 
-    expect(result.src).toContain(
-      'https://res.cloudinary.com/cloud-name/image/upload/f_jpg,h_500,w_300/t_lwj/public-id'
-    );
-    expect(result.width).toBe(width);
-    expect(result.height).toBe(height);
-    expect(result.format).toBe(format);
+      const result = _generateCloudinaryAssetSource(
+        filename,
+        width,
+        height,
+        format,
+        fit,
+        options
+      );
+
+      expect(result.src).toContain(
+        'http://res.cloudinary.com/cloud-name/image/upload/f_jpg,h_500,w_300/public-id'
+      );
+      expect(result.width).toBe(width);
+      expect(result.height).toBe(height);
+      expect(result.format).toBe(format);
+    });
+
+    it('with secure option set to true', () => {
+      const options = { secure: true };
+
+      const result = _generateCloudinaryAssetSource(
+        filename,
+        width,
+        height,
+        format,
+        fit,
+        options
+      );
+
+      expect(result.src).toContain(
+        'https://res.cloudinary.com/cloud-name/image/upload/f_jpg,h_500,w_300/public-id'
+      );
+    });
+
+    it('with custom secure_distribution (cname) and secure is true', () => {
+      const options = { secure: true, secureDistribution: 'example.com' };
+
+      const result = _generateCloudinaryAssetSource(
+        filename,
+        width,
+        height,
+        format,
+        fit,
+        options
+      );
+
+      expect(result.src).toContain(
+        'https://example.com/cloud-name/image/upload/f_jpg,h_500,w_300/public-id'
+      );
+    });
+
+    it('with cname and secure is false', () => {
+      const options = { secure: false, cname: 'example.com' };
+
+      const result = _generateCloudinaryAssetSource(
+        filename,
+        width,
+        height,
+        format,
+        fit,
+        options
+      );
+
+      expect(result.src).toContain(
+        'http://example.com/cloud-name/image/upload/f_jpg,h_500,w_300/public-id'
+      );
+    });
+    it('for private_cdn and secure is true', () => {
+      const options = { secure: true, privateCdn: true };
+
+      const result = _generateCloudinaryAssetSource(
+        filename,
+        width,
+        height,
+        format,
+        fit,
+        options
+      );
+
+      expect(result.src).toContain(
+        'https://cloud-name-res.cloudinary.com/image/upload/f_jpg,h_500,w_300/public-id'
+      );
+    });
+
+    it('for private_cdn and secure is false', () => {
+      const options = { secure: false, privateCdn: true };
+
+      const result = _generateCloudinaryAssetSource(
+        filename,
+        width,
+        height,
+        format,
+        fit,
+        options
+      );
+
+      expect(result.src).toContain(
+        'http://cloud-name-res.cloudinary.com/image/upload/f_jpg,h_500,w_300/public-id'
+      );
+    });
+
+    it('with transformations and chained options', () => {
+      const options = {
+        chained: ['t_lwj'],
+        transformations: ['e_grayscale', 'e_pixelate'],
+      };
+
+      const result = _generateCloudinaryAssetSource(
+        filename,
+        width,
+        height,
+        format,
+        fit,
+        options
+      );
+
+      expect(result.src).toContain(
+        'http://res.cloudinary.com/cloud-name/image/upload/f_jpg,h_500,w_300,e_grayscale,e_pixelate/t_lwj/public-id'
+      );
+    });
   });
 });
 

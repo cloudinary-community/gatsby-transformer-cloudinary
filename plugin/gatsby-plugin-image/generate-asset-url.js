@@ -57,6 +57,9 @@ exports.generateCloudinaryAssetUrl = ({
   const url = cloudinary.url(publicId, {
     cloud_name: cloudName,
     secure: options.secure,
+    cname: options.cname,
+    secure_distribution: options.secureDistribution,
+    private_cdn: options.privateCdn,
     transformation: transformation,
     flags: flags,
     urlAnalytics: true,
