@@ -1,3 +1,10 @@
+# [4.6.0-beta.2](https://github.com/cloudinary-community/gatsby-transformer-cloudinary/compare/v4.6.0-beta.1...v4.6.0-beta.2) (2024-06-07)
+
+
+### Features
+
+* cname, private cdn support ([#252](https://github.com/cloudinary-community/gatsby-transformer-cloudinary/issues/252)) ([db13e3d](https://github.com/cloudinary-community/gatsby-transformer-cloudinary/commit/db13e3da010433c796cfabb6f34425586467597a)), closes [#251](https://github.com/cloudinary-community/gatsby-transformer-cloudinary/issues/251)
+
 # [4.6.0-cname-private-cdn-support.1](https://github.com/cloudinary-community/gatsby-transformer-cloudinary/compare/v4.5.0...v4.6.0-cname-private-cdn-support.1) (2024-06-06)
 
 
