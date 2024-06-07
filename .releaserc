@@ -10,10 +10,6 @@
     {
       "name": "alpha",
       "prerelease": true
-    },
-    {
-      "name": "feat/cname-private-cdn-support",
-      "prerelease": "cname-private-cdn-support"
     }
   ],
   "plugins": [
