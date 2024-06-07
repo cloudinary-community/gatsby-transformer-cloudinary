@@ -660,6 +660,38 @@ Read the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/buil
 
 Read the [Gatsby Plugin Image Docs](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#all-options) on `sizes`.
 
+### `secure`
+
+When set to `false` use non-secure URLs (`http`) instead of secure URLs(`https`) for the image URLs.
+
+**Type:** `Boolean`\
+**Default:** `true`
+
+### `secureDistribution`
+
+The custom domain name (CNAME) to use for building secure URLs (`https`).
+
+Relevant only for users on the Advanced plan or higher that have a custom CNAME. For details, see [Private CDNs and CNAMEs](https://cloudinary.com/documentation/advanced_url_delivery_options#private_cdns_and_cnames).
+
+**Type:** `String`\
+**Default:** n/a
+
+### `cname`
+
+The custom domain name (CNAME) to use for building non-secure URLs (`http`), remember to set `secure` to `false` when using `cname`.
+
+Relevant only for users on the Advanced plan or higher that have a custom CNAME. For details, see [Private CDNs and CNAMEs](https://cloudinary.com/documentation/advanced_url_delivery_options#private_cdns_and_cnames).
+
+**Type:** `String`\
+**Default:** n/a
+
+### `privateCdn`
+
+Relevant only for users on the Advanced plan or higher that have private CDN distribution. For details, see [Private CDNs and CNAMEs](https://cloudinary.com/documentation/advanced_url_delivery_options#private_cdns_and_cnames).
+
+**Type:** `Boolean`\
+**Default:** `false`
+
 &nbsp;
 
 ## 📚 Other Resources

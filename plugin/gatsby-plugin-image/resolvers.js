@@ -29,6 +29,16 @@ exports.createGatsbyPluginImageResolver = (
         logLevel: {
           type: 'String',
         },
+        cname: {
+          type: 'String',
+        },
+        secureDistribution: {
+          type: 'String',
+        },
+        privateCdn: {
+          type: 'Boolean',
+          defaultValue: false,
+        },
       }
     );
 
