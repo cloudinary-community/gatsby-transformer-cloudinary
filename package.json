@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.20.5",
-    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "babel-jest": "^29.0.3",
     "babel-preset-gatsby": "^3.3.1",
