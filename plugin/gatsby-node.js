@@ -38,6 +38,18 @@ exports.pluginOptionsSchema = ({ Joi }) => {
             publicId: Joi.alternatives()
               .try(Joi.function(), Joi.string())
               .default('public_id'),
+            secure: Joi.alternatives()
+              .try(Joi.function(), Joi.string())
+              .default('secure'),
+            cname: Joi.alternatives()
+              .try(Joi.function(), Joi.string())
+              .default('cname'),
+            secureDistribution: Joi.alternatives()
+              .try(Joi.function(), Joi.string())
+              .default('secure_distribution'),
+            privateCdn: Joi.alternatives()
+              .try(Joi.function(), Joi.string())
+              .default('private_cdn'),
             height: Joi.alternatives()
               .try(Joi.function(), Joi.string())
               .default('height'),

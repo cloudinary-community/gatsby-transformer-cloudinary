@@ -10,7 +10,7 @@ const { generateCloudinaryAssetUrl } = require('./generate-asset-url');
 const ANALYTICS_CODE = 'AXE6EH00';
 
 describe('generateCloudinaryAssetUrl', () => {
-  const asset = {
+  const source = {
     publicId: 'public-id',
     cloudName: 'cloud-name',
     width: 400,
@@ -20,7 +20,7 @@ describe('generateCloudinaryAssetUrl', () => {
 
   describe('generates correct Cloudinary url', () => {
     it('when no options', () => {
-      const url = generateCloudinaryAssetUrl(asset);
+      const url = generateCloudinaryAssetUrl({ source });
       expect(url).toBe(
         `http://res.cloudinary.com/cloud-name/image/upload/f_jpg,h_600,w_400/public-id?_a=${ANALYTICS_CODE}`
       );
@@ -28,7 +28,7 @@ describe('generateCloudinaryAssetUrl', () => {
 
     it('with transformations option', () => {
       const url = generateCloudinaryAssetUrl({
-        ...asset,
+        source: source,
         options: {
           transformations: ['e_grayscale', 'e_pixelate'],
         },
@@ -40,7 +40,7 @@ describe('generateCloudinaryAssetUrl', () => {
 
     it('with chained option', () => {
       const url = generateCloudinaryAssetUrl({
-        ...asset,
+        source: source,
         options: {
           chained: ['t_lwj', 'e_pixelate'],
         },
@@ -50,9 +50,9 @@ describe('generateCloudinaryAssetUrl', () => {
       );
     });
 
-    it('with scure option set to true', () => {
+    it('with secure option set to true', () => {
       const url = generateCloudinaryAssetUrl({
-        ...asset,
+        source: source,
         options: {
           secure: true,
         },
@@ -62,9 +62,28 @@ describe('generateCloudinaryAssetUrl', () => {
       );
     });
 
-    it('with custom secure_distribution (cname) and secure is true', () => {
+    it('with secure source set to true', () => {
       const url = generateCloudinaryAssetUrl({
-        ...asset,
+        source: { ...source, secure: true },
+      });
+      expect(url).toBe(
+        `https://res.cloudinary.com/cloud-name/image/upload/f_jpg,h_600,w_400/public-id?_a=${ANALYTICS_CODE}`
+      );
+    });
+
+    it('with secure source set to true and secure option set to false', () => {
+      const url = generateCloudinaryAssetUrl({
+        source: { ...source, secure: true },
+        options: { secure: false },
+      });
+      expect(url).toBe(
+        `http://res.cloudinary.com/cloud-name/image/upload/f_jpg,h_600,w_400/public-id?_a=${ANALYTICS_CODE}`
+      );
+    });
+
+    it('with custom secure_distribution option and secure option set to true', () => {
+      const url = generateCloudinaryAssetUrl({
+        source: source,
         options: {
           secure: true,
           secureDistribution: 'example.com',
@@ -75,9 +94,30 @@ describe('generateCloudinaryAssetUrl', () => {
       );
     });
 
-    it('with cname and secure is false', () => {
+    it('with custom secure_distribution source and secure option set to true', () => {
       const url = generateCloudinaryAssetUrl({
-        ...asset,
+        source: { ...source, secureDistribution: 'example.com' },
+        options: {
+          secure: true,
+        },
+      });
+      expect(url).toBe(
+        `https://example.com/cloud-name/image/upload/f_jpg,h_600,w_400/public-id?_a=${ANALYTICS_CODE}`
+      );
+    });
+
+    it('with custom secure_distribution source and secure source set to true', () => {
+      const url = generateCloudinaryAssetUrl({
+        source: { ...source, secureDistribution: 'example.com', secure: true },
+      });
+      expect(url).toBe(
+        `https://example.com/cloud-name/image/upload/f_jpg,h_600,w_400/public-id?_a=${ANALYTICS_CODE}`
+      );
+    });
+
+    it('with custom cname option/source and secure option set to false', () => {
+      const url = generateCloudinaryAssetUrl({
+        source: { ...source, cname: 'example-shoud-be-overriden.com' },
         options: {
           secure: false,
           cname: 'example.com',
@@ -88,9 +128,30 @@ describe('generateCloudinaryAssetUrl', () => {
       );
     });
 
-    it('for private_cdn and secure is true', () => {
+    it('with custom cname option and secure source set to false', () => {
       const url = generateCloudinaryAssetUrl({
-        ...asset,
+        source: { ...source, secure: false },
+        options: {
+          cname: 'example.com',
+        },
+      });
+      expect(url).toBe(
+        `http://example.com/cloud-name/image/upload/f_jpg,h_600,w_400/public-id?_a=${ANALYTICS_CODE}`
+      );
+    });
+
+    it('with custom cname source and secure source set to false', () => {
+      const url = generateCloudinaryAssetUrl({
+        source: { ...source, secure: false, cname: 'example.com' },
+      });
+      expect(url).toBe(
+        `http://example.com/cloud-name/image/upload/f_jpg,h_600,w_400/public-id?_a=${ANALYTICS_CODE}`
+      );
+    });
+
+    it('for private_cdn option set to true and secure option set to true', () => {
+      const url = generateCloudinaryAssetUrl({
+        source: source,
         options: {
           secure: true,
           privateCdn: true,
@@ -101,9 +162,34 @@ describe('generateCloudinaryAssetUrl', () => {
       );
     });
 
-    it('for private_cdn and secure is false', () => {
+    it('for private_cdn source set to true and secure option set to true', () => {
       const url = generateCloudinaryAssetUrl({
-        ...asset,
+        source: { ...source, privateCdn: true },
+        options: {
+          secure: true,
+        },
+      });
+      expect(url).toBe(
+        `https://cloud-name-res.cloudinary.com/image/upload/f_jpg,h_600,w_400/public-id?_a=${ANALYTICS_CODE}`
+      );
+    });
+
+    it('for private_cdn option set to true and secure option set to false', () => {
+      const url = generateCloudinaryAssetUrl({
+        source: source,
+        options: {
+          secure: false,
+          privateCdn: true,
+        },
+      });
+      expect(url).toBe(
+        `http://cloud-name-res.cloudinary.com/image/upload/f_jpg,h_600,w_400/public-id?_a=${ANALYTICS_CODE}`
+      );
+    });
+
+    it('for private_cdn and secure in both source and options', () => {
+      const url = generateCloudinaryAssetUrl({
+        source: { ...source, privateCdn: false, secure: true },
         options: {
           secure: false,
           privateCdn: true,
@@ -116,7 +202,7 @@ describe('generateCloudinaryAssetUrl', () => {
 
     it('generates correct Cloudinary url in traced SVG mode', () => {
       const url = generateCloudinaryAssetUrl({
-        ...asset,
+        source: source,
         tracedSvg: {
           options: {
             colors: 2,

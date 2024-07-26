@@ -40,14 +40,16 @@ module.exports = {
           'BlogPostHeroImage',
           'VariedData',
           'EmptyDataCloudinary',
-          'MarkdownRemarkFrontmatterHeroImage',
-          // {
-          //   name: 'MarkdownRemarkFrontmatterHeroImage',
-          //   mapping: {
-          //     cloudName: `cloudName`,
-          //     publicId: `publicId`,
-          //    }
-          // },
+          // 'MarkdownRemarkFrontmatterHeroImage',
+          {
+            type: 'MarkdownRemarkFrontmatterHeroImage',
+            mapping: {
+              cloudName: `cloudName`,
+              publicId: `publicId`,
+              secureDistribution: `example.com`,
+              secure: () => true,
+            },
+          },
           {
             type: 'MarkdownRemarkFrontmatterHeroImageWithUnconformingShape',
             mapping: {

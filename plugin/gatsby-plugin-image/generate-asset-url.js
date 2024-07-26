@@ -6,12 +6,12 @@ const SDK_CODE = 'X';
 const SDK_SEMVER = pluginPkg.version;
 const TECH_VERSION = gatsbyPkg.version;
 
-const generateTransformations = ({ width, height, format, options = {} }) => {
+const generateTransformations = ({ source = {}, options = {} }) => {
   return [
     {
-      fetch_format: format || 'auto',
-      width: width,
-      height: height,
+      fetch_format: source.format || 'auto',
+      width: source.width,
+      height: source.height,
       raw_transformation: (options.transformations || []).join(','),
     },
     ...(options.chained || []).map((transformations) => {
@@ -34,19 +34,13 @@ const generateTracedSVGTransformation = ({ options, width }) => {
 
 // Create Cloudinary image URL with transformations.
 exports.generateCloudinaryAssetUrl = ({
-  publicId,
-  cloudName,
-  width,
-  height,
-  format,
+  source = {},
   options = {},
   flags,
   tracedSvg,
 }) => {
   const transformation = generateTransformations({
-    width,
-    height,
-    format,
+    source,
     options,
   });
 
@@ -54,12 +48,15 @@ exports.generateCloudinaryAssetUrl = ({
     transformation.push(generateTracedSVGTransformation(tracedSvg));
   }
 
-  const url = cloudinary.url(publicId, {
-    cloud_name: cloudName,
-    secure: options.secure,
-    cname: options.cname,
-    secure_distribution: options.secureDistribution,
-    private_cdn: options.privateCdn,
+  const url = cloudinary.url(source.publicId, {
+    cloud_name: source.cloudName,
+    // Secure and privateCdn is a boolean, so important to check if it's undefined
+    secure: options.secure === undefined ? source.secure : options.secure,
+    private_cdn:
+      options.privateCdn == undefined ? source.privateCdn : options.privateCdn,
+    cname: options.cname || source.cname,
+    secure_distribution:
+      options.secureDistribution || source.secureDistribution,
     transformation: transformation,
     flags: flags,
     urlAnalytics: true,

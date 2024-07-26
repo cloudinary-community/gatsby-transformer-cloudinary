@@ -23,11 +23,13 @@ const generateCloudinaryAssetSource = (
 ) => {
   const [cloudName, publicId] = filename.split('>>>');
   const cloudinarySrcUrl = generateCloudinaryAssetUrl({
-    cloudName: cloudName,
-    publicId: publicId,
-    width,
-    height,
-    format,
+    source: {
+      cloudName: cloudName,
+      publicId: publicId,
+      width,
+      height,
+      format,
+    },
     options,
   });
 

@@ -17,6 +17,7 @@ exports.createGatsbyPluginImageResolver = (
         transformations: {
           type: '[String]',
           defaultValue: defaultValues.transformations,
+          description: 'Cloudinary transformations to apply to the image',
         },
         chained: '[String]',
         placeholder: {
