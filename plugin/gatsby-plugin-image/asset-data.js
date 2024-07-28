@@ -22,9 +22,9 @@ const probeImage = async (url) => {
   return await probeCache[url];
 };
 
-exports.getAssetAsTracedSvg = async ({ source, args }) => {
+exports.getAssetAsTracedSvg = async ({ cldAssetData, args }) => {
   const svgUrl = generateCloudinaryAssetUrl({
-    source: { ...source, format: 'svg' },
+    cldAssetData: { ...cldAssetData, format: 'svg' },
     options: args,
     tracedSvg: {
       options: {
@@ -39,9 +39,9 @@ exports.getAssetAsTracedSvg = async ({ source, args }) => {
   return `data:image/svg+xml,${encodeURIComponent(data)}`;
 };
 
-exports.getAssetMetadata = async ({ source, args }) => {
+exports.getAssetMetadata = async ({ cldAssetData, args }) => {
   const metaDataUrl = generateCloudinaryAssetUrl({
-    source: source,
+    cldAssetData: cldAssetData,
     options: args,
   });
 

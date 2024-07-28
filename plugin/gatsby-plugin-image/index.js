@@ -26,7 +26,20 @@ const amendTransformTypeMapping = (mapping) => {
   }, {});
 };
 
+const mapToFunctionForTypeConfig = (config) => {
+  if (typeof config === 'function') {
+    // Example config: { width: (data) => data.metadata?.width }
+    // Return the function as is
+    return config;
+  } else {
+    // Example config: { cloudName: 'my-cloud' }
+    // Return a function that returns the configured value
+    return () => config;
+  }
+};
+
 exports._amendTransformTypeMapping = amendTransformTypeMapping;
+exports._mapToFunctionForTypeConfig = mapToFunctionForTypeConfig;
 
 exports.createGatsbyImageDataResolver = (gatsbyUtils, pluginOptions) => {
   const { createResolvers } = gatsbyUtils;
@@ -37,13 +50,26 @@ exports.createGatsbyImageDataResolver = (gatsbyUtils, pluginOptions) => {
   transformTypes.forEach((transformType) => {
     const transformTypeConfig = {
       type: transformType.type || transformType,
-      mapping: amendTransformTypeMapping(transformType.mapping || {}),
+      cloudName: mapToFunctionForTypeConfig(transformType.cloudName),
+      secure: mapToFunctionForTypeConfig(transformType.secure),
+      cname: mapToFunctionForTypeConfig(transformType.cname),
+      secureDistribution: mapToFunctionForTypeConfig(
+        transformType.secureDistribution
+      ),
+      privateCdn: mapToFunctionForTypeConfig(transformType.privateCdn),
+      publicId: mapToFunctionForTypeConfig(transformType.publicId),
+      height: mapToFunctionForTypeConfig(transformType.height),
+      width: mapToFunctionForTypeConfig(transformType.width),
+      format: mapToFunctionForTypeConfig(transformType.format),
+      base64: mapToFunctionForTypeConfig(transformType.base64),
+      tracedSVG: mapToFunctionForTypeConfig(transformType.tracedSVG),
+      mapping: amendTransformTypeMapping(transformType.mapping || {}), // Deprecated
     };
 
     const gatsbyImageResolver = createGatsbyPluginImageResolver(
       gatsbyUtils,
       transformTypeConfig,
-      { transformations: pluginOptions.defaultTransformations, secure: true }
+      { transformations: pluginOptions.defaultTransformations }
     );
 
     if (gatsbyImageResolver) {

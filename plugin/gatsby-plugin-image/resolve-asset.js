@@ -13,38 +13,25 @@ const { Joi } = require('gatsby-plugin-utils/joi');
 
 const { resolverReporter } = require('./resolver-reporter');
 
-const generateCloudinaryAssetSource = (
-  filename,
-  width,
-  height,
-  format,
-  _fit,
-  options
-) => {
-  const [cloudName, publicId] = filename.split('>>>');
-  const cloudinarySrcUrl = generateCloudinaryAssetUrl({
-    source: {
-      cloudName: cloudName,
-      publicId: publicId,
-      width,
-      height,
-      format,
-    },
-    options,
-  });
+const generateCloudinaryImageSource =
+  (cldAssetData) => (_filename, width, height, format, _fit, options) => {
+    const cloudinarySrcUrl = generateCloudinaryAssetUrl({
+      cldAssetData,
+      options,
+    });
 
-  const imageSource = {
-    src: cloudinarySrcUrl,
-    width: width,
-    height: height,
-    format: format,
+    const imageSource = {
+      src: cloudinarySrcUrl,
+      width: width,
+      height: height,
+      format: format,
+    };
+
+    return imageSource;
   };
 
-  return imageSource;
-};
-
 const validateMetadataAndFetchIfNeeded = async (
-  cldAssetSource,
+  cldAssetData,
   args,
   reporter
 ) => {
@@ -54,7 +41,7 @@ const validateMetadataAndFetchIfNeeded = async (
     format: Joi.string().default('auto'),
   }).required();
 
-  const { value, error } = schema.validate(cldAssetSource, {
+  const { value, error } = schema.validate(cldAssetData, {
     stripUnknown: true,
   });
 
@@ -64,11 +51,11 @@ const validateMetadataAndFetchIfNeeded = async (
 
   try {
     reporter.verbose(
-      `[gatsby-transformer-cloudinary] Missing metadata fields on ${cldAssetSource.type}: cloudName=${cldAssetSource.cloudName}, publicId=${cldAssetSource.publicId} >>> To save on network requests add width, height and format to ${cldAssetSource.transformType}`
+      `[gatsby-transformer-cloudinary] Missing metadata fields on ${cldAssetData.type}: cloudName=${cldAssetData.cloudName}, publicId=${cldAssetData.publicId} >>> To save on network requests add width, height and format to ${cldAssetData.transformType}`
     );
 
     const fetchedMetadata = await getAssetMetadata({
-      source: cldAssetSource,
+      cldAssetData,
       args,
     });
     const { value, error } = schema.validate(fetchedMetadata);
@@ -80,14 +67,14 @@ const validateMetadataAndFetchIfNeeded = async (
     } else {
       // Fetched metadata is not valid
       reporter.verbose(
-        `[gatsby-transformer-cloudinary] Invalid fetched metadata for ${cldAssetSource.type}: cloudName=${cldAssetSource.cloudName}, publicId=${cldAssetSource.publicId} >>> ${error.message}`
+        `[gatsby-transformer-cloudinary] Invalid fetched metadata for ${cldAssetData.type}: cloudName=${cldAssetData.cloudName}, publicId=${cldAssetData.publicId} >>> ${error.message}`
       );
       return null;
     }
   } catch (error) {
     // Error fetching
     reporter.verbose(
-      `[gatsby-transformer-cloudinary] Could not fetch metadata for ${cldAssetSource.type}: cloudName=${cldAssetSource.cloudName}, publicId=${cldAssetSource.publicId} >>> ${error.message}`
+      `[gatsby-transformer-cloudinary] Could not fetch metadata for ${cldAssetData.type}: cloudName=${cldAssetData.cloudName}, publicId=${cldAssetData.publicId} >>> ${error.message}`
     );
     return null;
   }
@@ -123,61 +110,142 @@ const validateRequiredData = (cldAssetSource, reporter) => {
   }
 };
 
+const generateCloudinaryAssetData = async ({ source, transformTypeConfig }) => {
+  const pickFirstValue = (...values) => {
+    for (const value of values) {
+      if (value != undefined) {
+        return value;
+      }
+    }
+  };
+
+  source = source || {};
+  // Deprecated
+  const mapping = transformTypeConfig.mapping || {};
+
+  const cldAssetData = {
+    type: transformTypeConfig.type,
+    cloudName: pickFirstValue(
+      transformTypeConfig['cloudName'](source),
+      mapping['cloudName'](source), // Deprected
+      source['cloud_name'],
+      source['cloudName']
+    ),
+    secure: pickFirstValue(
+      transformTypeConfig['secure'](source),
+      source['secure'],
+      true
+    ),
+    secureDistribution: pickFirstValue(
+      transformTypeConfig['secureDistribution'](source),
+      source['secure_distribution'],
+      source['secureDistribution']
+    ),
+    cname: pickFirstValue(
+      transformTypeConfig['cname'](source),
+      source['cname']
+    ),
+    secureDistribution: pickFirstValue(
+      transformTypeConfig['secureDistribution'](source),
+      source['secure_distribution'],
+      source['secureDistribution']
+    ),
+    privateCdn: pickFirstValue(
+      transformTypeConfig['privateCdn'](source),
+      source['private_cdn'],
+      source['privateCdn'],
+      false
+    ),
+    publicId: pickFirstValue(
+      transformTypeConfig['publicId'](source),
+      mapping['publicId'](source), // Deprecated
+      source['public_id'],
+      source['publicId']
+    ),
+    height: pickFirstValue(
+      transformTypeConfig['height'](source),
+      mapping['height'](source), // Deprecated
+      source['height'],
+      source['originalHeight']
+    ),
+    width: pickFirstValue(
+      transformTypeConfig['width'](source),
+      mapping['width'](source), // Deprecated
+      source['width'],
+      source['originalWidth']
+    ),
+    format: pickFirstValue(
+      transformTypeConfig['format'](source),
+      mapping['format'](source), // Deprecated
+      source['format'],
+      source['originalFormat']
+    ),
+    base64: pickFirstValue(
+      transformTypeConfig['base64'](source),
+      mapping['base64'](source), // Deprected
+      source['base64'],
+      source['defaultBase64']
+    ),
+    tracedSVG: pickFirstValue(
+      transformTypeConfig['tracedSVG'](source),
+      mapping['tracedSVG'](source), // Deprecated
+      source['tracedSVG'],
+      source['defaultTracedSVG']
+    ),
+  };
+
+  return cldAssetData;
+};
+
 // Make it testable
-exports._generateCloudinaryAssetSource = generateCloudinaryAssetSource;
+exports._generateCloudinaryImageSource = generateCloudinaryImageSource;
+exports._generateCloudinaryAssetData = generateCloudinaryAssetData;
 
 exports.createResolveCloudinaryAssetData =
   (gatsbyUtils, transformTypeConfig) => async (source, args, _context) => {
     let { reporter } = gatsbyUtils;
+
     reporter = resolverReporter({ reporter, logLevel: args.logLevel });
-    source = source || {};
-    const mapping = transformTypeConfig.mapping || {};
 
-    let cldAssetSource = {
-      type: transformTypeConfig.type,
-      cloudName: mapping['cloudName'](source) || source['cloudName'],
-      publicId: mapping['publicId'](source) || source['publicId'],
-      height: mapping['height'](source) || source['originalHeight'],
-      width: mapping['width'](source) || source['originalWidth'],
-      format: mapping['format'](source) || source['originalFormat'],
-      base64: mapping['base64'](source) || source['defaultBase64'],
-      tracedSVG: mapping['tracedSVG'](source) || source['defaultTracedSVG'],
-    };
+    let cldAssetData = await generateCloudinaryAssetData({
+      source,
+      transformTypeConfig,
+    });
 
-    const cldAssetRequired = validateRequiredData(cldAssetSource, reporter);
+    const cldAssetRequired = validateRequiredData(cldAssetData, reporter);
     if (!cldAssetRequired) return null;
 
-    cldAssetSource = {
-      ...cldAssetSource,
+    cldAssetData = {
+      ...cldAssetData,
       ...cldAssetRequired,
     };
 
     const cldAssetMetadata = await validateMetadataAndFetchIfNeeded(
-      cldAssetSource,
+      cldAssetData,
       args,
       reporter
     );
     if (!cldAssetMetadata) return null;
 
-    cldAssetSource = {
-      ...cldAssetSource,
+    cldAssetData = {
+      ...cldAssetData,
       ...cldAssetMetadata,
     };
 
     const gatsbyAssetDataArgs = {
       ...args,
-      filename: cldAssetSource.cloudName + '>>>' + cldAssetSource.publicId,
+      filename: cldAssetData.cloudName + '>>>' + cldAssetData.publicId,
       // Passing the plugin name allows for better error messages
       pluginName: `gatsby-transformer-cloudinary`,
       sourceMetadata: cldAssetMetadata,
-      generateImageSource: generateCloudinaryAssetSource,
+      generateImageSource: generateCloudinaryImageSource(cldAssetData),
       options: args,
     };
 
     try {
       if (args.placeholder === 'blurred') {
-        if (cldAssetSource.base64) {
-          gatsbyAssetDataArgs.placeholderURL = cldAssetSource.base64;
+        if (cldAssetData.base64) {
+          gatsbyAssetDataArgs.placeholderURL = cldAssetData.base64;
         } else {
           const lowResolutionUrl =
             getLowResolutionImageURL(gatsbyAssetDataArgs);
@@ -185,11 +253,11 @@ exports.createResolveCloudinaryAssetData =
           gatsbyAssetDataArgs.placeholderURL = base64;
         }
       } else if (args.placeholder === 'tracedSVG') {
-        if (cldAssetSource.tracedSVG) {
-          gatsbyAssetDataArgs.placeholderURL = cldAssetSource.tracedSVG;
+        if (cldAssetData.tracedSVG) {
+          gatsbyAssetDataArgs.placeholderURL = cldAssetData.tracedSVG;
         } else {
           const tracedSvg = await getAssetAsTracedSvg({
-            source: cldAssetSource,
+            cldAssetData,
             args,
           });
           gatsbyAssetDataArgs.placeholderURL = tracedSvg;
@@ -197,7 +265,7 @@ exports.createResolveCloudinaryAssetData =
       }
     } catch (error) {
       reporter.error(
-        `[gatsby-transformer-cloudinary] Could not generate placeholder (${args.placeholder}) for ${cldAssetSource.cloudName} > ${cldAssetSource.publicId}: ${error.message}`
+        `[gatsby-transformer-cloudinary] Could not generate placeholder (${args.placeholder}) for ${cldAssetData.cloudName} > ${cldAssetData.publicId}: ${error.message}`
       );
     }
 

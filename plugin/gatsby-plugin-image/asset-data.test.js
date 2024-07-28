@@ -9,7 +9,7 @@ const {
   getAssetAsTracedSvg,
 } = require('./asset-data');
 
-const source = {
+const cldAssetData = {
   publicId: 'public-id',
   cloudName: 'cloud-name',
 };
@@ -33,7 +33,7 @@ describe('getAssetMetaData', () => {
   });
 
   it('fetches the correct metadata url', async () => {
-    await getAssetMetadata({ source, args });
+    await getAssetMetadata({ cldAssetData, args });
     expect(probe).toHaveBeenCalledWith(
       expect.stringContaining(
         'res.cloudinary.com/cloud-name/image/upload/f_auto,e_grayscale/public-id'
@@ -42,15 +42,15 @@ describe('getAssetMetaData', () => {
   });
 
   it('returns the metadata', async () => {
-    const metadata = await getAssetMetadata({ source, args });
+    const metadata = await getAssetMetadata({ cldAssetData, args });
     expect(metadata).toStrictEqual({ width: 400, height: 300, format: 'jpg' });
   });
 
   it('to cache responses', async () => {
-    await getAssetMetadata({ source, args: {} });
-    await getAssetMetadata({ source, args: {} });
-    await getAssetMetadata({ source, args: { chained: ['t_lwj'] } });
-    await getAssetMetadata({ source, args: { chained: ['t_lwj'] } });
+    await getAssetMetadata({ cldAssetData, args: {} });
+    await getAssetMetadata({ cldAssetData, args: {} });
+    await getAssetMetadata({ cldAssetData, args: { chained: ['t_lwj'] } });
+    await getAssetMetadata({ cldAssetData, args: { chained: ['t_lwj'] } });
     expect(probe).toHaveBeenCalledTimes(2);
   });
 });
@@ -101,7 +101,7 @@ describe('getAssetAsTracedSvg', () => {
   });
 
   it('fetches the correct url', async () => {
-    await getAssetAsTracedSvg({ source, args });
+    await getAssetAsTracedSvg({ cldAssetData, args });
     expect(axios.get).toHaveBeenCalledWith(
       expect.stringContaining(
         'res.cloudinary.com/cloud-name/image/upload/f_svg,e_grayscale/e_vectorize:colors:2:detail:0.3:despeckle:0.1,w_300/public-id'
@@ -111,15 +111,15 @@ describe('getAssetAsTracedSvg', () => {
   });
 
   it('returns the svg as data url', async () => {
-    const svg = await getAssetAsTracedSvg({ source, args });
+    const svg = await getAssetAsTracedSvg({ cldAssetData, args });
     expect(svg).toBe('data:image/svg+xml,%3Csvg%20path.....%3E');
   });
 
   it('to cache responses', async () => {
-    await getAssetAsTracedSvg({ source, args: {} });
-    await getAssetAsTracedSvg({ source, args: {} });
-    await getAssetAsTracedSvg({ source, args: { chained: ['t_lwj'] } });
-    await getAssetAsTracedSvg({ source, args: { chained: ['t_lwj'] } });
+    await getAssetAsTracedSvg({ cldAssetData, args: {} });
+    await getAssetAsTracedSvg({ cldAssetData, args: {} });
+    await getAssetAsTracedSvg({ cldAssetData, args: { chained: ['t_lwj'] } });
+    await getAssetAsTracedSvg({ cldAssetData, args: { chained: ['t_lwj'] } });
     expect(axios.get).toHaveBeenCalledTimes(2);
   });
 });

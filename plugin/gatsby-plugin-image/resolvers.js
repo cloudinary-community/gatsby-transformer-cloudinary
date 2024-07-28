@@ -1,7 +1,7 @@
 exports.createGatsbyPluginImageResolver = (
   gatsbyUtils,
   transformTypeConfig,
-  defaultValues = {}
+  defaultConfigValues = {}
 ) => {
   const { reporter } = gatsbyUtils;
   try {
@@ -16,29 +16,34 @@ exports.createGatsbyPluginImageResolver = (
       {
         transformations: {
           type: '[String]',
-          defaultValue: defaultValues.transformations,
+          defaultValue: defaultConfigValues.transformations,
           description: 'Cloudinary transformations to apply to the image',
         },
         chained: '[String]',
         placeholder: {
           type: CloudinaryPlaceholderType,
         },
-        secure: {
-          type: 'Boolean',
-          defaultValue: defaultValues.secure,
-        },
         logLevel: {
           type: 'String',
         },
+        secure: {
+          type: 'Boolean',
+        },
         cname: {
           type: 'String',
+          description:
+            'Advanced Cloudinary configuration, see Private CDNs and custom delivery hostnames docs.',
         },
         secureDistribution: {
           type: 'String',
+          description:
+            'Advanced Cloudinary configuration, see Private CDNs and custom delivery hostnames docs.',
         },
         privateCdn: {
           type: 'Boolean',
-          defaultValue: false,
+          // defaultValue: false,
+          description:
+            'Advanced Cloudinary configuration, see Private CDNs and custom delivery hostnames docs.',
         },
       }
     );

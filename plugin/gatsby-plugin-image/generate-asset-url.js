@@ -6,12 +6,12 @@ const SDK_CODE = 'X';
 const SDK_SEMVER = pluginPkg.version;
 const TECH_VERSION = gatsbyPkg.version;
 
-const generateTransformations = ({ source = {}, options = {} }) => {
+const generateTransformations = ({ cldAssetData = {}, options = {} }) => {
   return [
     {
-      fetch_format: source.format || 'auto',
-      width: source.width,
-      height: source.height,
+      fetch_format: cldAssetData.format || 'auto',
+      width: cldAssetData.width,
+      height: cldAssetData.height,
       raw_transformation: (options.transformations || []).join(','),
     },
     ...(options.chained || []).map((transformations) => {
@@ -34,13 +34,13 @@ const generateTracedSVGTransformation = ({ options, width }) => {
 
 // Create Cloudinary image URL with transformations.
 exports.generateCloudinaryAssetUrl = ({
-  source = {},
+  cldAssetData = {},
   options = {},
   flags,
   tracedSvg,
 }) => {
   const transformation = generateTransformations({
-    source,
+    cldAssetData,
     options,
   });
 
@@ -48,15 +48,17 @@ exports.generateCloudinaryAssetUrl = ({
     transformation.push(generateTracedSVGTransformation(tracedSvg));
   }
 
-  const url = cloudinary.url(source.publicId, {
-    cloud_name: source.cloudName,
+  const url = cloudinary.url(cldAssetData.publicId, {
+    cloud_name: cldAssetData.cloudName,
     // Secure and privateCdn is a boolean, so important to check if it's undefined
-    secure: options.secure === undefined ? source.secure : options.secure,
+    secure: options.secure === undefined ? cldAssetData.secure : options.secure,
     private_cdn:
-      options.privateCdn == undefined ? source.privateCdn : options.privateCdn,
-    cname: options.cname || source.cname,
+      options.privateCdn == undefined
+        ? cldAssetData.privateCdn
+        : options.privateCdn,
+    cname: options.cname || cldAssetData.cname,
     secure_distribution:
-      options.secureDistribution || source.secureDistribution,
+      options.secureDistribution || cldAssetData.secureDistribution,
     transformation: transformation,
     flags: flags,
     urlAnalytics: true,
