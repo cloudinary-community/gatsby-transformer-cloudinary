@@ -24,7 +24,8 @@ const probeImage = async (url) => {
 
 exports.getAssetAsTracedSvg = async ({ cldAssetData, args }) => {
   const svgUrl = generateCloudinaryAssetUrl({
-    cldAssetData: { ...cldAssetData, format: 'svg' },
+    format: 'svg',
+    cldAssetData: cldAssetData,
     options: args,
     tracedSvg: {
       options: {

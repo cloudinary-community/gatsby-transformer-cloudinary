@@ -16,6 +16,9 @@ const { resolverReporter } = require('./resolver-reporter');
 const generateCloudinaryImageSource =
   (cldAssetData) => (_filename, width, height, format, _fit, options) => {
     const cloudinarySrcUrl = generateCloudinaryAssetUrl({
+      width,
+      height,
+      format,
       cldAssetData,
       options,
     });

@@ -6,12 +6,12 @@ const SDK_CODE = 'X';
 const SDK_SEMVER = pluginPkg.version;
 const TECH_VERSION = gatsbyPkg.version;
 
-const generateTransformations = ({ cldAssetData = {}, options = {} }) => {
+const generateTransformations = ({ width, height, format, options = {} }) => {
   return [
     {
-      fetch_format: cldAssetData.format || 'auto',
-      width: cldAssetData.width,
-      height: cldAssetData.height,
+      fetch_format: format || 'auto',
+      width: width,
+      height: height,
       raw_transformation: (options.transformations || []).join(','),
     },
     ...(options.chained || []).map((transformations) => {
@@ -34,13 +34,18 @@ const generateTracedSVGTransformation = ({ options, width }) => {
 
 // Create Cloudinary image URL with transformations.
 exports.generateCloudinaryAssetUrl = ({
+  width,
+  height,
+  format,
   cldAssetData = {},
   options = {},
   flags,
   tracedSvg,
 }) => {
   const transformation = generateTransformations({
-    cldAssetData,
+    width,
+    height,
+    format,
     options,
   });
 
