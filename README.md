@@ -153,7 +153,7 @@ module.exports = {
           {
             type: `CustomType`,
             // Use a static value
-            cloudName: 'my-cloud',
+            cloudName: 'my-cld-cloud',
             // Resolve a value using a function
             height: (data) => data.metadata?.height,
           },
@@ -194,20 +194,15 @@ module.exports = {
         transformTypes: [
           {
             type: 'SanityCloudinaryAsset',
-            mapping: {
-              // Dynamically get the cloud name
-              // from SanityCloudinaryAsset.url
-              cloudName: (data) => {
-                const findCloudName = new RegExp(
-                  '(cloudinary.com/)([^/]+)',
-                  'i'
-                );
-                const result = data.url.match(findCloudName);
-                return result[1];
-              },
-              // Or set it statically if all assets are from the same cloud
-              // cloudName: "my-cloud",
+            // Dynamically get the cloud name
+            // from SanityCloudinaryAsset.url
+            cloudName: (data) => {
+              const findCloudName = new RegExp('(cloudinary.com/)([^/]+)', 'i');
+              const result = data.url.match(findCloudName);
+              return result[1];
             },
+            // Or set it statically if all assets are from the same Cloudinary account
+            // cloudName: "my-cld-cloud",
           },
         ],
       },
@@ -242,20 +237,16 @@ module.exports = {
             // with the name of the GraphQL Type describing your Cloudinary assets
             // will always start with `contentful` and end with `JsonNode`
             type: 'contentfulBlogPostFeaturedImageJsonNode',
-            mapping: {
-              // Dynamically get the cloud name
-              // from SanityCloudinaryAsset.url
-              cloudName: (data) => {
-                const findCloudName = new RegExp(
-                  '(cloudinary.com/)([^/]+)',
-                  'i'
-                );
-                const result = data.url.match(findCloudName);
-                return result[1];
-              },
-              // Or set it statically if all assets are from the same cloud
-              // cloudName: "my-cloud",
+
+            // Dynamically get the cloud name
+            // from SanityCloudinaryAsset.url
+            cloudName: (data) => {
+              const findCloudName = new RegExp('(cloudinary.com/)([^/]+)', 'i');
+              const result = data.url.match(findCloudName);
+              return result[1];
             },
+            // Or set it statically if all assets are from the same cloud
+            // cloudName: 'my-cld-cloud',
           },
         ],
       },
