@@ -1,3 +1,10 @@
+# [4.7.0-beta.1](https://github.com/cloudinary-community/gatsby-transformer-cloudinary/compare/v4.6.0...v4.7.0-beta.1) (2024-07-28)
+
+
+### Features
+
+* simplify transformTypes configuration and allow "Advanced CDN Media Asset Delivery Options" ([#254](https://github.com/cloudinary-community/gatsby-transformer-cloudinary/issues/254)) ([d4ed539](https://github.com/cloudinary-community/gatsby-transformer-cloudinary/commit/d4ed539a88cb145a4bc91c9ff0c98e3b1d74804c))
+
 # [4.6.0](https://github.com/cloudinary-community/gatsby-transformer-cloudinary/compare/v4.5.0...v4.6.0) (2024-06-07)
 
 
