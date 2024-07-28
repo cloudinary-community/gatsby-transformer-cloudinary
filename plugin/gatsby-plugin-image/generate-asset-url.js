@@ -34,11 +34,10 @@ const generateTracedSVGTransformation = ({ options, width }) => {
 
 // Create Cloudinary image URL with transformations.
 exports.generateCloudinaryAssetUrl = ({
-  publicId,
-  cloudName,
   width,
   height,
   format,
+  cldAssetData = {},
   options = {},
   flags,
   tracedSvg,
@@ -54,12 +53,17 @@ exports.generateCloudinaryAssetUrl = ({
     transformation.push(generateTracedSVGTransformation(tracedSvg));
   }
 
-  const url = cloudinary.url(publicId, {
-    cloud_name: cloudName,
-    secure: options.secure,
-    cname: options.cname,
-    secure_distribution: options.secureDistribution,
-    private_cdn: options.privateCdn,
+  const url = cloudinary.url(cldAssetData.publicId, {
+    cloud_name: cldAssetData.cloudName,
+    // Secure and privateCdn is a boolean, so important to check if it's undefined
+    secure: options.secure === undefined ? cldAssetData.secure : options.secure,
+    private_cdn:
+      options.privateCdn == undefined
+        ? cldAssetData.privateCdn
+        : options.privateCdn,
+    cname: options.cname || cldAssetData.cname,
+    secure_distribution:
+      options.secureDistribution || cldAssetData.secureDistribution,
     transformation: transformation,
     flags: flags,
     urlAnalytics: true,

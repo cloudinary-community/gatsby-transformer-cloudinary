@@ -23,38 +23,29 @@ const {
 } = require('./asset-data');
 
 const {
-  _generateCloudinaryAssetSource,
+  _generateCloudinaryImageSource,
   createResolveCloudinaryAssetData,
 } = require('./resolve-asset');
 
-const resolveCloudinaryAssetData = createResolveCloudinaryAssetData(
-  gatsbyUtilsMocks,
-  {
-    type: 'CloudinaryAsset',
-    mapping: {
-      cloudName: (data) => data.cloudName,
-      publicId: (data) => data.publicId,
-      height: () => 300,
-      width: (data) => data.width,
-      format: (data) => data.format,
-      base64: (data) => data.base64,
-      tracedSVG: (data) => data.tracedSVG,
-    },
-  }
-);
-
-describe('generateCloudinaryAssetSource', () => {
+describe('_generateCloudinaryImageSource', () => {
+  const cldAssetData = {
+    cloudName: 'cloud-name',
+    publicId: 'public-id',
+    width: 300,
+    height: 500,
+    format: 'jpg',
+  };
   const filename = 'cloud-name>>>public-id';
-  const width = 300;
-  const height = 500;
-  const format = 'jpg';
+  const width = cldAssetData.width;
+  const height = cldAssetData.height;
+  const format = cldAssetData.format;
   const fit = undefined;
 
   describe('generated correct source data', () => {
     it('when no options', () => {
       const options = {};
 
-      const result = _generateCloudinaryAssetSource(
+      const result = _generateCloudinaryImageSource(cldAssetData)(
         filename,
         width,
         height,
@@ -74,7 +65,7 @@ describe('generateCloudinaryAssetSource', () => {
     it('with secure option set to true', () => {
       const options = { secure: true };
 
-      const result = _generateCloudinaryAssetSource(
+      const result = _generateCloudinaryImageSource(cldAssetData)(
         filename,
         width,
         height,
@@ -91,7 +82,7 @@ describe('generateCloudinaryAssetSource', () => {
     it('with custom secure_distribution (cname) and secure is true', () => {
       const options = { secure: true, secureDistribution: 'example.com' };
 
-      const result = _generateCloudinaryAssetSource(
+      const result = _generateCloudinaryImageSource(cldAssetData)(
         filename,
         width,
         height,
@@ -108,7 +99,7 @@ describe('generateCloudinaryAssetSource', () => {
     it('with cname and secure is false', () => {
       const options = { secure: false, cname: 'example.com' };
 
-      const result = _generateCloudinaryAssetSource(
+      const result = _generateCloudinaryImageSource(cldAssetData)(
         filename,
         width,
         height,
@@ -124,7 +115,7 @@ describe('generateCloudinaryAssetSource', () => {
     it('for private_cdn and secure is true', () => {
       const options = { secure: true, privateCdn: true };
 
-      const result = _generateCloudinaryAssetSource(
+      const result = _generateCloudinaryImageSource(cldAssetData)(
         filename,
         width,
         height,
@@ -141,7 +132,7 @@ describe('generateCloudinaryAssetSource', () => {
     it('for private_cdn and secure is false', () => {
       const options = { secure: false, privateCdn: true };
 
-      const result = _generateCloudinaryAssetSource(
+      const result = _generateCloudinaryImageSource(cldAssetData)(
         filename,
         width,
         height,
@@ -161,7 +152,7 @@ describe('generateCloudinaryAssetSource', () => {
         transformations: ['e_grayscale', 'e_pixelate'],
       };
 
-      const result = _generateCloudinaryAssetSource(
+      const result = _generateCloudinaryImageSource(cldAssetData)(
         filename,
         width,
         height,
@@ -178,6 +169,33 @@ describe('generateCloudinaryAssetSource', () => {
 });
 
 describe('resolveCloudinaryAssetData', () => {
+  const resolveCloudinaryAssetData = createResolveCloudinaryAssetData(
+    gatsbyUtilsMocks,
+    {
+      type: 'CloudinaryAsset',
+      cloudName: () => undefined, // Should defer to mapping
+      secure: (data) => data.secure,
+      secureDistribution: (data) => data.secureDistribution,
+      cname: (data) => data.cname,
+      privateCdn: (data) => data.privateCdn,
+      publicId: (data) => data.publicId,
+      height: () => undefined, // Should defer to mapping
+      width: (data) => data.width,
+      format: (data) => data.format,
+      base64: (data) => data.base64,
+      tracedSVG: (data) => data.tracedSVG,
+      mapping: {
+        cloudName: (data) => data.cloudName,
+        publicId: (data) => data.publicId,
+        height: () => 300,
+        width: (data) => data.width,
+        format: (data) => data.format,
+        base64: (data) => data.base64,
+        tracedSVG: (data) => data.tracedSVG,
+      },
+    }
+  );
+
   const sourceWithMetadata = {
     publicId: 'public-id',
     cloudName: 'cloud-name',
@@ -242,7 +260,7 @@ describe('resolveCloudinaryAssetData', () => {
 
     expect(generateImageData).toHaveBeenNthCalledWith(1, {
       filename: 'cloud-name>>>public-id',
-      generateImageSource: _generateCloudinaryAssetSource,
+      generateImageSource: expect.any(Function),
       options: {
         transformations: ['e_grayscale'],
       },
@@ -254,9 +272,10 @@ describe('resolveCloudinaryAssetData', () => {
       },
       transformations: ['e_grayscale'],
     });
+
     expect(generateImageData).toHaveBeenNthCalledWith(2, {
       filename: 'cloud-name>>>public-id',
-      generateImageSource: _generateCloudinaryAssetSource,
+      generateImageSource: expect.any(Function),
       options: {
         transformations: ['e_grayscale'],
       },
@@ -281,7 +300,7 @@ describe('resolveCloudinaryAssetData', () => {
     expect(generateImageData).toBeCalledTimes(2);
     expect(generateImageData).toHaveBeenNthCalledWith(2, {
       filename: 'cloud-name>>>public-id',
-      generateImageSource: _generateCloudinaryAssetSource,
+      generateImageSource: expect.any(Function),
       options: {},
       pluginName: 'gatsby-transformer-cloudinary',
       sourceMetadata: {
@@ -307,7 +326,7 @@ describe('resolveCloudinaryAssetData', () => {
     expect(generateImageData).toBeCalledTimes(2);
     expect(generateImageData).toHaveBeenNthCalledWith(1, {
       filename: 'cloud-name>>>public-id',
-      generateImageSource: _generateCloudinaryAssetSource,
+      generateImageSource: expect.any(Function),
       options: { placeholder: 'blurred' },
       pluginName: 'gatsby-transformer-cloudinary',
       sourceMetadata: {
@@ -320,7 +339,7 @@ describe('resolveCloudinaryAssetData', () => {
     });
     expect(generateImageData).toHaveBeenNthCalledWith(2, {
       filename: 'cloud-name>>>public-id',
-      generateImageSource: _generateCloudinaryAssetSource,
+      generateImageSource: expect.any(Function),
       options: { placeholder: 'blurred' },
       pluginName: 'gatsby-transformer-cloudinary',
       sourceMetadata: {
@@ -347,7 +366,7 @@ describe('resolveCloudinaryAssetData', () => {
     expect(generateImageData).toBeCalledTimes(2);
     expect(generateImageData).toHaveBeenNthCalledWith(1, {
       filename: 'cloud-name>>>public-id',
-      generateImageSource: _generateCloudinaryAssetSource,
+      generateImageSource: expect.any(Function),
       options: { placeholder: 'tracedSVG' },
       pluginName: 'gatsby-transformer-cloudinary',
       sourceMetadata: {
@@ -360,7 +379,7 @@ describe('resolveCloudinaryAssetData', () => {
     });
     expect(generateImageData).toHaveBeenNthCalledWith(2, {
       filename: 'cloud-name>>>public-id',
-      generateImageSource: _generateCloudinaryAssetSource,
+      generateImageSource: expect.any(Function),
       options: { placeholder: 'tracedSVG' },
       pluginName: 'gatsby-transformer-cloudinary',
       sourceMetadata: {
@@ -610,7 +629,7 @@ describe('resolveCloudinaryAssetData', () => {
       expect(gatsbyUtilsMocks.reporter.error).toBeCalledTimes(1);
       expect(generateImageData).toHaveBeenCalledWith({
         filename: 'cloud-name>>>public-id',
-        generateImageSource: _generateCloudinaryAssetSource,
+        generateImageSource: expect.any(Function),
         options: { placeholder: 'blurred' },
         pluginName: 'gatsby-transformer-cloudinary',
         sourceMetadata: {
@@ -630,7 +649,7 @@ describe('resolveCloudinaryAssetData', () => {
       expect(gatsbyUtilsMocks.reporter.error).toBeCalledTimes(1);
       expect(generateImageData).toHaveBeenCalledWith({
         filename: 'cloud-name>>>public-id',
-        generateImageSource: _generateCloudinaryAssetSource,
+        generateImageSource: expect.any(Function),
         options: { placeholder: 'tracedSVG' },
         pluginName: 'gatsby-transformer-cloudinary',
         sourceMetadata: {

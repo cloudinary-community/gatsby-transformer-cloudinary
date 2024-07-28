@@ -120,7 +120,7 @@ export default BlogPost;
 
 ### Transform Type Requirements
 
-Gatsby Image support may be added to any GraphQL Type describing a Cloudinary asset with the following information:
+Gatsby Image support may be added to any GraphQL Type describing a Cloudinary asset with the following data:
 
 ```js
 {
@@ -138,7 +138,7 @@ Gatsby Image support may be added to any GraphQL Type describing a Cloudinary as
 }
 ```
 
-If the GraphQL Type does not have the required data shape, you may use the `mapping` option to map the data from the sourced data shape to the required data shape:
+If the GraphQL Type does not have the required data shape, you may configure how to resolve the data using the `transformTypes` configuration option:
 
 ```js
 // File: ./gatsby-config.js
@@ -152,15 +152,10 @@ module.exports = {
         transformTypes: [
           {
             type: `CustomType`,
-            mapping: {
-              // Use a static value
-              cloudName: () => 'my-cloud',
-              // Use a differnt key than the default
-              publicId: 'thePublicId', // default for publicId is `public_id`
-              // Resolve a value using a function
-              height: (data) => data.dimensions?.height,
-              width: (data) => data.dimentions?.width,
-            },
+            // Use a static value
+            cloudName: 'my-cld-cloud',
+            // Resolve a value using a function
+            height: (data) => data.metadata?.height,
           },
         ],
         // Optional transformation option
@@ -175,6 +170,40 @@ module.exports = {
 To find the GraphQL Type describing your Cloudinary assets use the built-in [GraphiQL exlorer](https://www.gatsbyjs.com/docs/how-to/querying-data/running-queries-with-graphiql/)](https://www.gatsbyjs.com/docs/how-to/querying-data/running-queries-with-graphiql/). Either hover over the field describing the asset or look in the "Documentation Explorer".
 
 `defaultBase64` and `defaultTracedSVG` is the base64 URI of the placeholder image, it must comply with [RFC 2397](https://tools.ietf.org/html/rfc2397).
+
+### Private CDNs and custom delivery hostnames (CNAMEs)
+
+If you are using a private CDN or a custom delivery hostname (CNAME) you may configure the plugin to do so. Read more about [Private CDNs and CNAMEs](https://cloudinary.com/documentation/advanced_url_delivery_options#private_cdns_and_cnames).
+
+```js
+// File: ./gatsby-config.js
+
+module.exports = {
+  plugins: [
+    {
+      resolve: `gatsby-transformer-cloudinary`,
+      options: {
+        transformTypes: [
+          {
+            type: `CloudinaryAsset`,
+            secureDistribution: 'my-domain.com',
+
+            // Or using privateCdn
+            // privateCdn: true,
+
+            // Or using cname
+            // secure: false,
+            // cname: 'my-domain.com',
+          },
+        ],
+        // Optional transformation option
+        defaultTransformations: ['c_fill', 'g_auto', 'q_auto'],
+      },
+    },
+    `gatsby-plugin-image`,
+  ],
+};
+```
 
 ### Sanity.io Configuration
 
@@ -199,24 +228,17 @@ module.exports = {
         transformTypes: [
           {
             type: 'SanityCloudinaryAsset',
-            mapping: {
-              // Dynamically get the cloud name
-              // from SanityCloudinaryAsset.url
-              cloudName: (data) => {
-                const findCloudName = new RegExp(
-                  '(cloudinary.com/)([^/]+)',
-                  'i'
-                );
-                const result = data.url.match(findCloudName);
-                return result[1];
-              },
-              // Or set it statically if all assets are from the same cloud
-              // cloudName: () => "my-cloud",
+            // Dynamically get the cloud name
+            // from SanityCloudinaryAsset.url
+            cloudName: (data) => {
+              const findCloudName = new RegExp('(cloudinary.com/)([^/]+)', 'i');
+              const result = data.url.match(findCloudName);
+              return result[1];
             },
+            // Or set it statically if all assets are from the same Cloudinary account
+            // cloudName: "my-cld-cloud",
           },
         ],
-        // Optional transformation option
-        defaultTransformations: ['c_fill', 'g_auto', 'q_auto'],
       },
     },
     `gatsby-plugin-image`,
@@ -249,24 +271,18 @@ module.exports = {
             // with the name of the GraphQL Type describing your Cloudinary assets
             // will always start with `contentful` and end with `JsonNode`
             type: 'contentfulBlogPostFeaturedImageJsonNode',
-            mapping: {
-              // Dynamically get the cloud name
-              // from SanityCloudinaryAsset.url
-              cloudName: (data) => {
-                const findCloudName = new RegExp(
-                  '(cloudinary.com/)([^/]+)',
-                  'i'
-                );
-                const result = data.url.match(findCloudName);
-                return result[1];
-              },
-              // Or set it statically if all assets are from the same cloud
-              // cloudName: () => "my-cloud",
+
+            // Dynamically get the cloud name
+            // from SanityCloudinaryAsset.url
+            cloudName: (data) => {
+              const findCloudName = new RegExp('(cloudinary.com/)([^/]+)', 'i');
+              const result = data.url.match(findCloudName);
+              return result[1];
             },
+            // Or set it statically if all assets are from the same cloud
+            // cloudName: 'my-cld-cloud',
           },
         ],
-        // Optional transformation option
-        defaultTransformations: ['c_fill', 'g_auto', 'q_auto'],
       },
     },
     `gatsby-plugin-image`,

@@ -81,7 +81,7 @@ describe('pluginOptionsSchema', () => {
           mapping: {
             cloudName: 'cloud_name',
             publicId: 'public_id',
-            height: 400, // height is a number
+            height: 400, // is not a function or string
             width: 'the_width',
             format: () => 'jpg',
             base64: () => 'base64',
@@ -94,7 +94,7 @@ describe('pluginOptionsSchema', () => {
             cloudName: 'cloud_name',
             publicId: 'public_id',
             height: 'the_height',
-            width: 700, // width is string, not number or function
+            width: 700, // is not a function or string
             format: () => 'jpg',
             base64: 'base64',
             tracedSVG: 'tracedSVG',
@@ -105,9 +105,9 @@ describe('pluginOptionsSchema', () => {
           mapping: {
             cloudName: 'cloud_name',
             publicId: 'public_id',
-            height: 300,
-            width: () => 200,
-            format: new Date('Hello'), // format is not string or function
+            height: () => 400,
+            width: 'the_width',
+            format: new Date('Hello'), // is not a function or string
             base64: () => 'base64',
             tracedSVG: () => 'tracedSVG',
           },
@@ -117,10 +117,10 @@ describe('pluginOptionsSchema', () => {
           mapping: {
             cloudName: 'cloud_name',
             publicId: 'public_id',
-            height: 300,
-            width: () => 200,
+            height: () => 400,
+            width: 'the_width',
             format: 'png',
-            base64: 2342, // base64 is not string or function
+            base64: 2342, // is not a function or string
             tracedSVG: () => 'tracedSVG',
           },
         },
@@ -129,11 +129,69 @@ describe('pluginOptionsSchema', () => {
           mapping: {
             cloudName: 'cloud_name',
             publicId: 'public_id',
-            height: 300,
-            width: () => 200,
+            height: () => 400,
+            width: 'the_width',
             format: 'png',
             base64: 'base64',
-            tracedSVG: 224, // tracedSVG is not string or function
+            tracedSVG: 224, // is not a function or string
+          },
+        },
+        {
+          type: 'Type8',
+          mapping: {
+            cloudName: 'cloud_name',
+            publicId: 'public_id',
+            secure: 123, // is not a function or string
+            height: () => 400,
+            width: 'the_width',
+            format: 'png',
+            base64: 'base64',
+            tracedSVG: () => 'tracedSVG',
+          },
+        },
+        {
+          type: 'Type9',
+          mapping: {
+            cloudName: 'cloud_name',
+            publicId: 'public_id',
+            secure: () => false,
+            privateCdn: 123, // is not a function or string
+            height: () => 400,
+            width: 'the_width',
+            format: 'png',
+            base64: 'base64',
+            tracedSVG: () => 'tracedSVG',
+          },
+        },
+        {
+          type: 'Type10',
+          mapping: {
+            cloudName: 'cloud_name',
+            publicId: 'public_id',
+            secure: () => false,
+            privateCdn: () => true,
+            secureDistribution: 123, // is not a function or string
+            height: () => 400,
+            width: 'the_width',
+            format: 'png',
+            base64: 'base64',
+            tracedSVG: () => 'tracedSVG',
+          },
+        },
+        {
+          type: 'Type11',
+          mapping: {
+            cloudName: 'cloud_name',
+            publicId: 'public_id',
+            secure: () => false,
+            privateCdn: () => true,
+            secureDistribution: 'secureDistribution',
+            cname: false, // is not a function or string
+            height: () => 400,
+            width: 'the_width',
+            format: 'png',
+            base64: 'base64',
+            tracedSVG: () => 'tracedSVG',
           },
         },
       ],
@@ -152,6 +210,10 @@ describe('pluginOptionsSchema', () => {
       `"transformTypes[5]" does not match any of the allowed types`,
       `"transformTypes[6]" does not match any of the allowed types`,
       `"transformTypes[7]" does not match any of the allowed types`,
+      `"transformTypes[8]" does not match any of the allowed types`,
+      `"transformTypes[9]" does not match any of the allowed types`,
+      `"transformTypes[10]" does not match any of the allowed types`,
+      `"transformTypes[11]" does not match any of the allowed types`,
     ]);
   });
 
