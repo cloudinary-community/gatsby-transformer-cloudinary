@@ -1,7 +1,7 @@
 exports.CloudinaryAssetType = `
   type CloudinaryAsset implements Node {
     id: ID!
-    publicId: String! @deprecated(reason: "Use \`public_id\` instead")
+    publicId: String!
     cloudName: String!
     version: String
     originalWidth: Int
