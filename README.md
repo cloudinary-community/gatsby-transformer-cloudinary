@@ -171,6 +171,40 @@ To find the GraphQL Type describing your Cloudinary assets use the built-in [Gra
 
 `defaultBase64` and `defaultTracedSVG` is the base64 URI of the placeholder image, it must comply with [RFC 2397](https://tools.ietf.org/html/rfc2397).
 
+### Private CDNs and custom delivery hostnames (CNAMEs)
+
+If you are using a private CDN or a custom delivery hostname (CNAME) you may configure the plugin to do so. Read more about [Private CDNs and CNAMEs](https://cloudinary.com/documentation/advanced_url_delivery_options#private_cdns_and_cnames).
+
+```js
+// File: ./gatsby-config.js
+
+module.exports = {
+  plugins: [
+    {
+      resolve: `gatsby-transformer-cloudinary`,
+      options: {
+        transformTypes: [
+          {
+            type: `CloudinaryAsset`,
+            secureDistribution: 'my-domain.com',
+
+            // Or using privateCdn
+            // privateCdn: true,
+
+            // Or using cname
+            // secure: false,
+            // cname: 'my-domain.com',
+          },
+        ],
+        // Optional transformation option
+        defaultTransformations: ['c_fill', 'g_auto', 'q_auto'],
+      },
+    },
+    `gatsby-plugin-image`,
+  ],
+};
+```
+
 ### Sanity.io Configuration
 
 If you are using [Sanity.io](https://www.sanity.io/) and the [gatsby-source-sanity](https://www.gatsbyjs.com/plugins/gatsby-source-sanity/) plugin use the following configuration to add the `gatsbyImageData` resolver to the sourced Sanity Cloudinary assets:
