@@ -31,10 +31,30 @@ exports.pluginOptionsSchema = ({ Joi }) => {
         Joi.string(),
         Joi.object({
           type: Joi.string().required(),
+          // Typically static for all sourced data of same type
+          // Needs both dynamic and static oppertunities
+          cloudName: Joi.alternatives().try(Joi.function(), Joi.string()),
+          secure: Joi.alternatives().try(Joi.function(), Joi.boolean()),
+          cname: Joi.alternatives().try(Joi.function(), Joi.string()),
+          secureDistribution: Joi.alternatives().try(
+            Joi.function(),
+            Joi.string()
+          ),
+          privateCdn: Joi.alternatives().try(Joi.function(), Joi.boolean()),
+          // Dynamic within the same type of sourced data, no need for static value
+          publicId: Joi.function(),
+          height: Joi.function(),
+          width: Joi.function(),
+          format: Joi.function(),
+          base64: Joi.function(),
+          tracedSVG: Joi.function(),
+          // To be deprecated
           mapping: Joi.object({
+            // Typically static for all sourced data of same type
             cloudName: Joi.alternatives()
               .try(Joi.function(), Joi.string())
               .default('cloud_name'),
+            // Dynamic within the same type of sourced data
             publicId: Joi.alternatives()
               .try(Joi.function(), Joi.string())
               .default('public_id'),

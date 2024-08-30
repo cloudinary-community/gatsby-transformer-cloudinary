@@ -41,21 +41,37 @@ module.exports = {
           'VariedData',
           'EmptyDataCloudinary',
           'MarkdownRemarkFrontmatterHeroImage',
-          // {
-          //   name: 'MarkdownRemarkFrontmatterHeroImage',
-          //   mapping: {
-          //     cloudName: `cloudName`,
-          //     publicId: `publicId`,
-          //    }
-          // },
           {
             type: 'MarkdownRemarkFrontmatterHeroImageWithUnconformingShape',
+            cloudName: `lilly-labs-consulting`,
             mapping: {
-              cloudName: `a_cloud_name`,
-              publicId: (data) => {
-                return data['a_public_id'];
-              },
+              publicId: 'a_public_id',
             },
+          },
+          {
+            type: 'SecureDistribution',
+            secureDistribution: `example.com`,
+            // secure: true,
+            publicId: (data) => data.public,
+          },
+          {
+            type: 'Cname',
+            cname: `example.com`,
+            secure: false,
+            format: (data) => data.metadata.format,
+            mapping: {
+              width: (data) => data.metadata.width,
+              height: (data) => data.metadata.height,
+            },
+          },
+          {
+            type: 'PrivateCDN',
+            privateCdn: true,
+            secure: true,
+          },
+          {
+            type: 'PrivateCDNUnsecure',
+            // Configured in the source date
           },
         ],
       },

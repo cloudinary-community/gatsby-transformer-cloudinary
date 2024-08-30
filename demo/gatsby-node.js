@@ -270,6 +270,95 @@ exports.sourceNodes = (gatsbyUtils) => {
     createNode,
     createNodeId,
   });
+
+  // To test root config
+  const secureDistributionData1 = {
+    title: 'Secure Distribution Example One',
+    slug: 'secure-1',
+    cloudName: 'lilly-labs-consulting',
+    public: 'sample',
+    width: 864,
+    originalHeight: 576,
+    originalFormat: 'jpg',
+  };
+
+  createNode({
+    ...secureDistributionData1,
+    id: createNodeId(`SecureDistribution >>> 1`),
+    internal: {
+      type: 'SecureDistribution',
+      contentDigest: createContentDigest(secureDistributionData1),
+    },
+  });
+
+  reporter.info(`[site] Create SecureDistribution with existing asset # 1`);
+
+  const cnameData1 = {
+    title: 'Cname (unsecure) Example One',
+    slug: 'cname-1',
+    cloud_name: 'lilly-labs-consulting',
+    public_id: 'sample',
+    metadata: {
+      width: 864,
+      height: 576,
+      format: 'jpg',
+    },
+  };
+
+  createNode({
+    ...cnameData1,
+    id: createNodeId(`Cname >>> 1`),
+    internal: {
+      type: 'Cname',
+      contentDigest: createContentDigest(cnameData1),
+    },
+  });
+
+  reporter.info(`[site] Create Cname with existing asset # 1`);
+
+  const privateCdn1 = {
+    title: 'Private CDN Example One',
+    slug: 'private-cdn-1',
+    cloud_name: 'lilly-labs-consulting',
+    public_id: 'sample',
+    width: 864,
+    height: 576,
+    format: 'jpg',
+  };
+
+  createNode({
+    ...privateCdn1,
+    id: createNodeId(`PrivateCDN >>> 1`),
+    internal: {
+      type: 'PrivateCDN',
+      contentDigest: createContentDigest(privateCdn1),
+    },
+  });
+
+  reporter.info(`[site] Create PrivateCDN with existing asset # 1`);
+
+  const privateCdnUnsecure1 = {
+    title: 'Private CDN Unsecure Example One',
+    slug: 'private-cdn-unsecure-1',
+    cloud_name: 'lilly-labs-consulting',
+    secure: false,
+    privateCdn: true,
+    public_id: 'sample',
+    width: 864,
+    height: 576,
+    format: 'jpg',
+  };
+
+  createNode({
+    ...privateCdnUnsecure1,
+    id: createNodeId(`PrivateCDNUnsecure >>> 1`),
+    internal: {
+      type: 'PrivateCDNUnsecure',
+      contentDigest: createContentDigest(privateCdnUnsecure1),
+    },
+  });
+
+  reporter.info(`[site] Create PrivateCDNUnsecure with existing asset # 1`);
 };
 
 exports.onCreateNode = async (gatsbyUtils) => {

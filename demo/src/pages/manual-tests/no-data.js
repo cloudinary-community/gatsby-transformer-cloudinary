@@ -19,10 +19,16 @@ const EmptyDataPage = () => {
 
   return data.allEmptyData.nodes.map((node, index) => {
     const gatsbyImage = getImage(node.cloudinary);
+    const expectNoImage = node.expected === 'No image' && !gatsbyImage;
+    const expectImage = node.expected === 'An image' && gatsbyImage;
+    const correct = expectNoImage || expectImage;
 
     return (
       <>
-        <h2>{node.name}</h2>
+        <h2>
+          {correct ? '✅' : '❌'}
+          {' ' + node.name}
+        </h2>
         <div>
           <strong>Expected:</strong> {node.expected}
         </div>

@@ -153,7 +153,15 @@ describe('createGatsbyImageDataResolver', () => {
               type: '[String]',
             }),
             secure: expect.objectContaining({
-              defaultValue: true,
+              type: 'Boolean',
+            }),
+            secureDistribution: expect.objectContaining({
+              type: 'String',
+            }),
+            cname: expect.objectContaining({
+              type: 'String',
+            }),
+            privateCdn: expect.objectContaining({
               type: 'Boolean',
             }),
           }),
@@ -169,7 +177,15 @@ describe('createGatsbyImageDataResolver', () => {
               type: '[String]',
             }),
             secure: expect.objectContaining({
-              defaultValue: true,
+              type: 'Boolean',
+            }),
+            secureDistribution: expect.objectContaining({
+              type: 'String',
+            }),
+            cname: expect.objectContaining({
+              type: 'String',
+            }),
+            privateCdn: expect.objectContaining({
               type: 'Boolean',
             }),
           }),

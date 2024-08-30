@@ -6684,17 +6684,6 @@ gatsby-telemetry@^4.3.1, gatsby-telemetry@^4.7.0:
     lodash "^4.17.21"
     node-fetch "^2.6.8"
 
-gatsby-transformer-cloudinary@*:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/gatsby-transformer-cloudinary/-/gatsby-transformer-cloudinary-4.5.0.tgz#02a99f5e12de932b9d8e6424a8c29c5c32413f9e"
-  integrity sha512-btiynpmXUVkkjnTDXb0Ei3vxAEyCV6G5jpcwun6eHg6jM7S0GvqkRle6GvlaguKtLAJzb30GbIzU9IBGwb3xlg==
-  dependencies:
-    axios "~1.1.3"
-    cloudinary "^1.35.0"
-    fast-json-stable-stringify "2.1.0"
-    gatsby-plugin-utils "^4.0.0"
-    probe-image-size "7.2.3"
-
 gatsby-transformer-remark@^6.13.0:
   version "6.13.0"
   resolved "https://registry.yarnpkg.com/gatsby-transformer-remark/-/gatsby-transformer-remark-6.13.0.tgz#972e78406c98baf4cef515de31129f2c567bcd56"

@@ -5,64 +5,34 @@ import { getImage } from 'gatsby-plugin-image';
 const CnamePage = () => {
   const data = useStaticQuery(graphql`
     query {
-      cname: allProject {
+      allSecureDistribution {
         nodes {
-          name
-          coverImage {
-            gatsbyImageData(
-              height: 300
-              aspectRatio: 2
-              placeholder: TRACED_SVG
-              transformations: ["c_fill", "g_auto:subject", "q_auto"]
-              cname: "example.com"
-              secure: false
-            )
-          }
+          gatsbyImageData(height: 300)
         }
       }
-      secureDistribution: allProject {
+      allCname {
         nodes {
-          name
-          coverImage {
-            gatsbyImageData(
-              height: 300
-              aspectRatio: 2
-              placeholder: TRACED_SVG
-              transformations: ["c_fill", "g_auto:subject", "q_auto"]
-              secureDistribution: "example.com"
-              secure: true
-            )
-          }
+          gatsbyImageData(height: 300)
         }
       }
-      privateCDNSecure: allProject {
+      allPrivateCdn {
         nodes {
-          name
-          coverImage {
-            gatsbyImageData(
-              height: 300
-              aspectRatio: 2
-              placeholder: TRACED_SVG
-              transformations: ["c_fill", "g_auto:subject", "q_auto"]
-              privateCdn: true
-              secure: true
-            )
-          }
+          gatsbyImageData(height: 300)
         }
       }
-      privateCDNUnSecure: allProject {
+      allPrivateCdnUnsecure {
         nodes {
-          name
-          coverImage {
-            gatsbyImageData(
-              height: 300
-              aspectRatio: 2
-              placeholder: TRACED_SVG
-              transformations: ["c_fill", "g_auto:subject", "q_auto"]
-              privateCdn: true
-              secure: false
-            )
-          }
+          gatsbyImageData(height: 300)
+        }
+      }
+      override1: allSecureDistribution {
+        nodes {
+          gatsbyImageData(height: 300, secure: false, cname: "example.com")
+        }
+      }
+      override2: allPrivateCdnUnsecure {
+        nodes {
+          gatsbyImageData(height: 300, secure: true, privateCdn: true)
         }
       }
     }
@@ -70,66 +40,121 @@ const CnamePage = () => {
 
   return (
     <>
-      <h2>Secure distribution</h2>
-      <p>
-        Expect url to start with <code>https://example.com</code>
-      </p>
-      {data.secureDistribution.nodes.map((node) => {
-        const gatsbyImage = getImage(node.coverImage?.gatsbyImageData);
+      {data.allSecureDistribution.nodes.map((node) => {
+        const gatsbyImage = getImage(node.gatsbyImageData);
+        const src = gatsbyImage.images.fallback.src;
 
         return (
           <>
-            <h2>{node.name}</h2>
-            <pre>{gatsbyImage.images.fallback.src}</pre>
+            <h2>
+              {src.startsWith('https://example.com') ? '✅' : '❌'}
+              {' Secure distribution'}
+            </h2>
+
+            <p>
+              Expect url to start with <code>https://example.com</code>.
+              Configued in config, not graphql query.
+            </p>
+            <pre>{src}</pre>
           </>
         );
       })}
 
-      <h2>CNAME</h2>
-      <p>
-        Expect urls to start with <code>http://example.com</code>
-      </p>
-      {data.cname.nodes.map((node) => {
-        const gatsbyImage = getImage(node.coverImage?.gatsbyImageData);
+      {data.allCname.nodes.map((node) => {
+        const gatsbyImage = getImage(node.gatsbyImageData);
+        const src = gatsbyImage.images.fallback.src;
 
         return (
           <>
-            <h2>{node.name}</h2>
-            <pre>{gatsbyImage.images.fallback.src}</pre>
+            <h2>
+              {src.startsWith('http://example.com') ? '✅' : '❌'}
+              {' Cname'}
+            </h2>
+
+            <p>
+              Expect url to start with <code>http://example.com</code>
+            </p>
+            <pre>{src}</pre>
           </>
         );
       })}
 
-      <h2>Private CDN (Secure)</h2>
-      <p>
-        Expect urls to start with the cloudinary subdomain (https version), not{' '}
-        <code>https://res.cloudinary.com</code>
-      </p>
-
-      {data.privateCDNSecure.nodes.map((node) => {
-        const gatsbyImage = getImage(node.coverImage?.gatsbyImageData);
+      {data.allPrivateCdn.nodes.map((node) => {
+        const gatsbyImage = getImage(node.gatsbyImageData);
+        const src = gatsbyImage.images.fallback.src;
 
         return (
           <>
-            <h2>{node.name}</h2>
-            <pre>{gatsbyImage.images.fallback.src}</pre>
+            <h2>
+              {src.startsWith('https://lilly-labs-consulting') ? '✅' : '❌'}
+              {' Private CDN (Secure)'}
+            </h2>
+
+            <p>
+              Expect urls to start with{' '}
+              <code>https://lilly-labs-consulting</code>
+            </p>
+            <pre>{src}</pre>
           </>
         );
       })}
 
-      <h2>Private CDN (UnSecure)</h2>
-      <p>
-        Expect urls to start with the cloudinary subdomain (http version), not{' '}
-        <code>http://res.cloudinary.com</code>
-      </p>
-
-      {data.privateCDNUnSecure.nodes.map((node) => {
-        const gatsbyImage = getImage(node.coverImage?.gatsbyImageData);
+      {data.allPrivateCdnUnsecure.nodes.map((node) => {
+        const gatsbyImage = getImage(node.gatsbyImageData);
+        const src = gatsbyImage.images.fallback.src;
 
         return (
           <>
-            <h2>{node.name}</h2>
-            <pre>{gatsbyImage.images.fallback.src}</pre>
+            <h2>
+              {src.startsWith('http://lilly-labs-consulting') ? '✅' : '❌'}
+              {' Private CDN (UnSecure)'}
+            </h2>
+
+            <p>
+              Expect urls to start with{' '}
+              <code>http://lilly-labs-consulting</code>
+            </p>
+            <pre>{src}</pre>
+          </>
+        );
+      })}
+
+      {data.override1.nodes.map((node) => {
+        const gatsbyImage = getImage(node.gatsbyImageData);
+        const src = gatsbyImage.images.fallback.src;
+
+        return (
+          <>
+            <h2>
+              {src.startsWith('http://example.com') ? '✅' : '❌'}
+              {' Override Secure Distribution'}
+            </h2>
+
+            <p>
+              Expect url to start with <code>http://example.com</code> by
+              overriding the configured plugin options in graphql.
+            </p>
+            <pre>{src}</pre>
+          </>
+        );
+      })}
+
+      {data.override2.nodes.map((node) => {
+        const gatsbyImage = getImage(node.gatsbyImageData);
+        const src = gatsbyImage.images.fallback.src;
+
+        return (
+          <>
+            <h2>
+              {src.startsWith('https://lilly-labs-consulting') ? '✅' : '❌'}
+              {' Override Private CDN (UnSecure)'}
+            </h2>
+
+            <p>
+              Expect urls to start with{' '}
+              <code>https://lilly-labs-consulting</code>
+            </p>
+            <pre>{src}</pre>
           </>
         );
       })}
